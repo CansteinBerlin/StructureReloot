@@ -7,13 +7,12 @@ import me.hasenzahn1.structurereloot.util.ReflectionUtil;
 
 import java.lang.reflect.InvocationTargetException;
 
-public class RelootCommand extends BaseCommand {
+public class RelootDebugCommand extends BaseCommand {
 
-    public RelootCommand() {
-        super("reloot", "reloot.command.reloot");
+    public RelootDebugCommand() {
+        super("relootDebug", "reloot.commands.relootDebug");
 
-
-        for (Class<? extends SubCommand> command : ReflectionUtil.getAllClasses("me.hasenzahn1.structurereloot.commands.reloot", SubCommand.class)) {
+        for (Class<? extends SubCommand> command : ReflectionUtil.getAllClasses("me.hasenzahn1.structurereloot.commands.relootdebug", SubCommand.class)) {
             try {
                 addSubCommand(command.getConstructor(BaseCommand.class).newInstance(this));
             } catch (NoSuchMethodException | InstantiationException | IllegalAccessException |

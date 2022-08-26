@@ -1,6 +1,7 @@
 package me.hasenzahn1.structurereloot;
 
 import me.hasenzahn1.structurereloot.commands.RelootCommand;
+import me.hasenzahn1.structurereloot.commands.RelootDebugCommand;
 import me.hasenzahn1.structurereloot.commandsystem.CommandManager;
 import me.hasenzahn1.structurereloot.config.CustomConfig;
 import me.hasenzahn1.structurereloot.config.DefaultConfig;
@@ -13,7 +14,9 @@ public final class StructureReloot extends JavaPlugin {
 
     public static String PREFIX = "§b[§6StructureReloot§b] §r";
     private static StructureReloot instance;
-    private static Logger logger;
+    public static Logger LOGGER;
+
+    private boolean debugMode;
 
 
     private CommandManager commandManager;
@@ -22,12 +25,13 @@ public final class StructureReloot extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-        logger = getLogger();
+        LOGGER = getLogger();
 
         initConfigs();
 
         commandManager = new CommandManager(this);
         commandManager.addCommand(new RelootCommand());
+        if(debugMode) commandManager.addCommand(new RelootDebugCommand());
     }
 
     private void initConfigs() {
@@ -37,6 +41,7 @@ public final class StructureReloot extends JavaPlugin {
     private void initDefaultConfig() {
         defaultConfig = new DefaultConfig();
         PREFIX = ChatColor.translateAlternateColorCodes('&', defaultConfig.getConfig().getString("prefix", PREFIX));
+        debugMode = defaultConfig.getConfig().getBoolean("debugMode", false);
     }
 
     @Override
@@ -48,8 +53,4 @@ public final class StructureReloot extends JavaPlugin {
         return instance;
     }
 
-    @Override
-    public static Logger getLogger() {
-        return logger;
-    }
 }
