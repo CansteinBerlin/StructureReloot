@@ -2,25 +2,28 @@ package me.hasenzahn1.structurereloot.database;
 
 
 import me.hasenzahn1.structurereloot.StructureReloot;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
-import org.bukkit.loot.LootTables;
+import org.bukkit.loot.LootTable;
 
 import java.util.logging.Level;
 
 public class LootBlockValue {
 
     private final Location loc;
-    private final LootTables lootTable;
+    private final LootTable lootTable;
 
-    public LootBlockValue(Location loc, LootTables lootTable) {
+    public LootBlockValue(Location loc, LootTable
+            lootTable) {
         this.loc = loc;
         this.lootTable = lootTable;
     }
 
-    public LootBlockValue(World world, String loc, String lootTable){
+    public LootBlockValue(World world, String loc, NamespacedKey lootTable){
         this.loc = getLocFromString(world, loc);
-        this.lootTable = LootTables.valueOf(lootTable);
+        this.lootTable = Bukkit.getLootTable(lootTable);
     }
 
     private Location getLocFromString(World world, String loc) {
@@ -42,7 +45,7 @@ public class LootBlockValue {
     }
 
     public String getStringLootTable(){
-        return lootTable.name();
+        return lootTable.toString();
     }
 
     @Override

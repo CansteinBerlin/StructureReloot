@@ -4,6 +4,7 @@ import me.hasenzahn1.structurereloot.database.LootBlockValue;
 import me.hasenzahn1.structurereloot.databasesystem.Database;
 import me.hasenzahn1.structurereloot.databasesystem.Table;
 import org.bukkit.Location;
+import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 
 import java.sql.Connection;
@@ -25,7 +26,7 @@ public class BlockTable extends Table {
     public String getCreationString() {
         return "CREATE TABLE IF NOT EXISTS " + getTableName() + " (" +
                 "location varchar(27) PRIMARY KEY," +
-                "lootTable varchar(32) NOT NULL)" +
+                "lootTable varchar(57) NOT NULL)" +
                 ";";
     }
 
@@ -50,7 +51,7 @@ public class BlockTable extends Table {
         )){
             ResultSet set = statement.executeQuery();
             if(set.next()){
-                return new LootBlockValue(world, set.getString("location"), set.getString("lootTable"));
+                return new LootBlockValue(world, set.getString("location"), getNamespacedKey(set.getString("lootTable")));
             }else{
                 return null;
             }
@@ -58,6 +59,11 @@ public class BlockTable extends Table {
             e.printStackTrace();
         }
         return null;
+    }
+
+    private NamespacedKey getNamespacedKey(String lootTable) {
+        String[] strings = lootTable.split(":");
+        return new NamespacedKey(strings[0], strings[1]);
     }
 
     public ArrayList<LootBlockValue> getAllBlocks(){
@@ -68,7 +74,7 @@ public class BlockTable extends Table {
             ResultSet set = statement.executeQuery();
             ArrayList<LootBlockValue> values = new ArrayList<>();
             while(set.next()){
-                values.add(new LootBlockValue(world, set.getString("location"), set.getString("lootTable")));
+                values.add(new LootBlockValue(world, set.getString("location"), getNamespacedKey(set.getString("lootTable"))));
             }
             return values;
 

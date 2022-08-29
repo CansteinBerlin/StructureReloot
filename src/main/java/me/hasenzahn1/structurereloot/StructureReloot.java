@@ -12,6 +12,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
+import org.bukkit.loot.LootTable;
 import org.bukkit.loot.LootTables;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -57,9 +58,9 @@ public final class StructureReloot extends JavaPlugin {
         /*
         World world = Bukkit.getWorld("world");
         BlocksDatabase database = getDatabase(world);
-        database.addBlock(new LootBlockValue(new Location(world, 0, 0, 0), LootTables.BASTION_HOGLIN_STABLE));
-        database.addBlock(new LootBlockValue(new Location(world, 10, 0, 0), LootTables.BASTION_BRIDGE));
-        database.addBlock(new LootBlockValue(new Location(world, 100, 0, 0), LootTables.ANCIENT_CITY));
+        database.addBlock(new LootBlockValue(new Location(world, 0, 0, 0), LootTables.BASTION_HOGLIN_STABLE.getLootTable()));
+        database.addBlock(new LootBlockValue(new Location(world, 10, 0, 0), LootTables.BASTION_BRIDGE.getLootTable()));
+        database.addBlock(new LootBlockValue(new Location(world, 100, 0, 0), LootTables.ANCIENT_CITY.getLootTable()));
         System.out.println(database.getAllBlocks());
         System.out.println("###################");
         System.out.println(database.getBlock(new Location(world, 0, 0, 0)));
