@@ -45,4 +45,11 @@ public class LootBlockValue {
         return lootTable.name();
     }
 
+    @Override
+    public String toString() {
+        return "LootBlockValue{" +
+                "loc=" + loc +
+                ", lootTable=" + lootTable.getKey() +
+                '}';
+    }
 }

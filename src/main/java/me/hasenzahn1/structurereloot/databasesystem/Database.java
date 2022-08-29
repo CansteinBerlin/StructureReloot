@@ -39,6 +39,7 @@ public abstract class Database {
             }
 
         }
+        close();
     }
 
     protected Connection getSQLConnection() {

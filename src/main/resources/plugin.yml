@@ -2,7 +2,6 @@ name: StructureReloot
 version: '${project.version}'
 main: me.hasenzahn1.structurereloot.StructureReloot
 api-version: 1.19
-load: STARTUP
 authors: [ Hasenzahn1 ]
 description: A Plugin that replaces the loot in structures
 
