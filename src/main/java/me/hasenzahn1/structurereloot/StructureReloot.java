@@ -5,19 +5,20 @@ import me.hasenzahn1.structurereloot.commands.RelootDebugCommand;
 import me.hasenzahn1.structurereloot.commandsystem.CommandManager;
 import me.hasenzahn1.structurereloot.config.CustomConfig;
 import me.hasenzahn1.structurereloot.config.DefaultConfig;
-import me.hasenzahn1.structurereloot.database.BlocksDatabase;
+import me.hasenzahn1.structurereloot.database.LootEntityValue;
+import me.hasenzahn1.structurereloot.database.WorldDatabase;
 import me.hasenzahn1.structurereloot.database.LootBlockValue;
-import me.hasenzahn1.structurereloot.databasesystem.Database;
 import me.hasenzahn1.structurereloot.listeners.BlockListener;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.loot.LootTable;
+import org.bukkit.entity.EntityType;
 import org.bukkit.loot.LootTables;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
+import java.util.UUID;
 import java.util.logging.Logger;
 
 public final class StructureReloot extends JavaPlugin {
@@ -32,7 +33,7 @@ public final class StructureReloot extends JavaPlugin {
 
     private CommandManager commandManager;
     private CustomConfig defaultConfig;
-    private HashMap<World, BlocksDatabase>  databases;
+    private HashMap<World, WorldDatabase>  databases;
 
     @Override
     public void onEnable() {
@@ -53,23 +54,33 @@ public final class StructureReloot extends JavaPlugin {
         databases = new HashMap<>();
         for(World world : Bukkit.getWorlds()){
             System.out.println(world);
-            BlocksDatabase database = new BlocksDatabase(databasePath, world);
+            WorldDatabase database = new WorldDatabase(databasePath, world);
             database.init();
             databases.put(world, database);
         }
 
         /*
         World world = Bukkit.getWorld("world");
-        BlocksDatabase database = getDatabase(world);
+        WorldDatabase database = getDatabase(world);
         database.addBlock(new LootBlockValue(new Location(world, 0, 0, 0), LootTables.BASTION_HOGLIN_STABLE.getLootTable()));
         database.addBlock(new LootBlockValue(new Location(world, 10, 0, 0), LootTables.BASTION_BRIDGE.getLootTable()));
         database.addBlock(new LootBlockValue(new Location(world, 100, 0, 0), LootTables.ANCIENT_CITY.getLootTable()));
         System.out.println(database.getAllBlocks());
         System.out.println("###################");
         System.out.println(database.getBlock(new Location(world, 0, 0, 0)));
+
+        System.out.println("#############################################");
+        database.addEntity(new LootEntityValue(EntityType.CHEST_BOAT, new Location(world, 0, 0, 0), LootTables.BASTION_OTHER.getLootTable(), UUID.randomUUID()));
+        database.addEntity(new LootEntityValue(EntityType.CHEST_BOAT, new Location(world, 10, 0, 0), LootTables.ABANDONED_MINESHAFT.getLootTable(), UUID.randomUUID()));
+        database.addEntity(new LootEntityValue(EntityType.CHEST_BOAT, new Location(world, 100, 0, 0), LootTables.CAVE_SPIDER.getLootTable(), UUID.randomUUID()));
+        System.out.println(database.getAllEntities());
+        System.out.println("##########");
+        System.out.println(database.getEntity(new Location(world, 0, 0, 0)));
         database.close();
 
          */
+
+
 
     }
 
@@ -93,7 +104,7 @@ public final class StructureReloot extends JavaPlugin {
         return instance;
     }
 
-    public BlocksDatabase getDatabase(World world){
+    public WorldDatabase getDatabase(World world){
         return databases.get(world);
     }
 

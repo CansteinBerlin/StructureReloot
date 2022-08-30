@@ -1,4 +1,4 @@
-package me.hasenzahn1.structurereloot.database.tables.blocks;
+package me.hasenzahn1.structurereloot.database.tables;
 
 import me.hasenzahn1.structurereloot.database.LootBlockValue;
 import me.hasenzahn1.structurereloot.databasesystem.Database;
@@ -30,6 +30,17 @@ public class BlockTable extends Table {
                 "block varchar(40) NOT NULL," +
                 "facing varchar(6) NOT NULL)" +
                 ";";
+    }
+
+    public void removeLootBlockValue(LootBlockValue value){
+        Connection con = getConnection();
+        try(PreparedStatement statement = con.prepareStatement(
+                "DELETE FROM " + getTableName() + " WHERE location='" + value.getLocationString() + "'"
+        )){
+            statement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void addBlock(LootBlockValue value){
@@ -65,7 +76,7 @@ public class BlockTable extends Table {
         return null;
     }
 
-    private NamespacedKey getNamespacedKey(String lootTable) {
+    public static NamespacedKey getNamespacedKey(String lootTable) {
         String[] strings = lootTable.split(":");
         return new NamespacedKey(strings[0], strings[1]);
     }

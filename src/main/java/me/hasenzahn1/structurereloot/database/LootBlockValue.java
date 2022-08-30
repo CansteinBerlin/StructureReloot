@@ -43,7 +43,7 @@ public class LootBlockValue {
         this.facing = BlockFace.valueOf(facing);
     }
 
-    private Location getLocFromString(World world, String loc) {
+    public static Location getLocFromString(World world, String loc) {
         String[] strings = loc.split(",");
         try {
             return new Location(world, Integer.parseInt(strings[0]), Integer.parseInt(strings[1]), Integer.parseInt(strings[2]));
