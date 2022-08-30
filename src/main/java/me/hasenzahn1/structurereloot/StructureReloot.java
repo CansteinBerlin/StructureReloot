@@ -8,6 +8,7 @@ import me.hasenzahn1.structurereloot.config.DefaultConfig;
 import me.hasenzahn1.structurereloot.database.BlocksDatabase;
 import me.hasenzahn1.structurereloot.database.LootBlockValue;
 import me.hasenzahn1.structurereloot.databasesystem.Database;
+import me.hasenzahn1.structurereloot.listeners.BlockListener;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -44,6 +45,8 @@ public final class StructureReloot extends JavaPlugin {
         commandManager = new CommandManager(this);
         commandManager.addCommand(new RelootCommand());
         if(debugMode) commandManager.addCommand(new RelootDebugCommand());
+
+        Bukkit.getPluginManager().registerEvents(new BlockListener(), this);
     }
 
     private void initDatabase() {
@@ -94,4 +97,7 @@ public final class StructureReloot extends JavaPlugin {
         return databases.get(world);
     }
 
+    public boolean isDebugMode() {
+        return debugMode;
+    }
 }

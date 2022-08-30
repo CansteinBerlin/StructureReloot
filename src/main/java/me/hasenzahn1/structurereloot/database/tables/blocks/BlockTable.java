@@ -26,17 +26,21 @@ public class BlockTable extends Table {
     public String getCreationString() {
         return "CREATE TABLE IF NOT EXISTS " + getTableName() + " (" +
                 "location varchar(27) PRIMARY KEY," +
-                "lootTable varchar(57) NOT NULL)" +
+                "lootTable varchar(57) NOT NULL," +
+                "block varchar(40) NOT NULL," +
+                "facing varchar(6) NOT NULL)" +
                 ";";
     }
 
     public void addBlock(LootBlockValue value){
         Connection con = getConnection();
         try(PreparedStatement statement = con.prepareStatement(
-                "INSERT OR REPLACE INTO " + getTableName() + " (location, lootTable) VALUES(?,?)"
+                "INSERT OR REPLACE INTO " + getTableName() + " (location, lootTable, block, facing) VALUES(?,?,?,?)"
         )){
             statement.setString(1, value.getLocationString());
             statement.setString(2, value.getStringLootTable());
+            statement.setString(3, value.getBlockMaterialString());
+            statement.setString(4, value.getFacingString());
             statement.executeUpdate();
 
         } catch (SQLException e) {
@@ -51,7 +55,7 @@ public class BlockTable extends Table {
         )){
             ResultSet set = statement.executeQuery();
             if(set.next()){
-                return new LootBlockValue(world, set.getString("location"), getNamespacedKey(set.getString("lootTable")));
+                return new LootBlockValue(world, set.getString("location"), getNamespacedKey(set.getString("lootTable")), set.getString("block"), set.getString("facing"));
             }else{
                 return null;
             }
@@ -74,7 +78,7 @@ public class BlockTable extends Table {
             ResultSet set = statement.executeQuery();
             ArrayList<LootBlockValue> values = new ArrayList<>();
             while(set.next()){
-                values.add(new LootBlockValue(world, set.getString("location"), getNamespacedKey(set.getString("lootTable"))));
+                values.add(new LootBlockValue(world, set.getString("location"), getNamespacedKey(set.getString("lootTable")), set.getString("block"), set.getString("facing")));
             }
             return values;
 

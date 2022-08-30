@@ -18,8 +18,9 @@ public class BlocksDatabase extends Database {
         addTable(new BlockTable(this, world));
     }
 
-    public void addBlock(LootBlockValue value){
+    public BlocksDatabase addBlock(LootBlockValue value){
         getTable(BlockTable.class).addBlock(value);
+        return this;
     }
 
     public LootBlockValue getBlock(Location loc){
