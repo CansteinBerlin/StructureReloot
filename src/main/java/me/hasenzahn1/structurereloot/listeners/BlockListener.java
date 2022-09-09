@@ -6,6 +6,7 @@ import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.data.Directional;
+import org.bukkit.entity.minecart.StorageMinecart;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
@@ -20,8 +21,15 @@ import java.util.stream.Collectors;
 
 public class BlockListener implements Listener {
 
+    /*
+        Should not receive entityLootables as well as plugins calling
+        LootTable.fillInventory(org.bukkit.inventory.Inventory, java.util.Random, LootContext).
+     */
     @EventHandler
     public void onLootGenerate(LootGenerateEvent event){
+        if(event.getInventoryHolder() instanceof StorageMinecart) return;
+        if(event.isPlugin()) return;
+
         Location loc = event.getLootContext().getLocation();
         if(loc.getBlock().getType() == Material.AIR) return; // Do not Capture Broken Blocks
         LootTable lootTable = event.getLootTable();
