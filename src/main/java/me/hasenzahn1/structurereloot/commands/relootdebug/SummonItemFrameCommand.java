@@ -3,10 +3,14 @@ package me.hasenzahn1.structurereloot.commands.relootdebug;
 import me.hasenzahn1.structurereloot.StructureReloot;
 import me.hasenzahn1.structurereloot.commandsystem.BaseCommand;
 import me.hasenzahn1.structurereloot.commandsystem.SubCommand;
+import me.hasenzahn1.structurereloot.listeners.EntityListener;
 import org.bukkit.Location;
+import org.bukkit.Material;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.ItemFrame;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
+import org.bukkit.persistence.PersistentDataType;
 
 public class SummonItemFrameCommand extends SubCommand {
 
@@ -22,8 +26,9 @@ public class SummonItemFrameCommand extends SubCommand {
         }
         Player p = ((Player) sender);
         Location loc = p.getLocation();
-        loc.getWorld().spawn(loc, ItemFrame.class);
-
+        ItemFrame frame = loc.getWorld().spawn(loc, ItemFrame.class);
+        frame.getPersistentDataContainer().set(EntityListener.markEntityKey, PersistentDataType.BYTE, (byte) 1);
+        frame.setItem(new ItemStack(Material.ELYTRA));
         return true;
     }
 }

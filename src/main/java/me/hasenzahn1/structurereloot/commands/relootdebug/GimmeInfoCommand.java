@@ -6,6 +6,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.block.data.type.Chest;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.loot.Lootable;
 
 
@@ -17,8 +18,8 @@ public class GimmeInfoCommand extends SubCommand {
 
     @Override
     public boolean performCommand(CommandSender sender, String[] args) {
-        sender.sendMessage("Block: " + ((Lootable) new Location(Bukkit.getWorld("world"), 1747, 73, -286).getBlock().getState()).getLootTable());
-        sender.sendMessage("Block: " + (new Location(Bukkit.getWorld("world"), 1747, 73, -286).getBlock() instanceof Lootable));
+        Player player = (Player) sender;
+        sender.sendMessage(player.getWorld().getEnderDragonBattle() + "");
         return true;
     }
 }

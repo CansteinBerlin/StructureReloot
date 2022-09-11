@@ -5,6 +5,7 @@ import me.hasenzahn1.structurereloot.commands.RelootDebugCommand;
 import me.hasenzahn1.structurereloot.commandsystem.CommandManager;
 import me.hasenzahn1.structurereloot.config.CustomConfig;
 import me.hasenzahn1.structurereloot.config.DefaultConfig;
+import me.hasenzahn1.structurereloot.config.LanguageConfig;
 import me.hasenzahn1.structurereloot.database.LootEntityValue;
 import me.hasenzahn1.structurereloot.database.WorldDatabase;
 import me.hasenzahn1.structurereloot.database.LootBlockValue;
@@ -34,6 +35,7 @@ public final class StructureReloot extends JavaPlugin {
 
     private CommandManager commandManager;
     private CustomConfig defaultConfig;
+    private LanguageConfig languageConfig;
     private HashMap<World, WorldDatabase>  databases;
 
     @Override
@@ -82,7 +84,22 @@ public final class StructureReloot extends JavaPlugin {
         */
     }
 
+    public static String getLang(String key, String... args) {
+        String lang = StructureReloot.getInstance().languageConfig.getConfig().getString(key, "&cUnknown or empty language key please check the config &6" + key);
+        for (int i = 0; i + 1 < args.length; i += 2) {
+            lang = lang.replace("%" + args[i] + "%", args[i + 1]);
+        }
+
+        if(!StructureReloot.getInstance().languageConfig.getConfig().contains(key)){
+            StructureReloot.getInstance().languageConfig.getConfig().set(key, "&cUnknown or empty language key please check the config &6" + key);
+            StructureReloot.getInstance().languageConfig.saveConfig();
+        }
+
+        return ChatColor.translateAlternateColorCodes('&', lang).replace("\\n", "\n");
+    }
+
     private void initConfigs() {
+        languageConfig = new LanguageConfig(this);
         initDefaultConfig();
     }
 
