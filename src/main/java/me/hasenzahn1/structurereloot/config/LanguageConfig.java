@@ -6,6 +6,6 @@ public class LanguageConfig extends CustomConfig{
 
 
     public LanguageConfig(JavaPlugin plugin) {
-        super(plugin, "messages.yml");
+        super(plugin, "lang.yml");
     }
 }
