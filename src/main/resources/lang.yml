@@ -1,0 +1,7 @@
+commands:
+  invalidCommand: "&cInvalid command. Please use &6/%command% %args%"
+
+  reset:
+    invalidWorld: "&cUnknown world with name &6%world%"
+    removedEntities: "&aSuccessfully removed all entities from the database"
+    removedBlocks: "&aSuccessfully removed all blocks from the database"

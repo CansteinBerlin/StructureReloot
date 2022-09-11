@@ -53,4 +53,18 @@ public class WorldDatabase extends Database {
     public void removeLootEntityValue(LootEntityValue value){
         getTable(EntityTable.class).removeLootEntityValue(value);
     }
+
+    public void removeAllEntitys(){
+        ArrayList<LootEntityValue> values = getAllEntities();
+        for(LootEntityValue e : values){
+            removeLootEntityValue(e);
+        }
+    }
+
+    public void removeAllBlocks(){
+        ArrayList<LootBlockValue> values = getAllBlocks();
+        for(LootBlockValue e : values){
+            removeLootBlockValue(e);
+        }
+    }
 }
