@@ -26,7 +26,7 @@ public class LootEntityValue {
     public LootEntityValue(World world, String entityType, String location, NamespacedKey lootTable, String uuid){
         this.entity = EntityType.valueOf(entityType);
         this.location = LootBlockValue.getLocFromString(world, location);
-        this.lootTable = Bukkit.getLootTable(lootTable);
+        this.lootTable = lootTable == null ? null : Bukkit.getLootTable(lootTable);
         this.uuid = UUID.fromString(uuid);
     }
 
@@ -39,13 +39,28 @@ public class LootEntityValue {
     }
 
     public String getLootTableString(){
-        return lootTable.toString();
+        return lootTable != null ? lootTable.toString() : "";
     }
 
     public String getUUIDString(){
         return uuid.toString();
     }
 
+    public EntityType getEntity() {
+        return entity;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public LootTable getLootTable() {
+        return lootTable;
+    }
+
+    public UUID getUuid() {
+        return uuid;
+    }
 
     @Override
     public String toString() {

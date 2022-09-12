@@ -3,6 +3,7 @@ package me.hasenzahn1.structurereloot.commands.reloot;
 import me.hasenzahn1.structurereloot.StructureReloot;
 import me.hasenzahn1.structurereloot.commandsystem.BaseCommand;
 import me.hasenzahn1.structurereloot.commandsystem.SubCommand;
+import me.hasenzahn1.structurereloot.util.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -23,7 +24,9 @@ public class RelootResetCommand extends SubCommand {
         if(args.length != 2){
             sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.invalidCommand",
                     "command", getCommandHistory(),
-                    "args", "<entity/block> " + worldString(tabComplete(null, new String[]{""})) ));
+                    "args", StringUtils.listToCommandArgs(tabComplete(null, new String[]{""})) +
+                            " " +
+                            StringUtils.listToCommandArgs(tabComplete(null, new String[]{"", ""}))));
             return true;
         }
         World world = Bukkit.getWorld(args[1]);
@@ -34,26 +37,20 @@ public class RelootResetCommand extends SubCommand {
 
         if(args[0].equalsIgnoreCase("entity")){
             StructureReloot.getInstance().getDatabase(world).removeAllEntitys();
+            StructureReloot.getInstance().getDatabase(world).close();
             sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.reset.removedEntities"));
         } else if (args[0].equalsIgnoreCase("block")) {
             StructureReloot.getInstance().getDatabase(world).removeAllBlocks();
+            StructureReloot.getInstance().getDatabase(world).close();
             sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.reset.removedBlocks"));
         } else {
             sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.invalidCommand",
                     "command", getCommandHistory(),
-                    "args", "<entity/block> " + worldString(tabComplete(null, new String[]{""}))));
+                    "args", StringUtils.listToCommandArgs(tabComplete(null, new String[]{""})) +
+                            " " +
+                            StringUtils.listToCommandArgs(tabComplete(null, new String[]{"", ""}))));
         }
         return true;
-    }
-
-    private String worldString(List<String> worlds) {
-        if(worlds.size() == 0) return "<>";
-        StringBuilder sb = new StringBuilder("<" + worlds.get(0));
-        for(int i = 1; i < worlds.size(); i++){
-            sb.append("/").append(worlds.get(i));
-        }
-        sb.append(">");
-        return sb.toString();
     }
 
 

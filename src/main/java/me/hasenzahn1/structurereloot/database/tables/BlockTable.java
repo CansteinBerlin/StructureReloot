@@ -78,6 +78,7 @@ public class BlockTable extends Table {
 
     public static NamespacedKey getNamespacedKey(String lootTable) {
         String[] strings = lootTable.split(":");
+        if(strings.length == 1) return null;
         return new NamespacedKey(strings[0], strings[1]);
     }
 

@@ -73,6 +73,22 @@ public class LootBlockValue {
         return lootTable.toString();
     }
 
+    public Location getLoc() {
+        return loc;
+    }
+
+    public LootTable getLootTable() {
+        return lootTable;
+    }
+
+    public Material getBlockMaterial() {
+        return blockMaterial;
+    }
+
+    public BlockFace getFacing() {
+        return facing;
+    }
+
     @Override
     public String toString() {
         return "LootBlockValue{" +
