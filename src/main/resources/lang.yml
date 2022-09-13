@@ -5,3 +5,6 @@ commands:
     invalidWorld: "&cUnknown world with name &6%world%"
     removedEntities: "&aSuccessfully removed all entities from the database"
     removedBlocks: "&aSuccessfully removed all blocks from the database"
+  regen:
+    sucEntity: "&aSuccessfully relooted %amount% entities"
+    sucBlock: "&aSuccessfully relooted %amount% blocks"

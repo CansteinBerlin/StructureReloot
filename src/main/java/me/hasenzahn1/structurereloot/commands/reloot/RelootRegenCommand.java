@@ -3,17 +3,18 @@ package me.hasenzahn1.structurereloot.commands.reloot;
 import me.hasenzahn1.structurereloot.StructureReloot;
 import me.hasenzahn1.structurereloot.commandsystem.BaseCommand;
 import me.hasenzahn1.structurereloot.commandsystem.SubCommand;
+import me.hasenzahn1.structurereloot.database.LootBlockValue;
+import me.hasenzahn1.structurereloot.database.LootEntityValue;
+import me.hasenzahn1.structurereloot.reloot.RelootHelper;
 import me.hasenzahn1.structurereloot.util.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
+import java.util.*;
 import java.util.stream.Collectors;
 
-public class RelootRegenCommand extends SubCommand {
+public class RelootRegenCommand extends SubCommand { //TODO: Test
 
     public RelootRegenCommand(BaseCommand parent) {
         super(parent, "regen", "reloot.commands.regen");
@@ -40,7 +41,7 @@ public class RelootRegenCommand extends SubCommand {
         }
 
         //Check Amount
-        int amount = 0;
+        int amount;
         if(args[2].equalsIgnoreCase("all")){
             amount = Integer.MAX_VALUE;
         }else{
@@ -61,10 +62,22 @@ public class RelootRegenCommand extends SubCommand {
 
 
         if(args[0].equalsIgnoreCase("entity")){
+            List<LootEntityValue> levs = StructureReloot.getInstance().getDatabase(world).getAllEntities();
+            Collections.shuffle(levs);
+            for(int i = 0; i < Math.min(levs.size(), amount); i++){
+                RelootHelper.relootOneEntity(levs.get(i));
+            }
 
+            sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.regen.sucEntity", "amount", args[1].toLowerCase(Locale.ROOT)));
 
         } else if (args[0].equalsIgnoreCase("block")) {
+            List<LootBlockValue> lbvs = StructureReloot.getInstance().getDatabase(world).getAllBlocks();
+            Collections.shuffle(lbvs);
+            for(int i = 0; i < Math.min(lbvs.size(), amount); i++){
+                RelootHelper.relootOneBlock(lbvs.get(i));
+            }
 
+            sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.regen.sucBlock", "amount", args[1].toLowerCase(Locale.ROOT)));
 
         } else {
             sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.invalidCommand",
