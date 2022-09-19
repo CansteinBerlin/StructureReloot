@@ -5,7 +5,6 @@ import me.hasenzahn1.structurereloot.database.LootEntityValue;
 import me.hasenzahn1.structurereloot.databasesystem.Database;
 import me.hasenzahn1.structurereloot.databasesystem.Table;
 import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 
 import java.sql.Connection;
@@ -18,10 +17,16 @@ import static me.hasenzahn1.structurereloot.database.tables.BlockTable.getNamesp
 
 public class EntityTable extends Table {
 
-    private World world;
+    private final World world;
+
+    private boolean cacheRemove;
+    private final ArrayList<LootEntityValue> cachedLootEntityValues;
+
     public EntityTable(Database database, World world) {
         super("entities", database);
         this.world = world;
+        cacheRemove = false;
+        cachedLootEntityValues = new ArrayList<>();
     }
 
     @Override
@@ -35,6 +40,10 @@ public class EntityTable extends Table {
     }
 
     public void removeLootEntityValue(LootEntityValue value){
+        if(cacheRemove){
+            cachedLootEntityValues.add(value);
+            return;
+        }
         Connection con = getConnection();
         try(PreparedStatement statement = con.prepareStatement(
                 "DELETE FROM " + getTableName() + " WHERE location='" + value.getLocationString() + "'"
@@ -102,6 +111,33 @@ public class EntityTable extends Table {
             e.printStackTrace();
         }
         return new ArrayList<>();
+    }
+
+    private void removeCachedLevs(){
+        if(cachedLootEntityValues.size() == 0) return;
+        Connection con = getConnection();
+        StringBuilder sqlString = new StringBuilder("DELETE FROM ").append(getTableName()).append(" WHERE location IN ('").append(cachedLootEntityValues.get(0).getLocationString()).append("'");
+
+        for(int i = 1; i <  cachedLootEntityValues.size(); i++){
+            sqlString.append(", '").append(cachedLootEntityValues.get(i).getLocationString()).append("'");
+        }
+        sqlString.append(")");
+
+        try(PreparedStatement statement = con.prepareStatement(
+                sqlString.toString()
+        )){
+            statement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void setCacheRemove(boolean value){
+        this.cacheRemove = value;
+        if(!value) {
+            removeCachedLevs();
+            cachedLootEntityValues.clear();
+        }
     }
 
 }

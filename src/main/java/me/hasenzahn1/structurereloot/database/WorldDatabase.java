@@ -9,6 +9,7 @@ import org.bukkit.World;
 
 import javax.swing.text.html.parser.Entity;
 import java.util.ArrayList;
+import java.util.List;
 
 public class WorldDatabase extends Database {
 
@@ -54,6 +55,18 @@ public class WorldDatabase extends Database {
         getTable(EntityTable.class).removeLootEntityValue(value);
     }
 
+    public void removeLootBlockValues(List<LootBlockValue> values){
+        for(LootBlockValue value : values){
+            removeLootBlockValue(value);
+        }
+    }
+
+    public void removeLootEntityValues(List<LootEntityValue> values){
+        for(LootEntityValue value : values){
+            removeLootEntityValue(value);
+        }
+    }
+
     public void removeAllEntitys(){
         ArrayList<LootEntityValue> values = getAllEntities();
         for(LootEntityValue e : values){
@@ -66,5 +79,10 @@ public class WorldDatabase extends Database {
         for(LootBlockValue e : values){
             removeLootBlockValue(e);
         }
+    }
+
+    public void setCacheRemove(boolean value){
+        getTable(EntityTable.class).setCacheRemove(value);
+        getTable(BlockTable.class).setCacheRemove(value);
     }
 }

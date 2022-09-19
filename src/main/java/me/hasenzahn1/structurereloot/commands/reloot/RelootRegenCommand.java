@@ -5,11 +5,14 @@ import me.hasenzahn1.structurereloot.commandsystem.BaseCommand;
 import me.hasenzahn1.structurereloot.commandsystem.SubCommand;
 import me.hasenzahn1.structurereloot.database.LootBlockValue;
 import me.hasenzahn1.structurereloot.database.LootEntityValue;
+import me.hasenzahn1.structurereloot.database.WorldDatabase;
+import me.hasenzahn1.structurereloot.databasesystem.Database;
 import me.hasenzahn1.structurereloot.reloot.RelootHelper;
 import me.hasenzahn1.structurereloot.util.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Bat;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -88,23 +91,34 @@ public class RelootRegenCommand extends SubCommand { //TODO: Test
                             "<1/2/.../all>"
             ));
         }
+        StructureReloot.getInstance().getDatabase(world).close();
         return true;
     }
 
     public void regenEntities(World world, int amount){
         List<LootEntityValue> levs = StructureReloot.getInstance().getDatabase(world).getAllEntities();
         Collections.shuffle(levs);
-        for(int i = 0; i < Math.min(levs.size(), amount); i++){
-            RelootHelper.relootOneEntity(levs.get(i));
-        }
+        List<LootEntityValue> values = levs.stream().limit(Math.min(levs.size(), amount)).collect(Collectors.toList());
+
+        WorldDatabase database = StructureReloot.getInstance().getDatabase(world);
+        database.setCacheRemove(true);
+        RelootHelper.relootMultipleEntities(values);
+        database.removeLootEntityValues(values);
+        database.setCacheRemove(false);
     }
 
     public void regenBlocks(World world, int amount){
         List<LootBlockValue> lbvs = StructureReloot.getInstance().getDatabase(world).getAllBlocks();
         Collections.shuffle(lbvs);
-        for(int i = 0; i < Math.min(lbvs.size(), amount); i++){
-            RelootHelper.relootOneBlock(lbvs.get(i));
-        }
+        List<LootBlockValue> values = lbvs.stream().limit(Math.min(lbvs.size(), amount)).collect(Collectors.toList());
+
+        Bukkit.broadcastMessage(values.stream().map(LootBlockValue::getLocationString).collect(Collectors.toList()) + "");
+
+        WorldDatabase database = StructureReloot.getInstance().getDatabase(world);
+        database.setCacheRemove(true);
+        RelootHelper.relootMultipleBlocks(values);
+        database.removeLootBlockValues(values);
+        database.setCacheRemove(false);
     }
 
     @Override
