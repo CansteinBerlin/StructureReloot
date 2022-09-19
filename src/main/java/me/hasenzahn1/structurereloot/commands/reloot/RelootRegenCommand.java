@@ -31,6 +31,8 @@ public class RelootRegenCommand extends SubCommand { //TODO: Test
                             " " +
                             "<1/2/.../all>"
                     ));
+
+            return true;
         }
 
         //Check World
@@ -62,23 +64,20 @@ public class RelootRegenCommand extends SubCommand { //TODO: Test
 
 
         if(args[0].equalsIgnoreCase("entity")){
-            List<LootEntityValue> levs = StructureReloot.getInstance().getDatabase(world).getAllEntities();
-            Collections.shuffle(levs);
-            for(int i = 0; i < Math.min(levs.size(), amount); i++){
-                RelootHelper.relootOneEntity(levs.get(i));
-            }
+            regenEntities(world, amount);
 
             sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.regen.sucEntity", "amount", args[1].toLowerCase(Locale.ROOT)));
 
         } else if (args[0].equalsIgnoreCase("block")) {
-            List<LootBlockValue> lbvs = StructureReloot.getInstance().getDatabase(world).getAllBlocks();
-            Collections.shuffle(lbvs);
-            for(int i = 0; i < Math.min(lbvs.size(), amount); i++){
-                RelootHelper.relootOneBlock(lbvs.get(i));
-            }
+            regenBlocks(world, amount);
 
             sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.regen.sucBlock", "amount", args[1].toLowerCase(Locale.ROOT)));
 
+        } else if(args[0].equalsIgnoreCase("all")){
+            regenEntities(world, amount);
+            regenBlocks(world, amount);
+
+            sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.regen.sucBoth", "amount", args[0].toLowerCase(Locale.ROOT)));
         } else {
             sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.invalidCommand",
                     "command", getCommandHistory(),
@@ -90,6 +89,22 @@ public class RelootRegenCommand extends SubCommand { //TODO: Test
             ));
         }
         return true;
+    }
+
+    public void regenEntities(World world, int amount){
+        List<LootEntityValue> levs = StructureReloot.getInstance().getDatabase(world).getAllEntities();
+        Collections.shuffle(levs);
+        for(int i = 0; i < Math.min(levs.size(), amount); i++){
+            RelootHelper.relootOneEntity(levs.get(i));
+        }
+    }
+
+    public void regenBlocks(World world, int amount){
+        List<LootBlockValue> lbvs = StructureReloot.getInstance().getDatabase(world).getAllBlocks();
+        Collections.shuffle(lbvs);
+        for(int i = 0; i < Math.min(lbvs.size(), amount); i++){
+            RelootHelper.relootOneBlock(lbvs.get(i));
+        }
     }
 
     @Override
@@ -104,6 +119,12 @@ public class RelootRegenCommand extends SubCommand { //TODO: Test
             return Bukkit.getWorlds().stream()
                     .map(World::getName)
                     .filter(s -> s.startsWith(args[1]))
+                    .sorted()
+                    .collect(Collectors.toList());
+        }
+        if(args.length == 3){
+            return Arrays.stream(new String[]{"...", "1", "2", "all", "3"})
+                    .filter(s -> s.startsWith(args[2]))
                     .sorted()
                     .collect(Collectors.toList());
         }

@@ -10,6 +10,10 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.bukkit.loot.LootTables;
 
+import java.util.Arrays;
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class SummonLootChestCommand extends SubCommand {
 
     public SummonLootChestCommand(BaseCommand parent) {
@@ -23,6 +27,16 @@ public class SummonLootChestCommand extends SubCommand {
             sender.sendMessage(StructureReloot.PREFIX + "§cYou have to be a player to use this command");
             return true;
         }
+        LootTables lootTable = LootTables.ABANDONED_MINESHAFT;
+        if(args.length >= 1){
+            try {
+                lootTable = LootTables.valueOf(args[0]);
+            }catch (IllegalArgumentException e){
+                sender.sendMessage(StructureReloot.PREFIX + "§cUnknown LootTable " + args[0]);
+                return true;
+            }
+        }
+
         Player p = ((Player) sender);
         p.getLocation().getBlock().setType(Material.AIR);
         p.getLocation().getBlock().setType(Material.CHEST);
@@ -32,10 +46,20 @@ public class SummonLootChestCommand extends SubCommand {
             return true;
         }
         Chest chestState = ((Chest) state);
-        chestState.setLootTable(LootTables.ANCIENT_CITY.getLootTable());
+        chestState.setLootTable(lootTable.getLootTable());
         chestState.update();
 
         sender.sendMessage(StructureReloot.PREFIX + "§aSuccessfully placed chest");
         return true;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        return Arrays.stream(LootTables.values())
+                .filter(l -> l.getKey().getKey().contains("chest"))
+                .map(Enum::name)
+                .filter(s -> s.startsWith(args[0]))
+                .sorted()
+                .collect(Collectors.toList());
     }
 }

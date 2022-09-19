@@ -8,3 +8,4 @@ commands:
   regen:
     sucEntity: "&aSuccessfully relooted %amount% entities"
     sucBlock: "&aSuccessfully relooted %amount% blocks"
+    sucBoth: "&aSuccessfully relooted %amount% blocks and entities"

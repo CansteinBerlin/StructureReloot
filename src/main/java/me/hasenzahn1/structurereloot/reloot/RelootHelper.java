@@ -34,13 +34,13 @@ public class RelootHelper {
             loc.getBlock().setBlockData(data);
         }
         if(loc.getBlock().getState() instanceof Chest){
-            Bukkit.broadcastMessage("Lootable");
+            //Bukkit.broadcastMessage("Lootable");
             Chest ltbstate = ((Chest) loc.getBlock().getState());
             ltbstate.setLootTable(value.getLootTable()); //Set LootTable
             ltbstate.update();
         }
         if(loc.getBlock().getState() instanceof Dispenser){
-            Bukkit.broadcastMessage("Lootable");
+            //Bukkit.broadcastMessage("Lootable");
             Dispenser ltbstate = ((Dispenser) loc.getBlock().getState());
             ltbstate.setLootTable(value.getLootTable()); //Set LootTable
             ltbstate.update();
