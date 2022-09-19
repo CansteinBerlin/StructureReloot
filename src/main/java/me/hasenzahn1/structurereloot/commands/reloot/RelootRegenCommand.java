@@ -112,7 +112,7 @@ public class RelootRegenCommand extends SubCommand { //TODO: Test
         Collections.shuffle(lbvs);
         List<LootBlockValue> values = lbvs.stream().limit(Math.min(lbvs.size(), amount)).collect(Collectors.toList());
 
-        Bukkit.broadcastMessage(values.stream().map(LootBlockValue::getLocationString).collect(Collectors.toList()) + "");
+        //Bukkit.broadcastMessage(values.stream().map(LootBlockValue::getLocationString).collect(Collectors.toList()) + "");
 
         WorldDatabase database = StructureReloot.getInstance().getDatabase(world);
         database.setCacheRemove(true);

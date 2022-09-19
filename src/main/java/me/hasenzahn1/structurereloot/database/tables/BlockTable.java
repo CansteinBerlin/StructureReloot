@@ -121,7 +121,7 @@ public class BlockTable extends Table {
             sqlString.append(", '").append(cachedLootBlockValues.get(i).getLocationString()).append("'");
         }
         sqlString.append(")");
-        Bukkit.broadcastMessage(sqlString.toString());
+        //Bukkit.broadcastMessage(sqlString.toString());
         try(PreparedStatement statement = con.prepareStatement(
                 sqlString.toString()
         )){
@@ -134,7 +134,7 @@ public class BlockTable extends Table {
     public void setCacheRemove(boolean value){
         this.cacheRemove = value;
         if(!value) {
-            Bukkit.broadcastMessage(cachedLootBlockValues.stream().map(LootBlockValue::getLocationString).collect(Collectors.toList()) + "");
+            //Bukkit.broadcastMessage(cachedLootBlockValues.stream().map(LootBlockValue::getLocationString).collect(Collectors.toList()) + "");
             removeCachedLbvs();
             cachedLootBlockValues.clear();
         }
