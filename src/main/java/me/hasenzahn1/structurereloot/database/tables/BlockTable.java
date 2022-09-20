@@ -96,6 +96,15 @@ public class BlockTable extends Table {
     }
 
     public void addMultipleBlocks(List<LootBlockValue> values){
+        if(values.size() > 1000){
+            _addMultipleBlocks(values.subList(0, 999));
+            addMultipleBlocks(values.subList(1000, values.size()));
+        }else{
+            _addMultipleBlocks(values);
+        }
+    }
+
+    public void _addMultipleBlocks(List<LootBlockValue> values){
         Connection con = getConnection();
         if(values.size() == 0) return;
         StringBuilder sqlString = new StringBuilder("INSERT OR REPLACE INTO " + getTableName() + " (location, lootTable, block, facing) VALUES ");

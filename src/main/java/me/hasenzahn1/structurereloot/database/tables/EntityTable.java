@@ -104,6 +104,15 @@ public class EntityTable extends Table {
     }
 
     public void addMultipleEntities(List<LootEntityValue> values){
+        if(values.size() > 1000){
+            _addMultipleEntities(values.subList(0, 999));
+            addMultipleEntities(values.subList(1000, values.size()));
+        }else{
+            _addMultipleEntities(values);
+        }
+    }
+
+    public void _addMultipleEntities(List<LootEntityValue> values){
         if(values.size() == 0) return;
         Connection con = getConnection();
         StringBuilder sqlString = new StringBuilder("INSERT OR REPLACE INTO " + getTableName() + " (location, lootTable, uuid, entityType) VALUES ");
@@ -167,5 +176,6 @@ public class EntityTable extends Table {
             cachedLootEntityValues.clear();
         }
     }
+
 
 }

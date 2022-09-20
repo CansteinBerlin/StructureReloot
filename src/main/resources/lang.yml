@@ -6,6 +6,6 @@ commands:
     removedEntities: "&aSuccessfully removed all entities from the database"
     removedBlocks: "&aSuccessfully removed all blocks from the database"
   regen:
-    sucEntity: "&aSuccessfully relooted %amount% entities"
-    sucBlock: "&aSuccessfully relooted %amount% blocks"
-    sucBoth: "&aSuccessfully relooted %amount% blocks and entities"
+    sucEntity: "&aSuccessfully relooted %amount% entities in &6%time% &aseconds"
+    sucBlock: "&aSuccessfully relooted %amount% blocks in &6%time% &aseconds"
+    sucBoth: "&aSuccessfully relooted %amount% blocks and entities in &6%time% &aseconds"

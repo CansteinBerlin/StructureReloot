@@ -11,6 +11,7 @@ import me.hasenzahn1.structurereloot.database.WorldDatabase;
 import me.hasenzahn1.structurereloot.database.LootBlockValue;
 import me.hasenzahn1.structurereloot.listeners.BlockListener;
 import me.hasenzahn1.structurereloot.listeners.EntityListener;
+import me.hasenzahn1.structurereloot.reloot.BlockChangeTask;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -38,6 +39,8 @@ public final class StructureReloot extends JavaPlugin {
     private LanguageConfig languageConfig;
     private HashMap<World, WorldDatabase>  databases;
 
+    private BlockChangeTask blockChangeTask;
+
     @Override
     public void onEnable() {
         instance = this;
@@ -45,6 +48,8 @@ public final class StructureReloot extends JavaPlugin {
 
         initConfigs();
         initDatabase();
+
+        blockChangeTask = new BlockChangeTask();
 
         commandManager = new CommandManager(this);
         commandManager.addCommand(new RelootCommand());
@@ -108,6 +113,7 @@ public final class StructureReloot extends JavaPlugin {
         PREFIX = ChatColor.translateAlternateColorCodes('&', defaultConfig.getConfig().getString("prefix", PREFIX));
         debugMode = defaultConfig.getConfig().getBoolean("debugMode", false);
         databasePath = defaultConfig.getConfig().getString("databaseFolder", "data");
+        BlockChangeTask.BLOCK_CHANGE_AMOUNT = defaultConfig.getConfig().getInt("blocksPerTick", 10);
     }
 
     @Override
@@ -121,6 +127,10 @@ public final class StructureReloot extends JavaPlugin {
 
     public WorldDatabase getDatabase(World world){
         return databases.get(world);
+    }
+
+    public BlockChangeTask getBlockChangeTask() {
+        return blockChangeTask;
     }
 
     public boolean isDebugMode() {

@@ -43,7 +43,7 @@ public class StressTestCommand extends SubCommand {
         List<LootBlockValue> values = new ArrayList<>();
         for(int i = 1; i < amount + 1; i++){
             values.add(new LootBlockValue(
-                    new Location(world, 3000 + x * 16, 200, y * 16),
+                    new Location(world, 3000 + x * 16, 203, y * 16),
                     LootTables.ABANDONED_MINESHAFT.getLootTable(),
                     Material.CHEST,
                     BlockFace.NORTH

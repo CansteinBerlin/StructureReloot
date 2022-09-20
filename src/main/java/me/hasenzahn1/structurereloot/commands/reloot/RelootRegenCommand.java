@@ -63,22 +63,32 @@ public class RelootRegenCommand extends SubCommand { //TODO: Test
             }
         }
 
+        long millis = System.currentTimeMillis();
 
         if(args[0].equalsIgnoreCase("entity")){
             regenEntities(world, amount);
 
-            sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.regen.sucEntity", "amount", args[1].toLowerCase(Locale.ROOT)));
+            sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.regen.sucEntity",
+                    "amount", args[1].toLowerCase(Locale.ROOT),
+                    "time", ((System.currentTimeMillis() - millis) / 1000) + ""));
 
         } else if (args[0].equalsIgnoreCase("block")) {
-            regenBlocks(world, amount);
-
-            sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.regen.sucBlock", "amount", args[1].toLowerCase(Locale.ROOT)));
+            regenBlocks(world, amount, () ->
+                    sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.regen.sucBlock",
+                            "amount", args[1].toLowerCase(Locale.ROOT),
+                            "time", ((System.currentTimeMillis() - millis) / 1000) + ""))
+            );
 
         } else if(args[0].equalsIgnoreCase("all")){
             regenEntities(world, amount);
-            regenBlocks(world, amount);
+            regenBlocks(world, amount, () -> {
+                        sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.regen.sucBoth",
+                                "amount", args[0].toLowerCase(Locale.ROOT),
+                                "time", ((System.currentTimeMillis() - millis) / 1000) + ""));
+            }
+            );
 
-            sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.regen.sucBoth", "amount", args[0].toLowerCase(Locale.ROOT)));
+
         } else {
             sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.invalidCommand",
                     "command", getCommandHistory(),
@@ -105,14 +115,13 @@ public class RelootRegenCommand extends SubCommand { //TODO: Test
         database.setCacheRemove(false);
     }
 
-    public void regenBlocks(World world, int amount){
+    public void regenBlocks(World world, int amount, Runnable runnable){
         List<LootBlockValue> lbvs = StructureReloot.getInstance().getDatabase(world).getAllBlocks();
         Collections.shuffle(lbvs);
         List<LootBlockValue> values = lbvs.stream().limit(Math.min(lbvs.size(), amount)).collect(Collectors.toList());
 
-        //Bukkit.broadcastMessage(values.stream().map(LootBlockValue::getLocationString).collect(Collectors.toList()) + "");
-
         WorldDatabase database = StructureReloot.getInstance().getDatabase(world);
+        StructureReloot.getInstance().getBlockChangeTask().addCallback(runnable);
         database.setCacheRemove(true);
         RelootHelper.relootMultipleBlocks(values);
         database.removeMultipleBlocks(values);

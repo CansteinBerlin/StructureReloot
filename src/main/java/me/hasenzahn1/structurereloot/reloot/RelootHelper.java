@@ -1,5 +1,6 @@
 package me.hasenzahn1.structurereloot.reloot;
 
+import me.hasenzahn1.structurereloot.StructureReloot;
 import me.hasenzahn1.structurereloot.database.LootBlockValue;
 import me.hasenzahn1.structurereloot.database.LootEntityValue;
 import me.hasenzahn1.structurereloot.listeners.EntityListener;
@@ -45,9 +46,7 @@ public class RelootHelper {
     }
 
     public static void relootMultipleBlocks(List<LootBlockValue> values){
-        for(LootBlockValue value : values){
-            relootOneBlock(value);
-        }
+        StructureReloot.getInstance().getBlockChangeTask().changeBlocks(values);
     }
 
     public static void relootOneEntity(LootEntityValue value){
