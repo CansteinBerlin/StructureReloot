@@ -3,22 +3,22 @@ package me.hasenzahn1.structurereloot.commands.relootdebug;
 import me.hasenzahn1.structurereloot.StructureReloot;
 import me.hasenzahn1.structurereloot.commandsystem.BaseCommand;
 import me.hasenzahn1.structurereloot.commandsystem.SubCommand;
-import me.hasenzahn1.structurereloot.database.LootBlockValue;
+import me.hasenzahn1.structurereloot.database.LootEntityValue;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
-import org.bukkit.loot.LootTables;
+import org.bukkit.entity.EntityType;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
-public class StressTestCommand extends SubCommand {
+public class LoadStressTestDataEntityCommand extends SubCommand {
 
-    public StressTestCommand(BaseCommand parent) {
-        super(parent, "loadStresstestData", null);
+
+    public LoadStressTestDataEntityCommand(BaseCommand parent) {
+        super(parent, "loadStressTestDataEntity", null);
     }
 
     @Override
@@ -40,23 +40,18 @@ public class StressTestCommand extends SubCommand {
         int div = (int) (Math.sqrt(amount));
         int x = 0;
         int y = 0;
-        List<LootBlockValue> values = new ArrayList<>();
+        List<LootEntityValue> values = new ArrayList<>();
         for(int i = 1; i < amount + 1; i++){
-            values.add(new LootBlockValue(
-                    new Location(world, 3000 + x * 16, 203, y * 16),
-                    LootTables.ABANDONED_MINESHAFT.getLootTable(),
-                    Material.CHEST,
-                    BlockFace.NORTH
+            values.add(new LootEntityValue(
+                    EntityType.ITEM_FRAME, new Location(world, 3000 + x * 16, 204, y * 16), null, UUID.randomUUID()
             ));
             x = i % div;
             y = i / div;
         }
-        StructureReloot.getInstance().getDatabase(world).addMultipleBlocks(values);
+        StructureReloot.getInstance().getDatabase(world).addMultipleEntities(values);
         StructureReloot.getInstance().getDatabase(world).close();
 
-        sender.sendMessage(StructureReloot.PREFIX + "§aAdded " + amount + " new LootBlocks");
+        sender.sendMessage(StructureReloot.PREFIX + "§aAdded " + amount + " new LootEntities");
         return true;
     }
-
-
 }

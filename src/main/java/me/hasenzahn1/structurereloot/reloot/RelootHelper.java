@@ -66,9 +66,7 @@ public class RelootHelper {
     }
 
     public static void relootMultipleEntities(List<LootEntityValue> values){
-        for(LootEntityValue value : values){
-            relootOneEntity(value);
-        }
+        StructureReloot.getInstance().getEntityChangeTask().changeEntities(values);
     }
 
 }

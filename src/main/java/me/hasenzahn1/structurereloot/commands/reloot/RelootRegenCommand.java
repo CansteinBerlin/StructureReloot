@@ -15,7 +15,7 @@ import org.bukkit.command.CommandSender;
 import java.util.*;
 import java.util.stream.Collectors;
 
-public class RelootRegenCommand extends SubCommand { //TODO: Test
+public class RelootRegenCommand extends SubCommand {
 
     public RelootRegenCommand(BaseCommand parent) {
         super(parent, "regen", "reloot.commands.regen");
@@ -66,24 +66,24 @@ public class RelootRegenCommand extends SubCommand { //TODO: Test
         long millis = System.currentTimeMillis();
 
         if(args[0].equalsIgnoreCase("entity")){
-            regenEntities(world, amount);
-
-            sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.regen.sucEntity",
-                    "amount", args[1].toLowerCase(Locale.ROOT),
-                    "time", ((System.currentTimeMillis() - millis) / 1000) + ""));
+            regenEntities(world, amount, () -> {
+                sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.regen.sucEntity",
+                        "amount", args[2].toLowerCase(Locale.ROOT),
+                        "time", ((System.currentTimeMillis() - millis) / 1000) + ""));
+            });
 
         } else if (args[0].equalsIgnoreCase("block")) {
             regenBlocks(world, amount, () ->
                     sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.regen.sucBlock",
-                            "amount", args[1].toLowerCase(Locale.ROOT),
+                            "amount", args[2].toLowerCase(Locale.ROOT),
                             "time", ((System.currentTimeMillis() - millis) / 1000) + ""))
             );
 
         } else if(args[0].equalsIgnoreCase("all")){
-            regenEntities(world, amount);
+            regenEntities(world, amount, () -> {});
             regenBlocks(world, amount, () -> {
                         sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.regen.sucBoth",
-                                "amount", args[0].toLowerCase(Locale.ROOT),
+                                "amount", args[2].toLowerCase(Locale.ROOT),
                                 "time", ((System.currentTimeMillis() - millis) / 1000) + ""));
             }
             );
@@ -103,12 +103,13 @@ public class RelootRegenCommand extends SubCommand { //TODO: Test
         return true;
     }
 
-    public void regenEntities(World world, int amount){
+    public void regenEntities(World world, int amount, Runnable runnable){
         List<LootEntityValue> levs = StructureReloot.getInstance().getDatabase(world).getAllEntities();
         Collections.shuffle(levs);
         List<LootEntityValue> values = levs.stream().limit(Math.min(levs.size(), amount)).collect(Collectors.toList());
 
         WorldDatabase database = StructureReloot.getInstance().getDatabase(world);
+        StructureReloot.getInstance().getEntityChangeTask().addCallback(runnable);
         database.setCacheRemove(true);
         RelootHelper.relootMultipleEntities(values);
         database.removeMultipleEntities(values);

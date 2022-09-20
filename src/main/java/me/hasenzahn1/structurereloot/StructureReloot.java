@@ -12,6 +12,7 @@ import me.hasenzahn1.structurereloot.database.LootBlockValue;
 import me.hasenzahn1.structurereloot.listeners.BlockListener;
 import me.hasenzahn1.structurereloot.listeners.EntityListener;
 import me.hasenzahn1.structurereloot.reloot.BlockChangeTask;
+import me.hasenzahn1.structurereloot.reloot.EntityChangeTask;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Location;
@@ -40,6 +41,7 @@ public final class StructureReloot extends JavaPlugin {
     private HashMap<World, WorldDatabase>  databases;
 
     private BlockChangeTask blockChangeTask;
+    private EntityChangeTask entityChangeTask;
 
     @Override
     public void onEnable() {
@@ -50,6 +52,7 @@ public final class StructureReloot extends JavaPlugin {
         initDatabase();
 
         blockChangeTask = new BlockChangeTask();
+        entityChangeTask = new EntityChangeTask();
 
         commandManager = new CommandManager(this);
         commandManager.addCommand(new RelootCommand());
@@ -113,7 +116,8 @@ public final class StructureReloot extends JavaPlugin {
         PREFIX = ChatColor.translateAlternateColorCodes('&', defaultConfig.getConfig().getString("prefix", PREFIX));
         debugMode = defaultConfig.getConfig().getBoolean("debugMode", false);
         databasePath = defaultConfig.getConfig().getString("databaseFolder", "data");
-        BlockChangeTask.BLOCK_CHANGE_AMOUNT = defaultConfig.getConfig().getInt("blocksPerTick", 10);
+        BlockChangeTask.BLOCK_CHANGE_AMOUNT = defaultConfig.getConfig().getInt("blocksPerTick", 30);
+        EntityChangeTask.ENTITY_CHANGE_AMOUNT = defaultConfig.getConfig().getInt("entitiesPerTick", 30);
     }
 
     @Override
@@ -131,6 +135,10 @@ public final class StructureReloot extends JavaPlugin {
 
     public BlockChangeTask getBlockChangeTask() {
         return blockChangeTask;
+    }
+
+    public EntityChangeTask getEntityChangeTask() {
+        return entityChangeTask;
     }
 
     public boolean isDebugMode() {
