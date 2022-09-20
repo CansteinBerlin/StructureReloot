@@ -6,13 +6,11 @@ import me.hasenzahn1.structurereloot.commandsystem.SubCommand;
 import me.hasenzahn1.structurereloot.database.LootBlockValue;
 import me.hasenzahn1.structurereloot.database.LootEntityValue;
 import me.hasenzahn1.structurereloot.database.WorldDatabase;
-import me.hasenzahn1.structurereloot.databasesystem.Database;
 import me.hasenzahn1.structurereloot.reloot.RelootHelper;
 import me.hasenzahn1.structurereloot.util.StringUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Bat;
 
 import java.util.*;
 import java.util.stream.Collectors;
@@ -103,7 +101,7 @@ public class RelootRegenCommand extends SubCommand { //TODO: Test
         WorldDatabase database = StructureReloot.getInstance().getDatabase(world);
         database.setCacheRemove(true);
         RelootHelper.relootMultipleEntities(values);
-        database.removeLootEntityValues(values);
+        database.removeMultipleEntities(values);
         database.setCacheRemove(false);
     }
 
@@ -117,7 +115,7 @@ public class RelootRegenCommand extends SubCommand { //TODO: Test
         WorldDatabase database = StructureReloot.getInstance().getDatabase(world);
         database.setCacheRemove(true);
         RelootHelper.relootMultipleBlocks(values);
-        database.removeLootBlockValues(values);
+        database.removeMultipleBlocks(values);
         database.setCacheRemove(false);
     }
 

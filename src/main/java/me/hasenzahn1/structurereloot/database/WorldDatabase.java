@@ -7,7 +7,6 @@ import me.hasenzahn1.structurereloot.databasesystem.Database;
 import org.bukkit.Location;
 import org.bukkit.World;
 
-import javax.swing.text.html.parser.Entity;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -21,11 +20,8 @@ public class WorldDatabase extends Database {
         addTable(new EntityTable(this, world));
     }
 
-    public WorldDatabase addBlock(LootBlockValue value){
-        getTable(BlockTable.class).addBlock(value);
-        return this;
-    }
-
+    //############## Blocks ##############//
+    //get Value
     public LootBlockValue getBlock(Location loc){
         return getTable(BlockTable.class).getBlock(loc);
     }
@@ -34,15 +30,35 @@ public class WorldDatabase extends Database {
         return getTable(BlockTable.class).getAllBlocks();
     }
 
-    public void removeLootBlockValue(LootBlockValue value){
-        getTable(BlockTable.class).removeLootBlockValue(value);
-    }
 
-    public WorldDatabase addEntity(LootEntityValue value){
-        getTable(EntityTable.class).addEntity(value);
+    //add Value
+    public WorldDatabase addBlock(LootBlockValue value){
+        getTable(BlockTable.class).addBlock(value);
         return this;
     }
 
+    public void addMultipleBlocks(List<LootBlockValue> values){
+        getTable(BlockTable.class).addMultipleBlocks(values);
+    }
+
+
+    //remove Value
+    public void removeBlock(LootBlockValue value){
+        getTable(BlockTable.class).removeBlock(value);
+    }
+
+    public void removeMultipleBlocks(List<LootBlockValue> values){
+        getTable(BlockTable.class).removeMultipleBlocks(values);
+    }
+
+    public void removeAllBlocks(){
+        removeMultipleBlocks(getAllBlocks());
+    }
+
+
+    //############# Entities #############//
+
+    //get Value
     public LootEntityValue getEntity(Location location){
         return getTable(EntityTable.class).getEntity(location);
     }
@@ -51,36 +67,33 @@ public class WorldDatabase extends Database {
         return getTable(EntityTable.class).getAllEntities();
     }
 
-    public void removeLootEntityValue(LootEntityValue value){
-        getTable(EntityTable.class).removeLootEntityValue(value);
+
+    //add Value
+    public WorldDatabase addEntity(LootEntityValue value){
+        getTable(EntityTable.class).addEntity(value);
+        return this;
     }
 
-    public void removeLootBlockValues(List<LootBlockValue> values){
-        for(LootBlockValue value : values){
-            removeLootBlockValue(value);
-        }
+    public void addMultipleEntities(List<LootEntityValue> values){
+        getTable(EntityTable.class).addMultipleEntities(values);
     }
 
-    public void removeLootEntityValues(List<LootEntityValue> values){
-        for(LootEntityValue value : values){
-            removeLootEntityValue(value);
-        }
+
+    //remove Value
+    public void removeEntity(LootEntityValue value){
+        getTable(EntityTable.class).removeEntity(value);
+    }
+
+    public void removeMultipleEntities(List<LootEntityValue> values){
+        getTable(EntityTable.class).removeMultipleEntities(values);
     }
 
     public void removeAllEntitys(){
-        ArrayList<LootEntityValue> values = getAllEntities();
-        for(LootEntityValue e : values){
-            removeLootEntityValue(e);
-        }
+        removeMultipleEntities(getAllEntities());
     }
 
-    public void removeAllBlocks(){
-        ArrayList<LootBlockValue> values = getAllBlocks();
-        for(LootBlockValue e : values){
-            removeLootBlockValue(e);
-        }
-    }
 
+    //############# Caching ##############//
     public void setCacheRemove(boolean value){
         getTable(EntityTable.class).setCacheRemove(value);
         getTable(BlockTable.class).setCacheRemove(value);

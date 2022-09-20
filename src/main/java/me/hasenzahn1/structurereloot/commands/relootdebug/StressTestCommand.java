@@ -12,6 +12,9 @@ import org.bukkit.block.BlockFace;
 import org.bukkit.command.CommandSender;
 import org.bukkit.loot.LootTables;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class StressTestCommand extends SubCommand {
 
     public StressTestCommand(BaseCommand parent) {
@@ -37,9 +40,9 @@ public class StressTestCommand extends SubCommand {
         int div = (int) (Math.sqrt(amount));
         int x = 0;
         int y = 0;
-
+        List<LootBlockValue> values = new ArrayList<>();
         for(int i = 1; i < amount + 1; i++){
-            StructureReloot.getInstance().getDatabase(world).addBlock(new LootBlockValue(
+            values.add(new LootBlockValue(
                     new Location(world, 3000 + x * 16, 200, y * 16),
                     LootTables.ABANDONED_MINESHAFT.getLootTable(),
                     Material.CHEST,
@@ -48,7 +51,10 @@ public class StressTestCommand extends SubCommand {
             x = i % div;
             y = i / div;
         }
+        StructureReloot.getInstance().getDatabase(world).addMultipleBlocks(values);
+        StructureReloot.getInstance().getDatabase(world).close();
 
+        sender.sendMessage(StructureReloot.PREFIX + "§aAdded " + amount + " new LootBlocks");
         return true;
     }
 

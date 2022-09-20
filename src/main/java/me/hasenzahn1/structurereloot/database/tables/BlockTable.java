@@ -13,6 +13,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.stream.Collectors;
 
 public class BlockTable extends Table {
@@ -30,6 +31,7 @@ public class BlockTable extends Table {
         cachedLootBlockValues = new ArrayList<>();
     }
 
+    //Creation
     @Override
     public String getCreationString() {
         return "CREATE TABLE IF NOT EXISTS " + getTableName() + " (" +
@@ -40,37 +42,7 @@ public class BlockTable extends Table {
                 ";";
     }
 
-    public void removeLootBlockValue(LootBlockValue value){
-        if(cacheRemove){
-            cachedLootBlockValues.add(value);
-            return;
-        }
-        Connection con = getConnection();
-        try(PreparedStatement statement = con.prepareStatement(
-                "DELETE FROM " + getTableName() + " WHERE location='" + value.getLocationString() + "'"
-        )){
-            statement.execute();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void addBlock(LootBlockValue value){
-        Connection con = getConnection();
-        try(PreparedStatement statement = con.prepareStatement(
-                "INSERT OR REPLACE INTO " + getTableName() + " (location, lootTable, block, facing) VALUES(?,?,?,?)"
-        )){
-            statement.setString(1, value.getLocationString());
-            statement.setString(2, value.getStringLootTable());
-            statement.setString(3, value.getBlockMaterialString());
-            statement.setString(4, value.getFacingString());
-            statement.executeUpdate();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
+    //get Value
     public LootBlockValue getBlock(Location loc){
         Connection con = getConnection();
         try(PreparedStatement statement = con.prepareStatement(
@@ -86,12 +58,6 @@ public class BlockTable extends Table {
             e.printStackTrace();
         }
         return null;
-    }
-
-    public static NamespacedKey getNamespacedKey(String lootTable) {
-        String[] strings = lootTable.split(":");
-        if(strings.length == 1) return null;
-        return new NamespacedKey(strings[0], strings[1]);
     }
 
     public ArrayList<LootBlockValue> getAllBlocks(){
@@ -112,18 +78,54 @@ public class BlockTable extends Table {
         return new ArrayList<>();
     }
 
-    private void removeCachedLbvs(){
-        if(cachedLootBlockValues.size() == 0) return;
+    //add Value
+    public void addBlock(LootBlockValue value){
         Connection con = getConnection();
-        StringBuilder sqlString = new StringBuilder("DELETE FROM ").append(getTableName()).append(" WHERE location IN ('").append(cachedLootBlockValues.get(0).getLocationString()).append("'");
+        try(PreparedStatement statement = con.prepareStatement(
+                "INSERT OR REPLACE INTO " + getTableName() + " (location, lootTable, block, facing) VALUES(?,?,?,?)"
+        )){
+            statement.setString(1, value.getLocationString());
+            statement.setString(2, value.getStringLootTable());
+            statement.setString(3, value.getBlockMaterialString());
+            statement.setString(4, value.getFacingString());
+            statement.executeUpdate();
 
-        for(int i = 1; i < cachedLootBlockValues.size(); i++){
-            sqlString.append(", '").append(cachedLootBlockValues.get(i).getLocationString()).append("'");
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
-        sqlString.append(")");
+    }
+
+    public void addMultipleBlocks(List<LootBlockValue> values){
+        Connection con = getConnection();
+        if(values.size() == 0) return;
+        StringBuilder sqlString = new StringBuilder("INSERT OR REPLACE INTO " + getTableName() + " (location, lootTable, block, facing) VALUES ");
+        for(LootBlockValue val : values){
+            sqlString.append("('");
+            sqlString.append(val.getLocationString()).append("','");
+            sqlString.append(val.getStringLootTable()).append("','");
+            sqlString.append(val.getBlockMaterialString()).append("','");
+            sqlString.append(val.getFacingString()).append("'),");
+        }
+        sqlString.deleteCharAt(sqlString.length()-1);
         //Bukkit.broadcastMessage(sqlString.toString());
         try(PreparedStatement statement = con.prepareStatement(
                 sqlString.toString()
+        )){
+            statement.executeUpdate();
+        } catch (SQLException throwables) {
+            throwables.printStackTrace();
+        }
+    }
+
+    ///remove Value
+    public void removeBlock(LootBlockValue value){
+        if(cacheRemove){
+            cachedLootBlockValues.add(value);
+            return;
+        }
+        Connection con = getConnection();
+        try(PreparedStatement statement = con.prepareStatement(
+                "DELETE FROM " + getTableName() + " WHERE location='" + value.getLocationString() + "'"
         )){
             statement.execute();
         } catch (SQLException e) {
@@ -131,13 +133,37 @@ public class BlockTable extends Table {
         }
     }
 
+    public void removeMultipleBlocks(List<LootBlockValue> values){
+        if(values.size() == 0) return;
+        Connection con = getConnection();
+        StringBuilder sqlString = new StringBuilder("DELETE FROM ").append(getTableName()).append(" WHERE location IN ('").append(values.get(0).getLocationString()).append("'");
+
+        for(int i = 1; i < values.size(); i++){
+            sqlString.append(", '").append(values.get(i).getLocationString()).append("'");
+        }
+        sqlString.append(")");
+        try(PreparedStatement statement = con.prepareStatement(sqlString.toString())){
+            statement.execute();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    //Caching
     public void setCacheRemove(boolean value){
         this.cacheRemove = value;
         if(!value) {
-            //Bukkit.broadcastMessage(cachedLootBlockValues.stream().map(LootBlockValue::getLocationString).collect(Collectors.toList()) + "");
-            removeCachedLbvs();
+            removeMultipleBlocks(cachedLootBlockValues);
             cachedLootBlockValues.clear();
         }
+    }
+
+
+    //Whatever
+    public static NamespacedKey getNamespacedKey(String lootTable) {
+        String[] strings = lootTable.split(":");
+        if(strings.length == 1) return null;
+        return new NamespacedKey(strings[0], strings[1]);
     }
 
 }
