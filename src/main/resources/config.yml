@@ -5,8 +5,7 @@
 prefix: "&b[&6StructureReloot&b] &r"
 databaseFolder: "data"
 blockChangesPerTick: 10
-entitieChangesPerTick: 10
-
+entityChangesPerTick: 10
 
 
 debugMode: true

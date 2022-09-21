@@ -117,7 +117,7 @@ public final class StructureReloot extends JavaPlugin {
         debugMode = defaultConfig.getConfig().getBoolean("debugMode", false);
         databasePath = defaultConfig.getConfig().getString("databaseFolder", "data");
         BlockChangeTask.BLOCK_CHANGE_AMOUNT = defaultConfig.getConfig().getInt("blockChangesPerTick", 30);
-        EntityChangeTask.ENTITY_CHANGE_AMOUNT = defaultConfig.getConfig().getInt("entitieChangesPerTick", 30);
+        EntityChangeTask.ENTITY_CHANGE_AMOUNT = defaultConfig.getConfig().getInt("entityChangesPerTick", 30);
     }
 
     public void reloadLanguageConfig(){
