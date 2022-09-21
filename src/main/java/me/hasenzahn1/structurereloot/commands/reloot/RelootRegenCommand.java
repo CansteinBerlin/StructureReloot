@@ -145,9 +145,8 @@ public class RelootRegenCommand extends SubCommand {
                     .collect(Collectors.toList());
         }
         if(args.length == 3){
-            return Arrays.stream(new String[]{"...", "1", "2", "all", "3"})
+            return Arrays.stream(new String[]{"1", "2", "3", "...", "all"})
                     .filter(s -> s.startsWith(args[2]))
-                    .sorted()
                     .collect(Collectors.toList());
         }
         return new ArrayList<>();
