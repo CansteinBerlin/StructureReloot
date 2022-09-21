@@ -1,5 +1,6 @@
 package me.hasenzahn1.structurereloot;
 
+import me.hasenzahn1.structurereloot.autoupdate.AutoRelootScheduler;
 import me.hasenzahn1.structurereloot.autoupdate.RelootSettings;
 import me.hasenzahn1.structurereloot.commands.RelootCommand;
 import me.hasenzahn1.structurereloot.commands.RelootDebugCommand;
@@ -12,6 +13,7 @@ import me.hasenzahn1.structurereloot.listeners.BlockListener;
 import me.hasenzahn1.structurereloot.listeners.EntityListener;
 import me.hasenzahn1.structurereloot.reloot.BlockChangeTask;
 import me.hasenzahn1.structurereloot.reloot.EntityChangeTask;
+import me.hasenzahn1.structurereloot.reloot.RelootHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -19,6 +21,7 @@ import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.logging.Logger;
 
 public final class StructureReloot extends JavaPlugin {
@@ -41,6 +44,7 @@ public final class StructureReloot extends JavaPlugin {
 
     private BlockUpdateConfig blockUpdateConfig;
     private EntityUpdateConfig entityUpdateConfig;
+    private AutoRelootScheduler autoRelootScheduler;
 
     @Override
     public void onEnable() {
@@ -61,6 +65,47 @@ public final class StructureReloot extends JavaPlugin {
 
         Bukkit.getPluginManager().registerEvents(new BlockListener(), this);
         Bukkit.getPluginManager().registerEvents(new EntityListener(), this);
+
+        relootElementsInWorld(true);
+
+        autoRelootScheduler = new AutoRelootScheduler();
+        autoRelootScheduler.runTaskTimer(this, 20, 20*5);
+    }
+
+    public void relootElementsInWorld(boolean isStartup) {
+        List<World> neededBlockUpdateSettings = blockUpdateConfig.getNeededUpdates();
+        List<World> neededEntityUpdateSettings = entityUpdateConfig.getNeededUpdates();
+        boolean updated = false;
+
+        //Blocks
+        for(World world : neededBlockUpdateSettings){
+            RelootSettings settings = blockUpdateConfig.getSettingsForWorld(world);
+            if(isStartup != settings.isRelootOnStartup()){
+                continue;
+            }
+
+            //Bukkit.broadcastMessage("Update blocks in world: " + world.getName());
+            RelootHelper.regenNBlocks(world, settings.getMaxRelootAmount(), null);
+            updated = true;
+            settings.nextDate();
+        }
+
+        if(updated) blockUpdateConfig.update();
+
+        //Entities
+        updated = false;
+        for(World world : neededEntityUpdateSettings){
+            RelootSettings settings = entityUpdateConfig.getSettingsForWorld(world);
+
+            if(isStartup != settings.isRelootOnStartup()){
+                continue;
+            }
+
+            //Bukkit.broadcastMessage("Update entity in world: " + world.getName());
+            RelootHelper.regenNEntities(world, settings.getMaxRelootAmount(), null);
+            updated = true;
+            settings.nextDate();
+        }
     }
 
     private void initDatabase() {

@@ -3,10 +3,12 @@ package me.hasenzahn1.structurereloot.reloot;
 import me.hasenzahn1.structurereloot.StructureReloot;
 import me.hasenzahn1.structurereloot.database.LootBlockValue;
 import me.hasenzahn1.structurereloot.database.LootEntityValue;
+import me.hasenzahn1.structurereloot.database.WorldDatabase;
 import me.hasenzahn1.structurereloot.listeners.EntityListener;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
+import org.bukkit.World;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Dispenser;
 import org.bukkit.block.data.Directional;
@@ -16,7 +18,9 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.loot.Lootable;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class RelootHelper {
 
@@ -69,4 +73,31 @@ public class RelootHelper {
         StructureReloot.getInstance().getEntityChangeTask().changeEntities(values);
     }
 
+    public static void regenNEntities(World world, int amount, Runnable runnable){
+        List<LootEntityValue> levs = StructureReloot.getInstance().getDatabase(world).getAllEntities();
+        Collections.shuffle(levs);
+        List<LootEntityValue> values = levs.stream().limit(Math.min(levs.size(), amount)).collect(Collectors.toList());
+
+        WorldDatabase database = StructureReloot.getInstance().getDatabase(world);
+        StructureReloot.getInstance().getEntityChangeTask().addCallback(runnable);
+        database.setCacheRemove(true);
+        RelootHelper.relootMultipleEntities(values);
+        database.removeMultipleEntities(values);
+        database.setCacheRemove(false);
+    }
+
+    public static void regenNBlocks(World world, int amount, Runnable runnable){
+        List<LootBlockValue> lbvs = StructureReloot.getInstance().getDatabase(world).getAllBlocks();
+        Collections.shuffle(lbvs);
+        List<LootBlockValue> values = lbvs.stream().limit(Math.min(lbvs.size(), amount)).collect(Collectors.toList());
+
+        WorldDatabase database = StructureReloot.getInstance().getDatabase(world);
+        StructureReloot.getInstance().getBlockChangeTask().addCallback(runnable);
+        database.setCacheRemove(true);
+        RelootHelper.relootMultipleBlocks(values);
+        database.removeMultipleBlocks(values);
+        database.setCacheRemove(false);
+    }
+
 }
+

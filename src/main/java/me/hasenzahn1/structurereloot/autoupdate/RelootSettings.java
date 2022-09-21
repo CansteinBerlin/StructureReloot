@@ -39,7 +39,7 @@ public class RelootSettings implements ConfigurationSerializable {
     }
 
     public void nextDate(){
-        nextDate = nextDate.plusSeconds(duration);
+        nextDate = LocalDateTime.now().plusSeconds(duration);
     }
 
     public boolean needsUpdate(){

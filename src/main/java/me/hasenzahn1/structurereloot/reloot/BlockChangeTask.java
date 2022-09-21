@@ -45,6 +45,7 @@ public class BlockChangeTask extends BukkitRunnable{
     }
 
     public void addCallback(Runnable runnable){
+        if(runnable == null) return;
         finishedTaskRunnables.add(runnable);
     }
 

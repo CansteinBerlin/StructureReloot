@@ -66,22 +66,22 @@ public class RelootRegenCommand extends SubCommand {
         long millis = System.currentTimeMillis();
 
         if(args[0].equalsIgnoreCase("entity")){
-            regenEntities(world, amount, () -> {
+            RelootHelper.regenNEntities(world, amount, () -> {
                 sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.regen.sucEntity",
                         "amount", args[2].toLowerCase(Locale.ROOT),
                         "time", ((System.currentTimeMillis() - millis) / 1000) + ""));
             });
 
         } else if (args[0].equalsIgnoreCase("block")) {
-            regenBlocks(world, amount, () ->
+            RelootHelper.regenNBlocks(world, amount, () ->
                     sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.regen.sucBlock",
                             "amount", args[2].toLowerCase(Locale.ROOT),
                             "time", ((System.currentTimeMillis() - millis) / 1000) + ""))
             );
 
         } else if(args[0].equalsIgnoreCase("all")){
-            regenEntities(world, amount, () -> {});
-            regenBlocks(world, amount, () -> {
+            RelootHelper.regenNEntities(world, amount, () -> {});
+            RelootHelper.regenNBlocks(world, amount, () -> {
                         sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.regen.sucBoth",
                                 "amount", args[2].toLowerCase(Locale.ROOT),
                                 "time", ((System.currentTimeMillis() - millis) / 1000) + ""));
@@ -103,31 +103,7 @@ public class RelootRegenCommand extends SubCommand {
         return true;
     }
 
-    public void regenEntities(World world, int amount, Runnable runnable){
-        List<LootEntityValue> levs = StructureReloot.getInstance().getDatabase(world).getAllEntities();
-        Collections.shuffle(levs);
-        List<LootEntityValue> values = levs.stream().limit(Math.min(levs.size(), amount)).collect(Collectors.toList());
 
-        WorldDatabase database = StructureReloot.getInstance().getDatabase(world);
-        StructureReloot.getInstance().getEntityChangeTask().addCallback(runnable);
-        database.setCacheRemove(true);
-        RelootHelper.relootMultipleEntities(values);
-        database.removeMultipleEntities(values);
-        database.setCacheRemove(false);
-    }
-
-    public void regenBlocks(World world, int amount, Runnable runnable){
-        List<LootBlockValue> lbvs = StructureReloot.getInstance().getDatabase(world).getAllBlocks();
-        Collections.shuffle(lbvs);
-        List<LootBlockValue> values = lbvs.stream().limit(Math.min(lbvs.size(), amount)).collect(Collectors.toList());
-
-        WorldDatabase database = StructureReloot.getInstance().getDatabase(world);
-        StructureReloot.getInstance().getBlockChangeTask().addCallback(runnable);
-        database.setCacheRemove(true);
-        RelootHelper.relootMultipleBlocks(values);
-        database.removeMultipleBlocks(values);
-        database.setCacheRemove(false);
-    }
 
     @Override
     public List<String> tabComplete(CommandSender sender, String[] args) {
