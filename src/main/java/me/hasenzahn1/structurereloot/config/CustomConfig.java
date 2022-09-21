@@ -38,6 +38,18 @@ public class CustomConfig {
         config = YamlConfiguration.loadConfiguration(configFile);
     }
 
+    public void delete(){
+        String name = configFile.getName();
+        try{
+            boolean val = configFile.delete();
+            if(!val){
+                plugin.getLogger().severe("Could not delete config file: " + name);
+            }
+        }catch (SecurityException e){
+            plugin.getLogger().severe("Could not delete config file: " + name);
+        }
+    }
+
     public void reloadConfig(){
         config = YamlConfiguration.loadConfiguration(configFile);
 

@@ -3,7 +3,11 @@
 #
 
 prefix: "&b[&6StructureReloot&b] &r"
-debugMode: true
 databaseFolder: "data"
-blocksPerTick: 10
-entitiesPerTick: 10
+blockChangesPerTick: 10
+entitieChangesPerTick: 10
+
+
+
+debugMode: true
+

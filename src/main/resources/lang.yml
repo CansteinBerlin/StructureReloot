@@ -6,6 +6,9 @@ commands:
     removedEntities: "&aSuccessfully removed all entities from the database"
     removedBlocks: "&aSuccessfully removed all blocks from the database"
   regen:
-    sucEntity: "&aSuccessfully relooted %amount% entities in &6%time% &aseconds"
-    sucBlock: "&aSuccessfully relooted %amount% blocks in &6%time% &aseconds"
-    sucBoth: "&aSuccessfully relooted %amount% blocks and entities in &6%time% &aseconds"
+    sucEntity: "&aSuccessfully relooted &6%amount% &aentities in &6%time% &aseconds"
+    sucBlock: "&aSuccessfully relooted &6%amount% &ablocks in &6%time% &aseconds"
+    sucBoth: "&aSuccessfully relooted &6%amount% &ablocks and entities in &6%time% &aseconds"
+  reloadConfig:
+    reloadSuccess: "&aSuccessfully reloaded the config: &6%config%"
+    replaceSuccess: "&aSuccessfully replaced the config: &6%config%"

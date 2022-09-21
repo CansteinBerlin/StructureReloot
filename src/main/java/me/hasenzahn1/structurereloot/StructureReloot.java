@@ -111,13 +111,22 @@ public final class StructureReloot extends JavaPlugin {
         initDefaultConfig();
     }
 
-    private void initDefaultConfig() {
+    public void initDefaultConfig() {
         defaultConfig = new DefaultConfig();
         PREFIX = ChatColor.translateAlternateColorCodes('&', defaultConfig.getConfig().getString("prefix", PREFIX));
         debugMode = defaultConfig.getConfig().getBoolean("debugMode", false);
         databasePath = defaultConfig.getConfig().getString("databaseFolder", "data");
-        BlockChangeTask.BLOCK_CHANGE_AMOUNT = defaultConfig.getConfig().getInt("blocksPerTick", 30);
-        EntityChangeTask.ENTITY_CHANGE_AMOUNT = defaultConfig.getConfig().getInt("entitiesPerTick", 30);
+        BlockChangeTask.BLOCK_CHANGE_AMOUNT = defaultConfig.getConfig().getInt("blockChangesPerTick", 30);
+        EntityChangeTask.ENTITY_CHANGE_AMOUNT = defaultConfig.getConfig().getInt("entitieChangesPerTick", 30);
+    }
+
+    public void reloadLanguageConfig(){
+        if(languageConfig != null){
+            languageConfig.reloadConfig();
+        }
+        else{
+            languageConfig = new LanguageConfig(this);
+        }
     }
 
     @Override
@@ -143,5 +152,21 @@ public final class StructureReloot extends JavaPlugin {
 
     public boolean isDebugMode() {
         return debugMode;
+    }
+
+    public void setDefaultConfig(CustomConfig defaultConfig) {
+        this.defaultConfig = defaultConfig;
+    }
+
+    public void setLanguageConfig(LanguageConfig languageConfig) {
+        this.languageConfig = languageConfig;
+    }
+
+    public CustomConfig getDefaultConfig() {
+        return defaultConfig;
+    }
+
+    public LanguageConfig getLanguageConfig() {
+        return languageConfig;
     }
 }
