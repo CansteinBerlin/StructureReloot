@@ -47,7 +47,7 @@ public class ClassDebug {
         result.append(newLine).append("  Methods: ").append(newLine);
 
         for(Method method : object.getClass().getDeclaredMethods()){
-            result.append("    ").append(method.getName()).append(": ").append(method.toString()).append(newLine);
+            result.append("    ").append(method.getName()).append(": ").append(method).append(newLine);
         }
 
         result.append("}");

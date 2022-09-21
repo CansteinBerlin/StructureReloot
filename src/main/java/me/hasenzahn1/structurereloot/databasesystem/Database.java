@@ -15,9 +15,9 @@ import java.util.logging.Logger;
 public abstract class Database {
 
     JavaPlugin plugin;
-    private String fileName;
+    private final String fileName;
     private Connection connection;
-    private HashMap<Class<? extends Table>, Table> tables;
+    private final HashMap<Class<? extends Table>, Table> tables;
 
 
     public Database(JavaPlugin plugin, String fileName){

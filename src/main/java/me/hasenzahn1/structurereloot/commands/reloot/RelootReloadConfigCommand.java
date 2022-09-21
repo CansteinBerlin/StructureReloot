@@ -3,9 +3,10 @@ package me.hasenzahn1.structurereloot.commands.reloot;
 import me.hasenzahn1.structurereloot.StructureReloot;
 import me.hasenzahn1.structurereloot.commandsystem.BaseCommand;
 import me.hasenzahn1.structurereloot.commandsystem.SubCommand;
+import me.hasenzahn1.structurereloot.config.BlockUpdateConfig;
+import me.hasenzahn1.structurereloot.config.EntityUpdateConfig;
 import me.hasenzahn1.structurereloot.util.StringUtils;
 import org.bukkit.command.CommandSender;
-import org.checkerframework.checker.units.qual.A;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -22,7 +23,7 @@ public class RelootReloadConfigCommand extends SubCommand {
     @Override
     public boolean performCommand(CommandSender sender, String[] args) {
 
-        if(args.length == 0 || args.length > 2){
+        if (args.length == 0 || args.length > 2) {
             sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.invalidCommand",
                     "command", getCommandHistory(),
                     "args", StringUtils.listToCommandArgs(tabComplete(sender, new String[]{""}))));
@@ -31,40 +32,58 @@ public class RelootReloadConfigCommand extends SubCommand {
         }
 
         boolean replace = false;
-        if(args.length == 2){
-            if(args[1].equalsIgnoreCase("-o")){
+        if (args.length == 2) {
+            if (args[1].equalsIgnoreCase("-o")) {
                 replace = true;
             }
         }
 
-        switch (args[0].toLowerCase(Locale.ROOT)){
-            case "lang":
-                if(replace) {
+        switch (args[0].toLowerCase(Locale.ROOT)) {
+            case "lang" -> {
+
+                if (replace) {
                     StructureReloot.getInstance().getLanguageConfig().delete();
                     StructureReloot.getInstance().setLanguageConfig(null);
                 }
                 StructureReloot.getInstance().reloadLanguageConfig();
-                break;
+            }
 
-            case "config":
-                if(replace) {
+            case "config" -> {
+                if (replace) {
                     StructureReloot.getInstance().getDefaultConfig().delete();
                     StructureReloot.getInstance().setDefaultConfig(null);
                 }
                 StructureReloot.getInstance().initDefaultConfig();
-                break;
-            default:
+            }
+
+            case "entityupdatesettings" -> {
+                if(replace){
+                    StructureReloot.getInstance().getEntityUpdateConfig().delete();
+                    StructureReloot.getInstance().setEntityUpdateConfig(null);
+                }
+                StructureReloot.getInstance().setEntityUpdateConfig(new EntityUpdateConfig());
+            }
+
+            case "blockupdatesettings" -> {
+                if(replace){
+                    StructureReloot.getInstance().getBlockUpdateConfig().delete();
+                    StructureReloot.getInstance().setBlockUpdateConfig(null);
+                }
+                StructureReloot.getInstance().setBlockUpdateConfig(new BlockUpdateConfig());
+            }
+
+            default -> {
                 sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.invalidCommand",
                         "command", getCommandHistory(),
                         "args", StringUtils.listToCommandArgs(tabComplete(sender, new String[]{""}))));
                 return true;
+            }
         }
 
 
-
-
-        if(!replace) sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.reloadConfig.reloadSuccess",
-                "config", args[0].toLowerCase(Locale.ROOT)));
+        if (!replace)
+            sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.reloadConfig.reloadSuccess",
+                    "config", args[0].toLowerCase(Locale.ROOT)));
         else sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.reloadConfig.replaceSuccess",
                 "config", args[0].toLowerCase(Locale.ROOT)));
         return true;
@@ -72,12 +91,13 @@ public class RelootReloadConfigCommand extends SubCommand {
 
     @Override
     public List<String> tabComplete(CommandSender sender, String[] args) {
-        if(args.length == 1) return Arrays.stream(new String[]{"lang", "config"})
-                .filter(s -> s.startsWith(args[0]))
-                .sorted()
-                .collect(Collectors.toList());
+        if (args.length == 1)
+            return Arrays.stream(new String[]{"lang", "config", "entityUpdateSettings", "blockUpdateSettings"})
+                    .filter(s -> s.startsWith(args[0]))
+                    .sorted()
+                    .collect(Collectors.toList());
 
-        if(args.length == 2) return Arrays.stream(new String[]{"-o"})
+        if (args.length == 2) return Arrays.stream(new String[]{"-o"})
                 .filter(s -> s.startsWith(args[1]))
                 .sorted()
                 .collect(Collectors.toList());

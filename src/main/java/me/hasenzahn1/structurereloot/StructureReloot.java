@@ -171,4 +171,20 @@ public final class StructureReloot extends JavaPlugin {
     public LanguageConfig getLanguageConfig() {
         return languageConfig;
     }
+
+    public BlockUpdateConfig getBlockUpdateConfig() {
+        return blockUpdateConfig;
+    }
+
+    public EntityUpdateConfig getEntityUpdateConfig() {
+        return entityUpdateConfig;
+    }
+
+    public void setBlockUpdateConfig(BlockUpdateConfig blockUpdateConfig) {
+        this.blockUpdateConfig = blockUpdateConfig;
+    }
+
+    public void setEntityUpdateConfig(EntityUpdateConfig entityUpdateConfig) {
+        this.entityUpdateConfig = entityUpdateConfig;
+    }
 }

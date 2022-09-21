@@ -14,7 +14,7 @@ public class CustomConfig {
 
     private File configFile;
     private FileConfiguration config;
-    private JavaPlugin plugin;
+    private final JavaPlugin plugin;
     protected boolean isNew;
 
     public CustomConfig(JavaPlugin plugin, String name){

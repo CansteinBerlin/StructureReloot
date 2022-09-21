@@ -14,6 +14,6 @@ public class DebugMessage {
         for(Object value : objects){
             sb.append(value).append(" | ");
         }
-        return sb.substring(0, sb.length() - 2).toString();
+        return sb.substring(0, sb.length() - 2);
     }
 }
