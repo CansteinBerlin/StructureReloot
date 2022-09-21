@@ -15,15 +15,18 @@ public class CustomConfig {
     private File configFile;
     private FileConfiguration config;
     private JavaPlugin plugin;
+    protected boolean isNew;
 
     public CustomConfig(JavaPlugin plugin, String name){
         this.plugin = plugin;
+        isNew = false;
         createCustomConfig(plugin, name);
     }
 
     public void createCustomConfig(JavaPlugin plugin, String name){
         configFile = new File(plugin.getDataFolder(), name);
         if(!configFile.exists()){
+            isNew = true;
             configFile.getParentFile().mkdirs();
             if(plugin.getResource(name) != null) plugin.saveResource(name, false);
             else{

@@ -1,28 +1,22 @@
 package me.hasenzahn1.structurereloot;
 
+import me.hasenzahn1.structurereloot.automatic.RelootSettings;
 import me.hasenzahn1.structurereloot.commands.RelootCommand;
 import me.hasenzahn1.structurereloot.commands.RelootDebugCommand;
 import me.hasenzahn1.structurereloot.commandsystem.CommandManager;
-import me.hasenzahn1.structurereloot.config.CustomConfig;
-import me.hasenzahn1.structurereloot.config.DefaultConfig;
-import me.hasenzahn1.structurereloot.config.LanguageConfig;
-import me.hasenzahn1.structurereloot.database.LootEntityValue;
+import me.hasenzahn1.structurereloot.config.*;
 import me.hasenzahn1.structurereloot.database.WorldDatabase;
-import me.hasenzahn1.structurereloot.database.LootBlockValue;
 import me.hasenzahn1.structurereloot.listeners.BlockListener;
 import me.hasenzahn1.structurereloot.listeners.EntityListener;
 import me.hasenzahn1.structurereloot.reloot.BlockChangeTask;
 import me.hasenzahn1.structurereloot.reloot.EntityChangeTask;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.Location;
 import org.bukkit.World;
-import org.bukkit.entity.EntityType;
-import org.bukkit.loot.LootTables;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
-import java.util.UUID;
 import java.util.logging.Logger;
 
 public final class StructureReloot extends JavaPlugin {
@@ -43,8 +37,13 @@ public final class StructureReloot extends JavaPlugin {
     private BlockChangeTask blockChangeTask;
     private EntityChangeTask entityChangeTask;
 
+    private BlockUpdateConfig blockUpdateConfig;
+    private EntityUpdateConfig entityUpdateConfig;
+
     @Override
     public void onEnable() {
+        ConfigurationSerialization.registerClass(RelootSettings.class);
+
         instance = this;
         LOGGER = getLogger();
 
@@ -109,6 +108,9 @@ public final class StructureReloot extends JavaPlugin {
     private void initConfigs() {
         languageConfig = new LanguageConfig(this);
         initDefaultConfig();
+
+        blockUpdateConfig = new BlockUpdateConfig();
+        entityUpdateConfig = new EntityUpdateConfig();
     }
 
     public void initDefaultConfig() {
