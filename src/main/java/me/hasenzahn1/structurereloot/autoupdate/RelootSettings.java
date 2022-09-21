@@ -2,11 +2,13 @@ package me.hasenzahn1.structurereloot.autoupdate;
 
 import com.google.common.collect.ImmutableMap;
 import me.hasenzahn1.structurereloot.util.TimeUtil;
+import org.bukkit.Bukkit;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.time.format.FormatStyle;
+import java.time.temporal.ChronoUnit;
 import java.util.Map;
 
 public class RelootSettings implements ConfigurationSerializable {
@@ -27,6 +29,7 @@ public class RelootSettings implements ConfigurationSerializable {
         nextDate = LocalDateTime.now().plusSeconds(duration);
     }
 
+
     public RelootSettings(Map<String, Object> fields){
         relootOnStartup = (boolean) fields.get("relootOnStartup");
         maxRelootAmount = (int) fields.get("maxRelootAmount");
@@ -39,6 +42,9 @@ public class RelootSettings implements ConfigurationSerializable {
         nextDate = nextDate.plusSeconds(duration);
     }
 
+    public boolean needsUpdate(){
+        return ChronoUnit.SECONDS.between(LocalDateTime.now(), nextDate) <= 0;
+    }
 
     //Getter
     public boolean isRelootOnStartup() {
@@ -91,5 +97,16 @@ public class RelootSettings implements ConfigurationSerializable {
                 .put("duration", durationPattern)
                 .put("nextReloot", FORMATTER.format(nextDate))
                 .build();
+    }
+
+    @Override
+    public String toString() {
+        return "RelootSettings{" +
+                "relootOnStartup=" + relootOnStartup +
+                ", maxRelootAmount=" + maxRelootAmount +
+                ", nextDate=" + FORMATTER.format(nextDate) +
+                ", duration=" + (duration == Integer.MAX_VALUE ? -1 : duration) +
+                ", durationPattern='" + durationPattern + '\'' +
+                '}';
     }
 }

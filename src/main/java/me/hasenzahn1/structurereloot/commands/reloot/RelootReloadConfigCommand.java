@@ -3,8 +3,8 @@ package me.hasenzahn1.structurereloot.commands.reloot;
 import me.hasenzahn1.structurereloot.StructureReloot;
 import me.hasenzahn1.structurereloot.commandsystem.BaseCommand;
 import me.hasenzahn1.structurereloot.commandsystem.SubCommand;
-import me.hasenzahn1.structurereloot.config.BlockUpdateConfig;
-import me.hasenzahn1.structurereloot.config.EntityUpdateConfig;
+import me.hasenzahn1.structurereloot.config.update.BlockUpdateConfig;
+import me.hasenzahn1.structurereloot.config.update.EntityUpdateConfig;
 import me.hasenzahn1.structurereloot.util.StringUtils;
 import org.bukkit.command.CommandSender;
 

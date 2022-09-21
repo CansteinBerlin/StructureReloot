@@ -5,6 +5,8 @@ import me.hasenzahn1.structurereloot.commands.RelootCommand;
 import me.hasenzahn1.structurereloot.commands.RelootDebugCommand;
 import me.hasenzahn1.structurereloot.commandsystem.CommandManager;
 import me.hasenzahn1.structurereloot.config.*;
+import me.hasenzahn1.structurereloot.config.update.BlockUpdateConfig;
+import me.hasenzahn1.structurereloot.config.update.EntityUpdateConfig;
 import me.hasenzahn1.structurereloot.database.WorldDatabase;
 import me.hasenzahn1.structurereloot.listeners.BlockListener;
 import me.hasenzahn1.structurereloot.listeners.EntityListener;

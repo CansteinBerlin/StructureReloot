@@ -1,16 +1,19 @@
-package me.hasenzahn1.structurereloot.config;
+package me.hasenzahn1.structurereloot.config.update;
 
 import me.hasenzahn1.structurereloot.StructureReloot;
 import me.hasenzahn1.structurereloot.autoupdate.RelootSettings;
+import me.hasenzahn1.structurereloot.config.CustomConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
-import org.bukkit.plugin.java.JavaPlugin;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
-public class UpdateConfig extends CustomConfig{
+public class UpdateConfig extends CustomConfig {
 
     private final HashMap<World, RelootSettings> settings;
 
@@ -45,4 +48,9 @@ public class UpdateConfig extends CustomConfig{
         }
         saveConfig();
     }
+
+    public List<World> getNeededUpdates(){
+        return settings.entrySet().stream().filter(entry -> entry.getValue().needsUpdate()).map(Map.Entry::getKey).collect(Collectors.toList());
+    }
+
 }
