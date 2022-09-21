@@ -1,4 +1,4 @@
-package me.hasenzahn1.structurereloot.automatic;
+package me.hasenzahn1.structurereloot.autoupdate;
 
 import com.google.common.collect.ImmutableMap;
 import me.hasenzahn1.structurereloot.util.TimeUtil;
