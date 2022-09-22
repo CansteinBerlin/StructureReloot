@@ -1,5 +1,6 @@
 commands:
   invalidCommand: "&cInvalid command. Please use &6/%command% %args%"
+  noPlayer: "&cYou have to be a player to use this command"
 
   reset:
     invalidWorld: "&cUnknown world with name &6%world%"
@@ -12,3 +13,19 @@ commands:
   reloadConfig:
     reloadSuccess: "&aSuccessfully reloaded the config: &6%config%"
     replaceSuccess: "&aSuccessfully replaced the config: &6%config%"
+  info:
+    noSettings: "&cNo Settings available for world &6%world%"
+
+info:
+  title: "&aSettings for world&8:"
+  minusColor: GRAY
+  titleColor: GOLD
+  blocks: "&9Blocks:"
+  entities: "&9Entities:"
+  set: "§6Click to Change"
+  relootOnStartup: "&6Reloot on Startup&7:"
+  relootOnStartupHover: "&6This setting determines if the RelootTime should only be checked at server startup"
+  maxRelootAmount: "&6Max Reloot Amount&7:"
+  maxRelootAmountHover: "&6This setting determines the maximum number of blocks that are regenerated per cycle"
+  timeBetweenReloot: "&6Time Between Reloot&7:"
+  timeBetweenRelootHover: "&6This setting defines the duration between two cycles. E.g.: 2h30m"

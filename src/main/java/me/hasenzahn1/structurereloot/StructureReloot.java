@@ -117,25 +117,6 @@ public final class StructureReloot extends JavaPlugin {
             databases.put(world, database);
         }
 
-        /*
-        World world = Bukkit.getWorld("world");
-        WorldDatabase database = getDatabase(world);
-        database.addBlock(new LootBlockValue(new Location(world, 0, 0, 0), LootTables.BASTION_HOGLIN_STABLE.getLootTable()));
-        database.addBlock(new LootBlockValue(new Location(world, 10, 0, 0), LootTables.BASTION_BRIDGE.getLootTable()));
-        database.addBlock(new LootBlockValue(new Location(world, 100, 0, 0), LootTables.ANCIENT_CITY.getLootTable()));
-        System.out.println(database.getAllBlocks());
-        System.out.println("###################");
-        System.out.println(database.getBlock(new Location(world, 0, 0, 0)));
-
-        System.out.println("#############################################");
-        database.addEntity(new LootEntityValue(EntityType.CHEST_BOAT, new Location(world, 0, 0, 0), LootTables.BASTION_OTHER.getLootTable(), UUID.randomUUID()));
-        database.addEntity(new LootEntityValue(EntityType.CHEST_BOAT, new Location(world, 10, 0, 0), LootTables.ABANDONED_MINESHAFT.getLootTable(), UUID.randomUUID()));
-        database.addEntity(new LootEntityValue(EntityType.CHEST_BOAT, new Location(world, 100, 0, 0), LootTables.CAVE_SPIDER.getLootTable(), UUID.randomUUID()));
-        System.out.println(database.getAllEntities());
-        System.out.println("##########");
-        System.out.println(database.getEntity(new Location(world, 0, 0, 0)));
-        database.close();
-        */
     }
 
     public static String getLang(String key, String... args) {
@@ -150,6 +131,16 @@ public final class StructureReloot extends JavaPlugin {
         }
 
         return ChatColor.translateAlternateColorCodes('&', lang).replace("\\n", "\n");
+    }
+
+    public static net.md_5.bungee.api.ChatColor getChatColor(String key){
+        String color = StructureReloot.getInstance().languageConfig.getConfig().getString(key, "MAGIC");
+
+        if(!StructureReloot.getInstance().languageConfig.getConfig().contains(key)){
+            StructureReloot.getInstance().languageConfig.getConfig().set(key, "&cUnknown or empty language key please check the config &6" + key);
+            StructureReloot.getInstance().languageConfig.saveConfig();
+        }
+        return net.md_5.bungee.api.ChatColor.of(color);
     }
 
     private void initConfigs() {
