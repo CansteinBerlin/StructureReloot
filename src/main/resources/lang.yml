@@ -15,6 +15,11 @@ commands:
     replaceSuccess: "&aSuccessfully replaced the config: &6%config%"
   info:
     noSettings: "&cNo Settings available for world &6%world%"
+  settings:
+    invalidBool: "&cInvalid value &6%value% &cfor boolean (true/false)"
+    invalidType: "&cInvalid value &6%value% &cfor type (block/entity)"
+    invalidInt: "&cInvalid value &6%value% &cfor integer (1/2/3/...)"
+    invalidPattern: "&cInvalid value &6%value% &cfor time pattern (bsp. 2h30m)"
 
 info:
   title: "&aSettings for world&8:"

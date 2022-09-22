@@ -44,16 +44,21 @@ public class RelootInfoCommand extends SubCommand {
             }
         }
 
+        sendPlayerInfoScreen(sender, world);
+        return true;
+    }
+
+    public static void sendPlayerInfoScreen(CommandSender sender, World world){
         RelootSettings blockSettings = StructureReloot.getInstance().getBlockUpdateConfig().getSettingsForWorld(world);
         if(blockSettings == null){
             sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.info.noSettings", "world", world.getName()));
-            return true;
+            return;
         }
 
         RelootSettings entitySettings = StructureReloot.getInstance().getEntityUpdateConfig().getSettingsForWorld(world);
         if(entitySettings == null){
             sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.info.noSettings", "world", world.getName()));
-            return true;
+            return;
         }
 
         TextComponent firstLine = new TextComponent(StructureReloot.PREFIX + StructureReloot.getLang("info.title"));
@@ -64,8 +69,8 @@ public class RelootInfoCommand extends SubCommand {
                 StructureReloot.getChatColor("info.titleColor"));
 
 
-        BaseComponent[] blockSettingsText = convertSettings(StructureReloot.getLang("info.blocks"), world, blockSettings);
-        BaseComponent[] entitySettingsText = convertSettings(StructureReloot.getLang("info.entities"), world, entitySettings);
+        BaseComponent[] blockSettingsText = convertSettings(StructureReloot.getLang("info.blocks"), world, blockSettings, "block");
+        BaseComponent[] entitySettingsText = convertSettings(StructureReloot.getLang("info.entities"), world, entitySettings, "entity");
 
         sender.spigot().sendMessage(firstLine);
         sender.spigot().sendMessage(titleLine);
@@ -73,27 +78,26 @@ public class RelootInfoCommand extends SubCommand {
         sender.spigot().sendMessage(new TextComponent("\n"));
         sender.spigot().sendMessage(entitySettingsText);
         sender.spigot().sendMessage(titleLine);
-        return true;
     }
 
-    private BaseComponent[] convertSettings(String type, World world, RelootSettings settings){
+    private static BaseComponent[] convertSettings(String type, World world, RelootSettings settings, String commandType){
         TextComponent typeText = new TextComponent(type);
 
         BaseComponent[] relootOnStartup = combineComponents(
                 textWithHover(new TextComponent(StructureReloot.getLang("info.relootOnStartup")), StructureReloot.getLang("info.relootOnStartupHover")),
-                textWithCommand(textWithHover(new TextComponent(settings.isRelootOnStartup() ? "§ftrue" : "§8true"), StructureReloot.getLang("info.set")), "/reloot setRelootOnStartup " + world.getName() + " true"),
+                textWithCommand(textWithHover(new TextComponent(settings.isRelootOnStartup() ? "§ftrue" : "§8true"), StructureReloot.getLang("info.set")), "/reloot settings setRelootOnStartup " + commandType + " " + world.getName() + " true"),
                 new TextComponent("§7|"),
-                textWithCommand(textWithHover(new TextComponent(!settings.isRelootOnStartup() ? "§ffalse" : "§8false"), StructureReloot.getLang("info.set")), "/reloot setRelootOnStartup " + world.getName() + " false")
+                textWithCommand(textWithHover(new TextComponent(!settings.isRelootOnStartup() ? "§ffalse" : "§8false"), StructureReloot.getLang("info.set")), "/reloot settings setRelootOnStartup " + commandType + " " + world.getName() + " false")
         );
 
         BaseComponent[] maxRelootAmount = combineComponents(
                 textWithHover(new TextComponent(StructureReloot.getLang("info.maxRelootAmount")), StructureReloot.getLang("info.maxRelootAmountHover")),
-                textWithSuggestCommand(textWithHover(new TextComponent("§f" + (settings.getMaxRelootAmount() == Integer.MAX_VALUE ? "all" : settings.getMaxRelootAmount())), StructureReloot.getLang("info.set")), "/reloot setMaxRelootAmount ")
+                textWithSuggestCommand(textWithHover(new TextComponent("§f" + (settings.getMaxRelootAmount() == Integer.MAX_VALUE ? "all" : settings.getMaxRelootAmount())), StructureReloot.getLang("info.set")), "/reloot settings setMaxRelootAmount " + commandType + " " + world.getName() + " ")
         );
 
         BaseComponent[] timeBetweenReloot = combineComponents(
                 textWithHover(new TextComponent(StructureReloot.getLang("info.timeBetweenReloot")), StructureReloot.getLang("info.timeBetweenRelootHover")),
-                textWithSuggestCommand(textWithHover(new TextComponent("§f" + settings.getDurationPattern()), StructureReloot.getLang("info.set")), "/reloot setDuration ")
+                textWithSuggestCommand(textWithHover(new TextComponent("§f" + settings.getDurationPattern()), StructureReloot.getLang("info.set")), "/reloot settings setDuration " + commandType + " " + world.getName() + " ")
         );
 
         return new ComponentBuilder(typeText)
@@ -108,7 +112,7 @@ public class RelootInfoCommand extends SubCommand {
     }
 
 
-    private BaseComponent[] centerTextWithMinus(String text, int width, ChatColor minusColor, ChatColor textColor){
+    private static BaseComponent[] centerTextWithMinus(String text, int width, ChatColor minusColor, ChatColor textColor){
         width -= text.length() - 2;
         return combineComponents(
                 textWidthColor(new TextComponent("-".repeat(width / 2)), minusColor),
@@ -116,27 +120,27 @@ public class RelootInfoCommand extends SubCommand {
                 textWidthColor(new TextComponent("-".repeat(width - width / 2)), minusColor));
     }
 
-    private TextComponent textWithHover(TextComponent text, String subtitle){
+    private static TextComponent textWithHover(TextComponent text, String subtitle){
         text.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent(subtitle)}));
         return text;
     }
 
-    private TextComponent textWithCommand(TextComponent text, String command) {
+    private static TextComponent textWithCommand(TextComponent text, String command) {
         text.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command));
         return text;
     }
 
-    private TextComponent textWithSuggestCommand(TextComponent text, String command) {
+    private static TextComponent textWithSuggestCommand(TextComponent text, String command) {
         text.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, command));
         return text;
     }
 
-    private TextComponent textWidthColor(TextComponent text, ChatColor color){
+    private static TextComponent textWidthColor(TextComponent text, ChatColor color){
         text.setColor(color);
         return text;
     }
 
-    private BaseComponent[] combineComponents(BaseComponent... components){
+    private static BaseComponent[] combineComponents(BaseComponent... components){
         ComponentBuilder componentBuilder = new ComponentBuilder().retain(ComponentBuilder.FormatRetention.NONE);
         for(BaseComponent c : components){
             componentBuilder.append(c, ComponentBuilder.FormatRetention.NONE).append("§r ", ComponentBuilder.FormatRetention.NONE);

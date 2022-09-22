@@ -77,8 +77,10 @@ public class RelootSettings implements ConfigurationSerializable {
         this.maxRelootAmount = maxRelootAmount;
     }
 
-    public void setDurationPattern(String durationPattern) {
+    public long setDurationPattern(String durationPattern) {
         this.durationPattern = durationPattern;
+        this.duration = TimeUtil.parsePeriodToSeconds(durationPattern);
+        return this.duration;
     }
 
     public void setNextDate(LocalDateTime nextDate) {
