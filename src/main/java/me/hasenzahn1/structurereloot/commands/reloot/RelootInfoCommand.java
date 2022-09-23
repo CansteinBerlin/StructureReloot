@@ -12,6 +12,9 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 import org.w3c.dom.Text;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
 public class RelootInfoCommand extends SubCommand {
 
     public RelootInfoCommand(BaseCommand parent) {
@@ -46,6 +49,15 @@ public class RelootInfoCommand extends SubCommand {
 
         sendPlayerInfoScreen(sender, world);
         return true;
+    }
+
+    @Override
+    public List<String> tabComplete(CommandSender sender, String[] args) {
+        return Bukkit.getWorlds().stream()
+                .map(World::getName)
+                .filter(s -> s.startsWith(args[0]))
+                .sorted()
+                .collect(Collectors.toList());
     }
 
     public static void sendPlayerInfoScreen(CommandSender sender, World world){
@@ -147,6 +159,4 @@ public class RelootInfoCommand extends SubCommand {
         }
         return componentBuilder.create();
     }
-
-
 }
