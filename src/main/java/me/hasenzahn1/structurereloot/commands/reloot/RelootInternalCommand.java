@@ -1,4 +1,4 @@
-package me.hasenzahn1.structurereloot.commands;
+package me.hasenzahn1.structurereloot.commands.reloot;
 
 import me.hasenzahn1.structurereloot.StructureReloot;
 import me.hasenzahn1.structurereloot.commandsystem.BaseCommand;
@@ -7,18 +7,16 @@ import me.hasenzahn1.structurereloot.util.ReflectionUtil;
 
 import java.lang.reflect.InvocationTargetException;
 
-public class RelootCommand extends BaseCommand {
+public class RelootInternalCommand extends SubCommand {
 
-    public RelootCommand() {
-        super("reloot", null); //"reloot.command.reloot"
+    public RelootInternalCommand(BaseCommand parent) {
+        super(parent, "internal", null);
 
-
-        for (Class<? extends SubCommand> command : ReflectionUtil.getAllClasses("me.hasenzahn1.structurereloot.commands.reloot", SubCommand.class)) {
-            if(command.getPackage().getName() != "me.hasenzahn1.structurereloot.commands.reloot") continue;
+        for (Class<? extends SubCommand> command : ReflectionUtil.getAllClasses("me.hasenzahn1.structurereloot.commands.reloot.internal", SubCommand.class)) {
             try {
                 addSubCommand(command.getConstructor(BaseCommand.class).newInstance(this));
             } catch (NoSuchMethodException | InstantiationException | IllegalAccessException |
-                     InvocationTargetException e) {
+                    InvocationTargetException e) {
                 StructureReloot.LOGGER.severe("§cCould not register Subcommand for " + name);
             }
         }

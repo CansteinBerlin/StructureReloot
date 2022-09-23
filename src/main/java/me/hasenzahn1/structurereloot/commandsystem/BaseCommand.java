@@ -49,6 +49,7 @@ public abstract class BaseCommand {
         //Bingo.LOGGER.info(name + "; " + args[0].length());
         if (args.length == 1){
             for (BaseCommand cmd : subCommands) {
+                if(cmd.getName().equalsIgnoreCase("internal")) continue;
                 if(cmd.getPermission() == null || sender.hasPermission(cmd.getPermission())) {
                     if (args[0].length() != 0) {
                         if (cmd.getName().toLowerCase().startsWith(args[0].toLowerCase())) {
@@ -90,6 +91,7 @@ public abstract class BaseCommand {
         if (subCommands.size() > 0) {
             StringBuilder sb = new StringBuilder(subCommands.get(0).getName());
             for (int i = 1; i < subCommands.size(); i++){
+                if(subCommands.get(i).getName().equalsIgnoreCase("internal")) continue;
                 sb.append("/").append(subCommands.get(i).getName());
             }
             return sb.toString();

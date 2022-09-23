@@ -1,0 +1,27 @@
+[StructureReloot]: Settings for world:
+--------------------- world_the_end ---------------------
+Blocks:
+    Reloot On Startup: true | false
+    Max Reloot Amount: 10
+    Time Between Reloot: 2h
+
+Entities:
+    Reloot On Startup: true | false
+    Max Reloot Amount: 10
+    Time Between Reloot: 2h
+
+
+
+[StructureReloot]: Lootable Entities/Blocks in world:
+--------------------- world_the_end ---------------------
+NETHER_BRIDGE(10, 10, 10) [Reloot] [x]
+NETHER_BRIDGE(10, 10, 10) [Reloot] [x]
+NETHER_BRIDGE(10, 10, 10) [Reloot] [x]
+NETHER_BRIDGE(10, 10, 10) [Reloot] [x]
+NETHER_BRIDGE(10, 10, 10) [Reloot] [x]
+NETHER_BRIDGE(10, 10, 10) [Reloot] [x]
+NETHER_BRIDGE(10, 10, 10) [Reloot] [x]
+NETHER_BRIDGE(10, 10, 10) [Reloot] [x]
+NETHER_BRIDGE(10, 10, 10) [Reloot] [x]
+NETHER_BRIDGE(10, 10, 10) [Reloot] [x]
+----------------- <<< Page 1 / 6 >>> -------------------

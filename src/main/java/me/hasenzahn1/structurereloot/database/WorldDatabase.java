@@ -23,6 +23,7 @@ public class WorldDatabase extends Database {
     //############## Blocks ##############//
     //get Value
     public LootBlockValue getBlock(Location loc){
+        if(loc == null) return null;
         return getTable(BlockTable.class).getBlock(loc);
     }
 
@@ -60,6 +61,7 @@ public class WorldDatabase extends Database {
 
     //get Value
     public LootEntityValue getEntity(Location location){
+        if(location == null) return null;
         return getTable(EntityTable.class).getEntity(location);
     }
 

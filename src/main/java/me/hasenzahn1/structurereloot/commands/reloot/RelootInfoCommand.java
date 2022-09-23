@@ -4,16 +4,18 @@ import me.hasenzahn1.structurereloot.StructureReloot;
 import me.hasenzahn1.structurereloot.autoupdate.RelootSettings;
 import me.hasenzahn1.structurereloot.commandsystem.BaseCommand;
 import me.hasenzahn1.structurereloot.commandsystem.SubCommand;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.*;
+import net.md_5.bungee.api.chat.BaseComponent;
+import net.md_5.bungee.api.chat.ComponentBuilder;
+import net.md_5.bungee.api.chat.TextComponent;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.w3c.dom.Text;
 
 import java.util.List;
 import java.util.stream.Collectors;
+
+import static me.hasenzahn1.structurereloot.util.TextComponentUtil.*;
 
 public class RelootInfoCommand extends SubCommand {
 
@@ -23,7 +25,6 @@ public class RelootInfoCommand extends SubCommand {
 
     @Override
     public boolean performCommand(CommandSender sender, String[] args) {
-
         if(args.length > 1){
             sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.invalidCommand"),
                     "command", getCommandHistory(),
@@ -121,42 +122,5 @@ public class RelootInfoCommand extends SubCommand {
                 .append("\n", ComponentBuilder.FormatRetention.NONE)
                 .append(timeBetweenReloot, ComponentBuilder.FormatRetention.NONE)
                 .create();
-    }
-
-
-    private static BaseComponent[] centerTextWithMinus(String text, int width, ChatColor minusColor, ChatColor textColor){
-        width -= text.length() - 2;
-        return combineComponents(
-                textWidthColor(new TextComponent("-".repeat(width / 2)), minusColor),
-                textWidthColor(new TextComponent(text), textColor),
-                textWidthColor(new TextComponent("-".repeat(width - width / 2)), minusColor));
-    }
-
-    private static TextComponent textWithHover(TextComponent text, String subtitle){
-        text.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent(subtitle)}));
-        return text;
-    }
-
-    private static TextComponent textWithCommand(TextComponent text, String command) {
-        text.setClickEvent(new ClickEvent(ClickEvent.Action.RUN_COMMAND, command));
-        return text;
-    }
-
-    private static TextComponent textWithSuggestCommand(TextComponent text, String command) {
-        text.setClickEvent(new ClickEvent(ClickEvent.Action.SUGGEST_COMMAND, command));
-        return text;
-    }
-
-    private static TextComponent textWidthColor(TextComponent text, ChatColor color){
-        text.setColor(color);
-        return text;
-    }
-
-    private static BaseComponent[] combineComponents(BaseComponent... components){
-        ComponentBuilder componentBuilder = new ComponentBuilder().retain(ComponentBuilder.FormatRetention.NONE);
-        for(BaseComponent c : components){
-            componentBuilder.append(c, ComponentBuilder.FormatRetention.NONE).append("§r ", ComponentBuilder.FormatRetention.NONE);
-        }
-        return componentBuilder.create();
     }
 }

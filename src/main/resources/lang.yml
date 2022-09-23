@@ -20,6 +20,9 @@ commands:
     invalidType: "&cInvalid value &6%value% &cfor type (block/entity)"
     invalidInt: "&cInvalid value &6%value% &cfor integer (1/2/3/...)"
     invalidPattern: "&cInvalid value &6%value% &cfor time pattern (bsp. 2h30m)"
+  listlootables:
+    noLootables: "&cThere are no lootable &6%type%&c in world &6%world%"
+
 
 info:
   title: "&aSettings for world&8:"
@@ -34,3 +37,8 @@ info:
   maxRelootAmountHover: "&6This setting determines the maximum number of blocks that are regenerated per cycle"
   timeBetweenReloot: "&6Time Between Reloot&7:"
   timeBetweenRelootHover: "&6This setting defines the duration between two cycles. E.g.: 2h30m"
+
+listLootTables:
+  title: "&aList Lootable %type% for world:"
+  teleport: "&8Click to teleport"
+  reloot: "&a[Reloot]"
