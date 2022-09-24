@@ -53,7 +53,7 @@ public class RelootEntityCommand extends SubCommand {
     public List<String> tabComplete(CommandSender sender, String[] args) {
         if(!(sender instanceof Player)) return null;
         List<LootEntityValue> lootBlockValues = StructureReloot.getInstance().getDatabase(((Player) sender).getWorld()).getAllEntities(); //Not Performant i know
-
+        StructureReloot.getInstance().getDatabase(((Player) sender).getWorld()).close();
         return lootBlockValues.stream()
                 .map(LootEntityValue::getLocationString)
                 .filter(s -> s.startsWith(args[0]))

@@ -50,6 +50,7 @@ public class RelootResetCommand extends SubCommand {
                             " " +
                             StringUtils.listToCommandArgs(tabComplete(null, new String[]{"", ""}))));
         }
+
         return true;
     }
 

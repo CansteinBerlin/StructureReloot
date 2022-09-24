@@ -84,6 +84,7 @@ public class RelootHelper {
         RelootHelper.relootMultipleEntities(values);
         database.removeMultipleEntities(values);
         database.setCacheRemove(false);
+        database.close();
     }
 
     public static void regenNBlocks(World world, int amount, Runnable runnable){
@@ -97,6 +98,7 @@ public class RelootHelper {
         RelootHelper.relootMultipleBlocks(values);
         database.removeMultipleBlocks(values);
         database.setCacheRemove(false);
+        database.close();
     }
 
 }

@@ -54,7 +54,7 @@ public class RegenCommand extends SubCommand {
             RelootHelper.relootOneEntity(value);
             database.removeEntity(value);
         }
-
+        database.close();
         RelootListLootablesCommand.listAllElements(sender,
                 world,
                 page,

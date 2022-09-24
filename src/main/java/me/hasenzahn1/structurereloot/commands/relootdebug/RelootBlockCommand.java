@@ -43,7 +43,7 @@ public class RelootBlockCommand extends SubCommand {
         }
 
         sender.sendMessage(StructureReloot.PREFIX + "Relooted " + valid.size() + " blocks");
-        StructureReloot.getInstance().getDatabase(((Player) sender).getWorld());
+        StructureReloot.getInstance().getDatabase(((Player) sender).getWorld()).close();
         return true;
     }
 
@@ -51,7 +51,7 @@ public class RelootBlockCommand extends SubCommand {
     public List<String> tabComplete(CommandSender sender, String[] args) {
         if(!(sender instanceof Player)) return null;
         List<LootBlockValue> lootBlockValues = StructureReloot.getInstance().getDatabase(((Player) sender).getWorld()).getAllBlocks(); //Not Performant i know
-
+        StructureReloot.getInstance().getDatabase(((Player) sender).getWorld()).close();
         return lootBlockValues.stream()
                 .map(LootBlockValue::getLocationString)
                 .filter(s -> s.startsWith(args[0]))
