@@ -24,6 +24,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
 
+
 public final class StructureReloot extends JavaPlugin {
 
     public static String PREFIX = "§b[§6StructureReloot§b] §r";
