@@ -1,5 +1,6 @@
 package me.hasenzahn1.structurereloot.database.tables;
 
+import me.hasenzahn1.structurereloot.StructureReloot;
 import me.hasenzahn1.structurereloot.database.LootBlockValue;
 import me.hasenzahn1.structurereloot.database.LootEntityValue;
 import me.hasenzahn1.structurereloot.databasesystem.Database;
@@ -101,6 +102,9 @@ public class EntityTable extends Table {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        //Update Changes per day
+        StructureReloot.getInstance().getChangesPerDay().markAddEntity(value);
     }
 
     public void addMultipleEntities(List<LootEntityValue> values){
@@ -110,6 +114,8 @@ public class EntityTable extends Table {
         }else{
             _addMultipleEntities(values);
         }
+        //Update Changes per day
+        for(LootEntityValue value : values) StructureReloot.getInstance().getChangesPerDay().markAddEntity(value);
     }
 
     public void _addMultipleEntities(List<LootEntityValue> values){
@@ -149,6 +155,8 @@ public class EntityTable extends Table {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        //Update Changes per day
+        StructureReloot.getInstance().getChangesPerDay().markRemoveEntity(value);
     }
 
     public void removeMultipleEntities(List<LootEntityValue> values){
@@ -166,6 +174,8 @@ public class EntityTable extends Table {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        //Update Changes per day
+        for(LootEntityValue value : values) StructureReloot.getInstance().getChangesPerDay().markRemoveEntity(value);
     }
 
     //Caching

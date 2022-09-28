@@ -1,5 +1,6 @@
 package me.hasenzahn1.structurereloot.database.tables;
 
+import me.hasenzahn1.structurereloot.StructureReloot;
 import me.hasenzahn1.structurereloot.database.LootBlockValue;
 import me.hasenzahn1.structurereloot.databasesystem.Database;
 import me.hasenzahn1.structurereloot.databasesystem.Table;
@@ -93,6 +94,9 @@ public class BlockTable extends Table {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        //Update Changes per day
+        StructureReloot.getInstance().getChangesPerDay().markAddBlock(value);
     }
 
     public void addMultipleBlocks(List<LootBlockValue> values){
@@ -102,6 +106,8 @@ public class BlockTable extends Table {
         }else{
             _addMultipleBlocks(values);
         }
+        //Update Changes per day
+        for(LootBlockValue value : values) StructureReloot.getInstance().getChangesPerDay().markAddBlock(value);
     }
 
     public void _addMultipleBlocks(List<LootBlockValue> values){
@@ -126,7 +132,7 @@ public class BlockTable extends Table {
         }
     }
 
-    ///remove Value
+    // remove Value
     public void removeBlock(LootBlockValue value){
         if(cacheRemove){
             cachedLootBlockValues.add(value);
@@ -140,6 +146,9 @@ public class BlockTable extends Table {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        //Update Changes per day
+        StructureReloot.getInstance().getChangesPerDay().markRemoveBlock(value);
     }
 
     public void removeMultipleBlocks(List<LootBlockValue> values){
@@ -156,6 +165,8 @@ public class BlockTable extends Table {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        //Update Changes per day
+        for(LootBlockValue value : values) StructureReloot.getInstance().getChangesPerDay().markAddBlock(value);
     }
 
     //Caching
