@@ -166,7 +166,7 @@ public class BlockTable extends Table {
             e.printStackTrace();
         }
         //Update Changes per day
-        for(LootBlockValue value : values) StructureReloot.getInstance().getChangesPerDay().markAddBlock(value);
+        for(LootBlockValue value : values) StructureReloot.getInstance().getChangesPerDay().markRemoveBlock(value);
     }
 
     //Caching

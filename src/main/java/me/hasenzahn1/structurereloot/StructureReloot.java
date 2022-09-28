@@ -2,12 +2,13 @@ package me.hasenzahn1.structurereloot;
 
 import me.hasenzahn1.structurereloot.autoupdate.AutoRelootScheduler;
 import me.hasenzahn1.structurereloot.autoupdate.ChangesPerDay;
-import me.hasenzahn1.structurereloot.autoupdate.DailyMessageTask;
 import me.hasenzahn1.structurereloot.autoupdate.RelootSettings;
 import me.hasenzahn1.structurereloot.commands.RelootCommand;
 import me.hasenzahn1.structurereloot.commands.RelootDebugCommand;
 import me.hasenzahn1.structurereloot.commandsystem.CommandManager;
-import me.hasenzahn1.structurereloot.config.*;
+import me.hasenzahn1.structurereloot.config.CustomConfig;
+import me.hasenzahn1.structurereloot.config.DefaultConfig;
+import me.hasenzahn1.structurereloot.config.LanguageConfig;
 import me.hasenzahn1.structurereloot.config.update.BlockUpdateConfig;
 import me.hasenzahn1.structurereloot.config.update.EntityUpdateConfig;
 import me.hasenzahn1.structurereloot.database.WorldDatabase;
@@ -22,12 +23,8 @@ import org.bukkit.World;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.text.SimpleDateFormat;
-import java.time.*;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Timer;
 import java.util.logging.Logger;
 
 
@@ -53,8 +50,7 @@ public final class StructureReloot extends JavaPlugin {
     private EntityUpdateConfig entityUpdateConfig;
     private AutoRelootScheduler autoRelootScheduler;
 
-    private Timer timer;
-    private DailyMessageTask dailyMessageTask;
+    private ChangesPerDay changes;
 
     @Override
     public void onEnable() {
@@ -81,13 +77,7 @@ public final class StructureReloot extends JavaPlugin {
         autoRelootScheduler = new AutoRelootScheduler();
         autoRelootScheduler.runTaskTimer(this, 20, 20*5);
 
-        dailyMessageTask = new DailyMessageTask();
-        timer = new Timer();
-
-        Instant current = LocalDateTime.now().plusDays(1).toInstant(OffsetDateTime.now().getOffset());
-        Date date = Date.from(current);
-        if(isDebugMode()) timer.schedule(dailyMessageTask, date, Instant.EPOCH.plus(Duration.ofDays(1)).getEpochSecond() * 1000);
-
+        changes = new ChangesPerDay();
     }
 
     public void relootElementsInWorld(boolean isStartup) {
@@ -245,6 +235,6 @@ public final class StructureReloot extends JavaPlugin {
     }
 
     public ChangesPerDay getChangesPerDay(){
-        return dailyMessageTask.getChanges();
+        return changes;
     }
 }
