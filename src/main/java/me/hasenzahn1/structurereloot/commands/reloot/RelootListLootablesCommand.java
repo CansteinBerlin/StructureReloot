@@ -109,7 +109,7 @@ public class RelootListLootablesCommand extends SubCommand {
 
 
         for(int i = page * 10; i < Math.min((page + 1) * 10, values.size()); i++){ //Loop through all elements on "page"
-            String lootTable = values.get(i).getStringLootTable().equals("") ? "Item Frame" : values.get(i).getStringLootTable();
+            String lootTable = values.get(i).getLootTable() == null ? "Item Frame" : getNameFromLootTable(values.get(i).getLootTable());
             Location loc = values.get(i).getLocation();
             String locString = values.get(i).getLocationString();
 

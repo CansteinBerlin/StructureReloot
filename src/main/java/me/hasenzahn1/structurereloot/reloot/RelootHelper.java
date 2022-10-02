@@ -4,19 +4,7 @@ import me.hasenzahn1.structurereloot.StructureReloot;
 import me.hasenzahn1.structurereloot.database.LootBlockValue;
 import me.hasenzahn1.structurereloot.database.LootEntityValue;
 import me.hasenzahn1.structurereloot.database.WorldDatabase;
-import me.hasenzahn1.structurereloot.listeners.EntityListener;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.World;
-import org.bukkit.block.Chest;
-import org.bukkit.block.Dispenser;
-import org.bukkit.block.data.Directional;
-import org.bukkit.entity.Entity;
-import org.bukkit.entity.ItemFrame;
-import org.bukkit.inventory.ItemStack;
-import org.bukkit.loot.Lootable;
-import org.bukkit.persistence.PersistentDataType;
 
 import java.util.Collections;
 import java.util.List;
@@ -25,11 +13,11 @@ import java.util.stream.Collectors;
 public class RelootHelper {
 
     public static void relootMultipleBlocks(List<LootBlockValue> values){
-        StructureReloot.getInstance().getBlockChangeTask().changeBlocks(values);
+        StructureReloot.getInstance().getLootValueChangeTask().addValues(values);
     }
 
     public static void relootMultipleEntities(List<LootEntityValue> values){
-        StructureReloot.getInstance().getEntityChangeTask().changeEntities(values);
+        StructureReloot.getInstance().getLootValueChangeTask().addValues(values);
     }
 
     public static void regenNEntities(World world, int amount, Runnable runnable){
@@ -38,7 +26,7 @@ public class RelootHelper {
         List<LootEntityValue> values = levs.stream().limit(Math.min(levs.size(), amount)).collect(Collectors.toList());
 
         WorldDatabase database = StructureReloot.getInstance().getDatabase(world);
-        StructureReloot.getInstance().getEntityChangeTask().addCallback(runnable);
+        StructureReloot.getInstance().getLootValueChangeTask().addCallback(runnable);
         database.setCacheRemove(true);
         RelootHelper.relootMultipleEntities(values);
         database.removeMultipleEntities(values);
@@ -52,7 +40,7 @@ public class RelootHelper {
         List<LootBlockValue> values = lbvs.stream().limit(Math.min(lbvs.size(), amount)).collect(Collectors.toList());
 
         WorldDatabase database = StructureReloot.getInstance().getDatabase(world);
-        StructureReloot.getInstance().getBlockChangeTask().addCallback(runnable);
+        StructureReloot.getInstance().getLootValueChangeTask().addCallback(runnable);
         database.setCacheRemove(true);
         RelootHelper.relootMultipleBlocks(values);
         database.removeMultipleBlocks(values);

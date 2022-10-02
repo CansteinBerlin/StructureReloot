@@ -59,7 +59,6 @@ public class LootBlockValue extends LootValue{
         //Set Loottable of Lootable Chest and Dispenser
         BlockState state = loc.getBlock().getState();
         if(state instanceof Lootable){
-            Bukkit.broadcastMessage("Lootable");
             ((Lootable) state).setLootTable(lootTable);
             state.update();
         }

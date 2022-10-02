@@ -16,6 +16,7 @@ import me.hasenzahn1.structurereloot.listeners.BlockListener;
 import me.hasenzahn1.structurereloot.listeners.EntityListener;
 import me.hasenzahn1.structurereloot.reloot.BlockChangeTask;
 import me.hasenzahn1.structurereloot.reloot.EntityChangeTask;
+import me.hasenzahn1.structurereloot.reloot.LootValueChangeTask;
 import me.hasenzahn1.structurereloot.reloot.RelootHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
@@ -43,8 +44,7 @@ public final class StructureReloot extends JavaPlugin {
     private LanguageConfig languageConfig;
     private HashMap<World, WorldDatabase>  databases;
 
-    private BlockChangeTask blockChangeTask;
-    private EntityChangeTask entityChangeTask;
+    private LootValueChangeTask lootValueChangeTask;
 
     private BlockUpdateConfig blockUpdateConfig;
     private EntityUpdateConfig entityUpdateConfig;
@@ -64,8 +64,7 @@ public final class StructureReloot extends JavaPlugin {
 
         changes = new ChangesPerDay();
 
-        blockChangeTask = new BlockChangeTask();
-        entityChangeTask = new EntityChangeTask();
+        lootValueChangeTask = new LootValueChangeTask();
 
         commandManager = new CommandManager(this);
         commandManager.addCommand(new RelootCommand());
@@ -193,14 +192,6 @@ public final class StructureReloot extends JavaPlugin {
         return databases.get(world);
     }
 
-    public BlockChangeTask getBlockChangeTask() {
-        return blockChangeTask;
-    }
-
-    public EntityChangeTask getEntityChangeTask() {
-        return entityChangeTask;
-    }
-
     public boolean isDebugMode() {
         return debugMode;
     }
@@ -239,5 +230,9 @@ public final class StructureReloot extends JavaPlugin {
 
     public ChangesPerDay getChangesPerDay(){
         return changes;
+    }
+
+    public LootValueChangeTask getLootValueChangeTask() {
+        return lootValueChangeTask;
     }
 }
