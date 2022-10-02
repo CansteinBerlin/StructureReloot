@@ -25,3 +25,5 @@ NETHER_BRIDGE(10, 10, 10) [Reloot] [x]
 NETHER_BRIDGE(10, 10, 10) [Reloot] [x]
 NETHER_BRIDGE(10, 10, 10) [Reloot] [x]
 ----------------- <<< Page 1 / 6 >>> -------------------
+
+[21-10-2005 11:36:22]: Added new LootBlock at %loc% in world_the_end

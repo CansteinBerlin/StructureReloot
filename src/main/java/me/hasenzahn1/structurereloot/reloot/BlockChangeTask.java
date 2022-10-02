@@ -13,12 +13,10 @@ public class BlockChangeTask extends BukkitRunnable{
 
     private final ArrayList<LootBlockValue> blocksToChange;
     private final ArrayList<Runnable> finishedTaskRunnables;
-    private boolean running;
 
     public BlockChangeTask(){
         blocksToChange = new ArrayList<>();
         finishedTaskRunnables = new ArrayList<>();
-        running = false;
         runTaskTimer(StructureReloot.getInstance(), 0, 1);
     }
 
@@ -31,7 +29,6 @@ public class BlockChangeTask extends BukkitRunnable{
         }
 
         if(blocksToChange.size() == 0){
-            running = false;
 
             for(Runnable r : finishedTaskRunnables){
                 r.run();

@@ -6,6 +6,7 @@ import me.hasenzahn1.structurereloot.commandsystem.BaseCommand;
 import me.hasenzahn1.structurereloot.commandsystem.SubCommand;
 import me.hasenzahn1.structurereloot.database.LootBlockValue;
 import me.hasenzahn1.structurereloot.database.LootEntityValue;
+import me.hasenzahn1.structurereloot.database.LootValue;
 import me.hasenzahn1.structurereloot.database.WorldDatabase;
 import me.hasenzahn1.structurereloot.reloot.RelootHelper;
 import org.bukkit.Bukkit;
@@ -37,27 +38,29 @@ public class RemoveCommand extends SubCommand {
         }
 
         WorldDatabase database = StructureReloot.getInstance().getDatabase(world);
-        int page = 0;
+        int page;
         if(args[1].equalsIgnoreCase("block")){
-            LootBlockValue value = database.getBlock(LootBlockValue.getLocFromString(world, args[2]));
+            LootBlockValue value = database.getBlock(LootValue.getLocFromString(world, args[2]));
             if(value == null) return true;
             List<LootBlockValue> values = database.getAllBlocks();
             page = values.indexOf(value) / 10;
             database.removeBlock(value);
+
         }else{
-            LootEntityValue value = database.getEntity(LootBlockValue.getLocFromString(world, args[2]));
+            LootEntityValue value = database.getEntity(LootValue.getLocFromString(world, args[2]));
             if(value == null) return true;
             List<LootEntityValue> values = database.getAllEntities();
             page = values.indexOf(value) / 10;
             database.removeEntity(value);
         }
-        database.close();
+
         RelootListLootablesCommand.listAllElements(sender,
                 world,
                 page,
-                args[1].equalsIgnoreCase("block") ? database.getAllBlocks() : new ArrayList<>(),
-                !args[1].equalsIgnoreCase("block") ? database.getAllEntities() : new ArrayList<>(),
-                args[0].equalsIgnoreCase("block") ? "blocks" : "entities");
+                args[1].equalsIgnoreCase("block") ? database.getAllBlocks() : database.getAllEntities(),
+                args[1].equalsIgnoreCase("block") ? "blocks" : "entities");
+
+        database.close();
         return true;
     }
 }

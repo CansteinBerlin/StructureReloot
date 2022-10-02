@@ -25,7 +25,7 @@ import java.util.stream.Collectors;
 public class RelootHelper {
 
     public static void relootOneBlock(LootBlockValue value){
-        Location loc = value.getLoc();
+        Location loc = value.getLocation();
         loc.getBlock().setType(Material.AIR); //Reset block
         loc.getBlock().setType(value.getBlockMaterial()); //Set Block
         // Bukkit.broadcastMessage(value + "");

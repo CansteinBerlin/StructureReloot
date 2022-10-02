@@ -39,7 +39,7 @@ public class RelootBlockCommand extends SubCommand {
         RelootHelper.relootMultipleBlocks(valid);
 
         if(valid.size() != 0){
-            player.teleport(valid.get(0).getLoc());
+            player.teleport(valid.get(0).getLocation());
         }
 
         sender.sendMessage(StructureReloot.PREFIX + "Relooted " + valid.size() + " blocks");

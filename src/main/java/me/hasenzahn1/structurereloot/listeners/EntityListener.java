@@ -27,7 +27,7 @@ public class EntityListener implements Listener {
     public static NamespacedKey markEntityKey = new NamespacedKey(StructureReloot.getInstance(), "markedRelootEntity");
 
     /*
-        Should not be receive block Loottables as well as plugins calling.
+        Should not receive block Loottables as well as plugins calling.
         LootTable.fillInventory(org.bukkit.inventory.Inventory, java.util.Random, LootContext).
      */
     @EventHandler

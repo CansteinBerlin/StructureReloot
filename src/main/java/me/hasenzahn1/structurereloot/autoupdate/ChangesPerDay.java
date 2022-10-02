@@ -18,7 +18,23 @@ public class ChangesPerDay {
     DateTimeFormatter formatter;
 
     public ChangesPerDay(){
-        formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm:ss");
+        formatter = DateTimeFormatter.ofPattern("dd-MM-yyy hh:mm:ss");
+    }
+
+    public void markAddBlock(LootBlockValue value){
+        logToTextFile("Added new LootBlock at " + value.getLocationString() + " in " + value.getLocation().getWorld().getName() + "\n");
+    }
+
+    public void markAddEntity(LootEntityValue value){
+        logToTextFile("Added new LootEntity at " + value.getLocationString() + " in " + value.getLocation().getWorld().getName() + "\n");
+    }
+
+    public void markRemoveBlock(LootBlockValue value){
+        logToTextFile("Removed or relooted LootBlock at " + value.getLocationString() + " in " + value.getLocation().getWorld().getName() + "\n");
+    }
+
+    public void markRemoveEntity(LootEntityValue value){
+        logToTextFile("Removed or relooted LootEntity at " + value.getLocationString() + " in " + value.getLocation().getWorld().getName() + "\n");
     }
 
     private void create(){
@@ -35,55 +51,15 @@ public class ChangesPerDay {
         }
     }
 
-    public void markAddBlock(LootBlockValue value){
+    private void logToTextFile(String text){
         create();
         try {
             Files.writeString(
                     Paths.get(file.toURI()),
-                    "[" + formatter.format(LocalDateTime.now()) + "]: Added new LootBlock at " + value.getLocationString() + " in world " + value.getLoc().getWorld().getName() + "\n",
+                    "[" + formatter.format(LocalDateTime.now()) + "]: " + text,
                     StandardOpenOption.APPEND);
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-    public void markAddEntity(LootEntityValue value){
-        create();
-        try {
-            Files.writeString(
-                    Paths.get(file.toURI()),
-                    "[" + formatter.format(LocalDateTime.now()) + "]: Added new LootEntity at " + value.getLocationString() + " in world " + value.getLocation().getWorld().getName() + "\n",
-                    StandardOpenOption.APPEND);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void markRemoveBlock(LootBlockValue value){
-        create();
-        try {
-            Files.writeString(
-                    Paths.get(file.toURI()),
-                    "[" + formatter.format(LocalDateTime.now()) + "]: Removed LootBlock at " + value.getLocationString() + " in world " + value.getLoc().getWorld().getName() + "\n",
-                    StandardOpenOption.APPEND);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void markRemoveEntity(LootEntityValue value){
-        create();
-        try {
-            Files.writeString(
-                    Paths.get(file.toURI()),
-                    "[" + formatter.format(LocalDateTime.now()) + "]: Removed LootEntity at " + value.getLocationString() + " in world " + value.getLocation().getWorld().getName() + "\n",
-                    StandardOpenOption.APPEND);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-    public void clear(){
-    }
-
 }

@@ -13,7 +13,6 @@ public class EntityChangeTask extends BukkitRunnable {
 
     private final ArrayList<LootEntityValue> entitiesToChange;
     private final ArrayList<Runnable> finishedTaskRunnables;
-    private boolean running;
 
     public EntityChangeTask(){
         entitiesToChange = new ArrayList<>();
@@ -29,7 +28,6 @@ public class EntityChangeTask extends BukkitRunnable {
         }
 
         if(entitiesToChange.size() == 0){
-            running = false;
 
             for(Runnable r : finishedTaskRunnables){
                 r.run();

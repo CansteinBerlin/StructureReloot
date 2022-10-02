@@ -94,7 +94,7 @@ public class EntityTable extends Table {
                 "INSERT OR REPLACE INTO " + getTableName() + " (location, lootTable, uuid, entityType) VALUES(?,?,?,?)"
         )){
             statement.setString(1, value.getLocationString());
-            statement.setString(2, value.getLootTableString());
+            statement.setString(2, value.getStringLootTable());
             statement.setString(3, value.getUUIDString());
             statement.setString(4, value.getEntityString());
             statement.executeUpdate();
@@ -125,7 +125,7 @@ public class EntityTable extends Table {
         for(LootEntityValue val : values){
             sqlString.append("('");
             sqlString.append(val.getLocationString()).append("','");
-            sqlString.append(val.getLootTableString()).append("','");
+            sqlString.append(val.getStringLootTable()).append("','");
             sqlString.append(val.getUUIDString()).append("','");
             sqlString.append(val.getEntityString()).append("'),");
         }

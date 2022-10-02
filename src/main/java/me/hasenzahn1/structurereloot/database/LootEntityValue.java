@@ -1,6 +1,5 @@
 package me.hasenzahn1.structurereloot.database;
 
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
@@ -9,37 +8,27 @@ import org.bukkit.loot.LootTable;
 
 import java.util.UUID;
 
-public class LootEntityValue {
+public class LootEntityValue extends LootValue{
 
     private final EntityType entity;
-    private final Location location;
-    private final LootTable lootTable;
     private final UUID uuid;
 
     public LootEntityValue(EntityType entity, Location location, LootTable lootTable, UUID uuid) {
+        super(location, lootTable);
+
         this.entity = entity;
-        this.location = location;
-        this.lootTable = lootTable;
         this.uuid = uuid;
     }
 
     public LootEntityValue(World world, String entityType, String location, NamespacedKey lootTable, String uuid){
+        super(world, location, lootTable);
+
         this.entity = EntityType.valueOf(entityType);
-        this.location = LootBlockValue.getLocFromString(world, location);
-        this.lootTable = lootTable == null ? null : Bukkit.getLootTable(lootTable);
         this.uuid = UUID.fromString(uuid);
     }
 
     public String getEntityString(){
         return entity.name();
-    }
-
-    public String getLocationString(){
-        return LootBlockValue.locationToLocationString(location);
-    }
-
-    public String getLootTableString(){
-        return lootTable != null ? lootTable.toString() : "";
     }
 
     public String getUUIDString(){
@@ -50,14 +39,6 @@ public class LootEntityValue {
         return entity;
     }
 
-    public Location getLocation() {
-        return location;
-    }
-
-    public LootTable getLootTable() {
-        return lootTable;
-    }
-
     public UUID getUuid() {
         return uuid;
     }
@@ -66,7 +47,7 @@ public class LootEntityValue {
     public String toString() {
         return "LootEntityValue{" +
                 "entity=" + entity +
-                ", location=" + location +
+                ", location=" + loc +
                 ", lootTable=" + lootTable +
                 ", uuid=" + uuid +
                 '}';

@@ -6,6 +6,7 @@ import me.hasenzahn1.structurereloot.commandsystem.BaseCommand;
 import me.hasenzahn1.structurereloot.commandsystem.SubCommand;
 import me.hasenzahn1.structurereloot.database.LootBlockValue;
 import me.hasenzahn1.structurereloot.database.LootEntityValue;
+import me.hasenzahn1.structurereloot.database.LootValue;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -75,17 +76,21 @@ public class RelootListLootablesCommand extends SubCommand {
             }
         }
 
+        List<? extends LootValue> values = args[0].equalsIgnoreCase("block") ?
+                StructureReloot.getInstance().getDatabase(world).getAllBlocks() :
+                StructureReloot.getInstance().getDatabase(world).getAllEntities();
+
         List<LootBlockValue> lbvs = args[0].equalsIgnoreCase("block") ? StructureReloot.getInstance().getDatabase(world).getAllBlocks() : new ArrayList<>();
         List<LootEntityValue> levs = !args[0].equalsIgnoreCase("block") ? StructureReloot.getInstance().getDatabase(world).getAllEntities() : new ArrayList<>();
         StructureReloot.getInstance().getDatabase(world).close();
-        listAllElements(sender, world, page, lbvs, levs, args[0].equalsIgnoreCase("block") ? "blocks" : "entities");
+        listAllElements(sender, world, page, values, args[0].equalsIgnoreCase("block") ? "blocks" : "entities");
 
         return true;
     }
 
-    public static void listAllElements(CommandSender sender, World world, int page, List<LootBlockValue> lbvs, List<LootEntityValue> levs, String entityType){
+    public static void listAllElements(CommandSender sender, World world, int page, List<? extends LootValue> values, String entityType){
 
-        if(lbvs.size() == 0 && levs.size() == 0){
+        if(values.size() == 0){
             sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.listlootables.noLootables", "type", entityType, "world", world.getName()));
             return;
         }
@@ -105,43 +110,34 @@ public class RelootListLootablesCommand extends SubCommand {
         sender.spigot().sendMessage(titleLine);
 
 
-        for(int i = page * 10; i < Math.min((page + 1) * 10, Math.max(lbvs.size(), levs.size())); i++){ //Loop through all elements on "page"
-            LootTable lootTable = null;
-            Location loc = null;
-            String locString = null;
-            if(lbvs.size() > 0){
-                lootTable = lbvs.get(i).getLootTable();
-                loc = lbvs.get(i).getLoc();
-                locString = lbvs.get(i).getLocationString();
-            }else{
-                lootTable = levs.get(i).getLootTable();
-                loc = levs.get(i).getLocation();
-                locString = levs.get(i).getLocationString();
-            }
+        for(int i = page * 10; i < Math.min((page + 1) * 10, values.size()); i++){ //Loop through all elements on "page"
+            LootTable lootTable = values.get(i).getLootTable();
+            Location loc = values.get(i).getLocation();
+            String locString = values.get(i).getLocationString();
 
             BaseComponent[] comps = combineComponents(
                 new TextComponent("§6  " + getNameFromLootTable(lootTable)),
                     textWithHover(textWithCommand(new TextComponent("§8(" + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ")"), sender.hasPermission("minecraft.command.teleport") ? "/minecraft:tp " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ() : ""), sender.hasPermission("minecraft.command.teleport") ? StructureReloot.getLang("listLootTables.teleport") : ""),
                     sender.hasPermission("reloot.commands.regen") ? textWithCommand(new TextComponent(StructureReloot.getLang("listLootTables.reloot")),
-                            "/reloot internal regen " + world.getName() + " " + (lbvs.size() > 0 ? "block" : "entity") + " " + locString) : null,
+                            "/reloot internal regen " + world.getName() + " " + (entityType.equalsIgnoreCase("blocks") ? "block" : "entity") + " " + locString) : null,
                     sender.hasPermission("reloot.commands.reset") ? textWithCommand(new TextComponent("§c[x]"),
-                            "/reloot internal remove " + world.getName() + " " + (lbvs.size() > 0 ? "block" : "entity") + " " + locString) : null
+                            "/reloot internal remove " + world.getName() + " " + (entityType.equalsIgnoreCase("blocks") ? "block" : "entity") + " " + locString) : null
             );
             sender.spigot().sendMessage(comps);
         }
 
-        int amount = 58 - 18 - ("" + page).length() - ("" + (int) Math.ceil(Math.max(levs.size(), lbvs.size()) / 10f)).length();
-        if(page > 0 && page < ((int) Math.ceil(Math.max(levs.size(), lbvs.size()) / 10f)) - 1) amount -= 2;
+        int amount = 58 - 18 - ("" + page).length() - ("" + (int) Math.ceil(values.size() / 10f)).length();
+        if(page > 0 && page < ((int) Math.ceil(values.size() / 10f)) - 1) amount -= 2;
         BaseComponent[] comps = combineComponents(
                 textWithColor(new TextComponent("-".repeat((int) Math.floor(amount / 2f))), minusColor),
                 page > 0 ? textWithCommand(textWithColor(new TextComponent("<<<"), titleColor),
-                        "/reloot listLootables " + (lbvs.size() > 0 ? "block" : "entity") + " " + world.getName() + " " + (page-1)) : textWithColor(new TextComponent("|||"), titleColor),
+                        "/reloot listLootables " + (entityType.equalsIgnoreCase("blocks") ? "block" : "entity") + " " + world.getName() + " " + (page-1)) : textWithColor(new TextComponent("|||"), titleColor),
                 textWithColor(new TextComponent("Page"), titleColor),
                 textWithColor(new TextComponent("" + (page + 1)), titleColor),
                 textWithColor(new TextComponent("/"), titleColor),
-                textWithColor(new TextComponent("" + ((int) Math.ceil(Math.max(levs.size(), lbvs.size()) / 10f))), titleColor),
-                page < ((int) Math.ceil(Math.max(levs.size(), lbvs.size()) / 10f)) - 1 ? textWithCommand(textWithColor(new TextComponent(">>>"), titleColor),
-                        "/reloot listLootables " + (lbvs.size() > 0 ? "block" : "entity") + " " + world.getName() + " " + (page+1)) : textWithColor(new TextComponent("|||"), titleColor),
+                textWithColor(new TextComponent("" + ((int) Math.ceil(values.size() / 10f))), titleColor),
+                page < ((int) Math.ceil(values.size() / 10f)) - 1 ? textWithCommand(textWithColor(new TextComponent(">>>"), titleColor),
+                        "/reloot listLootables " + (entityType.equalsIgnoreCase("blocks") ? "block" : "entity") + " " + world.getName() + " " + (page+1)) : textWithColor(new TextComponent("|||"), titleColor),
                 textWithColor(new TextComponent("-".repeat((int) Math.ceil(amount / 2f))), minusColor)
         );
         sender.spigot().sendMessage(comps);
