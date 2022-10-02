@@ -1,10 +1,14 @@
 package me.hasenzahn1.structurereloot.database;
 
-import org.bukkit.Location;
-import org.bukkit.NamespacedKey;
-import org.bukkit.World;
+import me.hasenzahn1.structurereloot.listeners.EntityListener;
+import org.bukkit.*;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
+import org.bukkit.entity.ItemFrame;
+import org.bukkit.inventory.ItemStack;
 import org.bukkit.loot.LootTable;
+import org.bukkit.loot.Lootable;
+import org.bukkit.persistence.PersistentDataType;
 
 import java.util.UUID;
 
@@ -27,6 +31,25 @@ public class LootEntityValue extends LootValue{
         this.uuid = UUID.fromString(uuid);
     }
 
+    @Override
+    public void reloot() {
+        Entity remove = Bukkit.getEntity(uuid); //Get Old Entity
+        if(remove != null){
+            remove.teleport(remove.getLocation().add(0, -500, 0)); //Remove old Entity if exists
+        }
+        loc.add(0.5, 0.5, 0.5);
+
+        Entity spawned = loc.getWorld().spawnEntity(loc, entity); //Spawn Entity
+        if(lootTable == null && spawned instanceof ItemFrame){
+            ((ItemFrame) spawned).setItem(new ItemStack(Material.ELYTRA)); //If itemframe set item
+            spawned.getPersistentDataContainer().set(EntityListener.markEntityKey, PersistentDataType.BYTE, (byte) 1); //Mark entity
+
+        } else if (spawned instanceof Lootable){
+            ((Lootable) spawned).setLootTable(lootTable); //If StorageMinecart set LootTable
+        }
+    }
+
+    //Getter and Setter
     public String getEntityString(){
         return entity.name();
     }

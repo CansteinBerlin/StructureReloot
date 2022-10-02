@@ -24,7 +24,7 @@ public class BlockChangeTask extends BukkitRunnable{
     @Override
     public void run() {
         for(int i = Math.min(blocksToChange.size(), BLOCK_CHANGE_AMOUNT) - 1; i >= 0; i--){
-            RelootHelper.relootOneBlock(blocksToChange.get(i));
+            blocksToChange.get(i).reloot();
             blocksToChange.remove(i);
         }
 

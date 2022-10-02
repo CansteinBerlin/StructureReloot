@@ -62,6 +62,8 @@ public final class StructureReloot extends JavaPlugin {
         initConfigs();
         initDatabase();
 
+        changes = new ChangesPerDay();
+
         blockChangeTask = new BlockChangeTask();
         entityChangeTask = new EntityChangeTask();
 
@@ -77,7 +79,6 @@ public final class StructureReloot extends JavaPlugin {
         autoRelootScheduler = new AutoRelootScheduler();
         autoRelootScheduler.runTaskTimer(this, 20, 20*5);
 
-        changes = new ChangesPerDay();
     }
 
     public void relootElementsInWorld(boolean isStartup) {
@@ -114,6 +115,8 @@ public final class StructureReloot extends JavaPlugin {
             updated = true;
             settings.nextDate();
         }
+
+        if(updated) entityUpdateConfig.update();
     }
 
     private void initDatabase() {

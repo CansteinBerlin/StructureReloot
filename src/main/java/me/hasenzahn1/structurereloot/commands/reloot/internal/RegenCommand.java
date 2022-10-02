@@ -46,7 +46,7 @@ public class RegenCommand extends SubCommand {
             if(value == null) return true;
             List<LootBlockValue> values = database.getAllBlocks();
             page = values.indexOf(value) / 10;
-            RelootHelper.relootOneBlock(value);
+            value.reloot();
             database.removeBlock(value);
 
         }else{
@@ -54,7 +54,7 @@ public class RegenCommand extends SubCommand {
             if(value == null) return true;
             List<LootEntityValue> values = database.getAllEntities();
             page = values.indexOf(value) / 10;
-            RelootHelper.relootOneEntity(value);
+            value.reloot();
             database.removeEntity(value);
         }
 

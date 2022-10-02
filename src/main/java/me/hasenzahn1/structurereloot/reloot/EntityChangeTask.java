@@ -23,7 +23,7 @@ public class EntityChangeTask extends BukkitRunnable {
     @Override
     public void run() {
         for(int i = Math.min(entitiesToChange.size(), ENTITY_CHANGE_AMOUNT) - 1; i >= 0; i--){
-            RelootHelper.relootOneEntity(entitiesToChange.get(i));
+            entitiesToChange.get(i).reloot();
             entitiesToChange.remove(i);
         }
 

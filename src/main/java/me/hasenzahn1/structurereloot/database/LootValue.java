@@ -9,10 +9,12 @@ import org.bukkit.loot.LootTable;
 
 import java.util.logging.Level;
 
-public class LootValue {
+public abstract class LootValue {
 
     protected Location loc;
     protected LootTable lootTable;
+    
+    public abstract void reloot();
 
     protected LootValue(Location loc, LootTable lootTable){
         this.loc = loc;

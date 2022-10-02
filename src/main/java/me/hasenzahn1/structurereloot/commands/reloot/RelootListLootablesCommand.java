@@ -80,8 +80,6 @@ public class RelootListLootablesCommand extends SubCommand {
                 StructureReloot.getInstance().getDatabase(world).getAllBlocks() :
                 StructureReloot.getInstance().getDatabase(world).getAllEntities();
 
-        List<LootBlockValue> lbvs = args[0].equalsIgnoreCase("block") ? StructureReloot.getInstance().getDatabase(world).getAllBlocks() : new ArrayList<>();
-        List<LootEntityValue> levs = !args[0].equalsIgnoreCase("block") ? StructureReloot.getInstance().getDatabase(world).getAllEntities() : new ArrayList<>();
         StructureReloot.getInstance().getDatabase(world).close();
         listAllElements(sender, world, page, values, args[0].equalsIgnoreCase("block") ? "blocks" : "entities");
 
@@ -111,12 +109,12 @@ public class RelootListLootablesCommand extends SubCommand {
 
 
         for(int i = page * 10; i < Math.min((page + 1) * 10, values.size()); i++){ //Loop through all elements on "page"
-            LootTable lootTable = values.get(i).getLootTable();
+            String lootTable = values.get(i).getStringLootTable().equals("") ? "Item Frame" : values.get(i).getStringLootTable();
             Location loc = values.get(i).getLocation();
             String locString = values.get(i).getLocationString();
 
             BaseComponent[] comps = combineComponents(
-                new TextComponent("§6  " + getNameFromLootTable(lootTable)),
+                new TextComponent("§6  " + lootTable),
                     textWithHover(textWithCommand(new TextComponent("§8(" + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ")"), sender.hasPermission("minecraft.command.teleport") ? "/minecraft:tp " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ() : ""), sender.hasPermission("minecraft.command.teleport") ? StructureReloot.getLang("listLootTables.teleport") : ""),
                     sender.hasPermission("reloot.commands.regen") ? textWithCommand(new TextComponent(StructureReloot.getLang("listLootTables.reloot")),
                             "/reloot internal regen " + world.getName() + " " + (entityType.equalsIgnoreCase("blocks") ? "block" : "entity") + " " + locString) : null,
