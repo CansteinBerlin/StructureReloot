@@ -1,4 +1,4 @@
-package me.hasenzahn1.structurereloot.autoupdate;
+package me.hasenzahn1.structurereloot.general;
 
 import me.hasenzahn1.structurereloot.StructureReloot;
 import me.hasenzahn1.structurereloot.database.LootBlockValue;

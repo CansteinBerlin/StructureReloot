@@ -22,7 +22,6 @@ public class RelootReloadConfigCommand extends SubCommand {
 
     @Override
     public boolean performCommand(CommandSender sender, String[] args) {
-
         if (args.length == 0 || args.length > 2) {
             sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.invalidCommand",
                     "command", getCommandHistory(),
@@ -40,7 +39,6 @@ public class RelootReloadConfigCommand extends SubCommand {
 
         switch (args[0].toLowerCase(Locale.ROOT)) {
             case "lang" -> {
-
                 if (replace) {
                     StructureReloot.getInstance().getLanguageConfig().delete();
                     StructureReloot.getInstance().setLanguageConfig(null);

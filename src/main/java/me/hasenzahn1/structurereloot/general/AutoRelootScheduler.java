@@ -1,7 +1,6 @@
-package me.hasenzahn1.structurereloot.autoupdate;
+package me.hasenzahn1.structurereloot.general;
 
 import me.hasenzahn1.structurereloot.StructureReloot;
-import org.bukkit.Bukkit;
 import org.bukkit.scheduler.BukkitRunnable;
 
 public class AutoRelootScheduler extends BukkitRunnable {

@@ -1,8 +1,7 @@
-package me.hasenzahn1.structurereloot.autoupdate;
+package me.hasenzahn1.structurereloot.general;
 
 import com.google.common.collect.ImmutableMap;
 import me.hasenzahn1.structurereloot.util.TimeUtil;
-import org.bukkit.Bukkit;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 import java.time.LocalDateTime;

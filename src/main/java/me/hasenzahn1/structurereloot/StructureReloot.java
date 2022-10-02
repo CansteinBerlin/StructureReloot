@@ -1,8 +1,8 @@
 package me.hasenzahn1.structurereloot;
 
-import me.hasenzahn1.structurereloot.autoupdate.AutoRelootScheduler;
-import me.hasenzahn1.structurereloot.autoupdate.ChangesPerDay;
-import me.hasenzahn1.structurereloot.autoupdate.RelootSettings;
+import me.hasenzahn1.structurereloot.general.AutoRelootScheduler;
+import me.hasenzahn1.structurereloot.general.ChangesPerDay;
+import me.hasenzahn1.structurereloot.general.RelootSettings;
 import me.hasenzahn1.structurereloot.commands.RelootCommand;
 import me.hasenzahn1.structurereloot.commands.RelootDebugCommand;
 import me.hasenzahn1.structurereloot.commandsystem.CommandManager;

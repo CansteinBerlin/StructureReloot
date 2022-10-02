@@ -92,14 +92,15 @@ public class RelootListLootablesCommand extends SubCommand {
             sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.listlootables.noLootables", "type", entityType, "world", world.getName()));
             return;
         }
-
-        TextComponent firstLine = new TextComponent(StructureReloot.PREFIX + StructureReloot.getLang("listLootTables.title", "type", entityType));
-        sender.spigot().sendMessage(firstLine);
-
+        //Get Chatcolor from config
         ChatColor minusColor = StructureReloot.getChatColor("info.minusColor");
         ChatColor titleColor = StructureReloot.getChatColor("info.titleColor");
 
+        //First line with Prefix
+        TextComponent firstLine = new TextComponent(StructureReloot.PREFIX + StructureReloot.getLang("listLootTables.title", "type", entityType));
+        sender.spigot().sendMessage(firstLine);
 
+        //Title Line ---- world ---
         BaseComponent[] titleLine = centerTextWithMinus(
                 world.getName(),
                 50,
@@ -107,12 +108,13 @@ public class RelootListLootablesCommand extends SubCommand {
                 titleColor);
         sender.spigot().sendMessage(titleLine);
 
-
+        //For Every elementr in "page"
         for(int i = page * 10; i < Math.min((page + 1) * 10, values.size()); i++){ //Loop through all elements on "page"
             String lootTable = values.get(i).getLootTable() == null ? "Item Frame" : getNameFromLootTable(values.get(i).getLootTable());
             Location loc = values.get(i).getLocation();
             String locString = values.get(i).getLocationString();
 
+            //Element text <lootTable> (<loc>) [Reloot if perm] [x if perm]
             BaseComponent[] comps = combineComponents(
                 new TextComponent("§6  " + lootTable),
                     textWithHover(textWithCommand(new TextComponent("§8(" + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ")"), sender.hasPermission("minecraft.command.teleport") ? "/minecraft:tp " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ() : ""), sender.hasPermission("minecraft.command.teleport") ? StructureReloot.getLang("listLootTables.teleport") : ""),
@@ -124,6 +126,7 @@ public class RelootListLootablesCommand extends SubCommand {
             sender.spigot().sendMessage(comps);
         }
 
+        //Bottom Line with "page selection"
         int amount = 58 - 18 - ("" + page).length() - ("" + (int) Math.ceil(values.size() / 10f)).length();
         if(page > 0 && page < ((int) Math.ceil(values.size() / 10f)) - 1) amount -= 2;
         BaseComponent[] comps = combineComponents(

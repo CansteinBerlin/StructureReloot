@@ -1,13 +1,12 @@
 package me.hasenzahn1.structurereloot.config.update;
 
 import me.hasenzahn1.structurereloot.StructureReloot;
-import me.hasenzahn1.structurereloot.autoupdate.RelootSettings;
+import me.hasenzahn1.structurereloot.general.RelootSettings;
 import me.hasenzahn1.structurereloot.config.CustomConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.configuration.file.FileConfiguration;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;

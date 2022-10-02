@@ -1,7 +1,7 @@
 package me.hasenzahn1.structurereloot.commands.reloot.settings;
 
 import me.hasenzahn1.structurereloot.StructureReloot;
-import me.hasenzahn1.structurereloot.autoupdate.RelootSettings;
+import me.hasenzahn1.structurereloot.general.RelootSettings;
 import me.hasenzahn1.structurereloot.commands.reloot.RelootInfoCommand;
 import me.hasenzahn1.structurereloot.commandsystem.BaseCommand;
 import me.hasenzahn1.structurereloot.commandsystem.SubCommand;

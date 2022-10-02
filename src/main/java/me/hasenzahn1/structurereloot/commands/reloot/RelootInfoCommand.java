@@ -1,7 +1,7 @@
 package me.hasenzahn1.structurereloot.commands.reloot;
 
 import me.hasenzahn1.structurereloot.StructureReloot;
-import me.hasenzahn1.structurereloot.autoupdate.RelootSettings;
+import me.hasenzahn1.structurereloot.general.RelootSettings;
 import me.hasenzahn1.structurereloot.commandsystem.BaseCommand;
 import me.hasenzahn1.structurereloot.commandsystem.SubCommand;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -113,14 +113,15 @@ public class RelootInfoCommand extends SubCommand {
                 textWithSuggestCommand(textWithHover(new TextComponent("§f" + settings.getDurationPattern()), StructureReloot.getLang("info.set")), "/reloot settings setDuration " + commandType + " " + world.getName() + " ")
         );
 
-        return new ComponentBuilder(typeText)
+        return new ComponentBuilder()
                 .retain(ComponentBuilder.FormatRetention.NONE)
-                .append("\n", ComponentBuilder.FormatRetention.NONE)
-                .append(relootOnStartup, ComponentBuilder.FormatRetention.NONE)
-                .append("\n", ComponentBuilder.FormatRetention.NONE)
-                .append(maxRelootAmount, ComponentBuilder.FormatRetention.NONE)
-                .append("\n", ComponentBuilder.FormatRetention.NONE)
-                .append(timeBetweenReloot, ComponentBuilder.FormatRetention.NONE)
+                .append(typeText)
+                .append("\n")
+                .append(relootOnStartup)
+                .append("\n")
+                .append(maxRelootAmount)
+                .append("\n")
+                .append(timeBetweenReloot)
                 .create();
     }
 }
