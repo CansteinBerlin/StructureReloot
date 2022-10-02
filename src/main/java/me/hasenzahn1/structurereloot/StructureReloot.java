@@ -14,8 +14,6 @@ import me.hasenzahn1.structurereloot.config.update.EntityUpdateConfig;
 import me.hasenzahn1.structurereloot.database.WorldDatabase;
 import me.hasenzahn1.structurereloot.listeners.BlockListener;
 import me.hasenzahn1.structurereloot.listeners.EntityListener;
-import me.hasenzahn1.structurereloot.reloot.BlockChangeTask;
-import me.hasenzahn1.structurereloot.reloot.EntityChangeTask;
 import me.hasenzahn1.structurereloot.reloot.LootValueChangeTask;
 import me.hasenzahn1.structurereloot.reloot.RelootHelper;
 import org.bukkit.Bukkit;
@@ -166,8 +164,7 @@ public final class StructureReloot extends JavaPlugin {
         PREFIX = ChatColor.translateAlternateColorCodes('&', defaultConfig.getConfig().getString("prefix", PREFIX));
         debugMode = defaultConfig.getConfig().getBoolean("debugMode", false);
         databasePath = defaultConfig.getConfig().getString("databaseFolder", "data");
-        BlockChangeTask.BLOCK_CHANGE_AMOUNT = defaultConfig.getConfig().getInt("blockChangesPerTick", 30);
-        EntityChangeTask.ENTITY_CHANGE_AMOUNT = defaultConfig.getConfig().getInt("entityChangesPerTick", 30);
+        LootValueChangeTask.CHANGE_AMOUNT = defaultConfig.getConfig().getInt("changesPerTick", 20);
     }
 
     public void reloadLanguageConfig(){
