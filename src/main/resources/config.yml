@@ -1,7 +1,3 @@
-#
-# Default Config of the StructureReloot Plugin
-#
-
 prefix: "&b[&6StructureReloot&b] &r"
 databaseFolder: "data"
 changesPerTick: 20
