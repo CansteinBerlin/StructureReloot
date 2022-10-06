@@ -8,5 +8,6 @@ description: A Plugin that replaces the loot in structures
 commands:
   reloot:
     description: Reloot Commands
-  relootDebug:
+
+relootDebug:
     description: Reloot debugCommands. Only available if debug is turned on in the config

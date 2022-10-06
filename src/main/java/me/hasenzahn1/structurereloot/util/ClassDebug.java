@@ -38,7 +38,7 @@ public class ClassDebug {
                 try {
                     result.append( field.get(object) );
                 } catch (IllegalAccessException e) {
-                    System.out.println("Something wrong happened");
+                    //System.out.println("Something wrong happened");
                 }
             }
             result.append(newLine);

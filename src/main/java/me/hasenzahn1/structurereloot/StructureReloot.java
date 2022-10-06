@@ -66,7 +66,7 @@ public final class StructureReloot extends JavaPlugin {
 
         commandManager = new CommandManager(this);
         commandManager.addCommand(new RelootCommand());
-        if(debugMode) commandManager.addCommand(new RelootDebugCommand());
+        //if(debugMode) commandManager.addCommand(new RelootDebugCommand());
 
         Bukkit.getPluginManager().registerEvents(new BlockListener(), this);
         Bukkit.getPluginManager().registerEvents(new EntityListener(), this);
@@ -119,7 +119,7 @@ public final class StructureReloot extends JavaPlugin {
     private void initDatabase() {
         databases = new HashMap<>();
         for(World world : Bukkit.getWorlds()){
-            System.out.println(world);
+            //System.out.println(world);
             WorldDatabase database = new WorldDatabase(databasePath, world);
             database.init();
             databases.put(world, database);
