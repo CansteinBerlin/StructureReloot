@@ -103,7 +103,7 @@ public class RelootInfoCommand extends SubCommand {
                 "relootOnStartupHover", StructureReloot.getLang("info.relootOnStartupHover"),
                 "colorTrue", settings.isRelootOnStartup() ? "white" : "dark_gray",
                 "colorFalse", settings.isRelootOnStartup() ? "dark_gray" : "white",
-                "setHover", StructureReloot.getLang("info.set"),
+                "setHover", StructureReloot.getLang("info.setHover"),
                 "commandType", commandType,
                 "world", world.getName())
         ).toComponent();
@@ -114,7 +114,7 @@ public class RelootInfoCommand extends SubCommand {
                 "amount", settings.getMaxRelootAmount() == Integer.MAX_VALUE ? "all" : settings.getMaxRelootAmount() + "",
                 "commandType", commandType,
                 "world", world.getName(),
-                "setHover", StructureReloot.getLang("info.set"))
+                "setHover", StructureReloot.getLang("info.setHover"))
         ).toComponent();
 
         BaseComponent[] timeBetweenReloot = new MineDown(StructureReloot.getLang("info.timeBetweenRelootLine",
@@ -123,7 +123,7 @@ public class RelootInfoCommand extends SubCommand {
                 "time", settings.getDurationPattern(),
                 "commandType", commandType,
                 "world", world.getName(),
-                "setHover", StructureReloot.getLang("info.set"))
+                "setHover", StructureReloot.getLang("info.setHover"))
         ).toComponent();
 
 

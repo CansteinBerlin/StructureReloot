@@ -72,7 +72,7 @@ public class RelootListLootablesCommand extends SubCommand {
                         "args", "<block/entity> <world> <page>");
                 return true;
             }else{
-                page = Integer.parseInt(args[2]);
+                page = Math.max(Integer.parseInt(args[2]) - 1, 0);
             }
         }
 
@@ -108,7 +108,7 @@ public class RelootListLootablesCommand extends SubCommand {
                 titleColor);
         sender.spigot().sendMessage(titleLine);
 
-        //For Every elementr in "page"
+        //For Every element in "page"
         for(int i = page * 10; i < Math.min((page + 1) * 10, values.size()); i++){ //Loop through all elements on "page"
             String lootTable = values.get(i).getLootTable() == null ? "Item Frame" : getNameFromLootTable(values.get(i).getLootTable());
             Location loc = values.get(i).getLocation();
@@ -132,13 +132,13 @@ public class RelootListLootablesCommand extends SubCommand {
         BaseComponent[] comps = combineComponents(
                 textWithColor(new TextComponent("-".repeat((int) Math.floor(amount / 2f))), minusColor),
                 page > 0 ? textWithCommand(textWithColor(new TextComponent("<<<"), titleColor),
-                        "/reloot listLootables " + (entityType.equalsIgnoreCase("blocks") ? "block" : "entity") + " " + world.getName() + " " + (page-1)) : textWithColor(new TextComponent("|||"), titleColor),
+                        "/reloot listLootables " + (entityType.equalsIgnoreCase("blocks") ? "block" : "entity") + " " + world.getName() + " " + (page)) : textWithColor(new TextComponent("|||"), titleColor),
                 textWithColor(new TextComponent("Page"), titleColor),
                 textWithColor(new TextComponent("" + (page + 1)), titleColor),
                 textWithColor(new TextComponent("/"), titleColor),
                 textWithColor(new TextComponent("" + ((int) Math.ceil(values.size() / 10f))), titleColor),
                 page < ((int) Math.ceil(values.size() / 10f)) - 1 ? textWithCommand(textWithColor(new TextComponent(">>>"), titleColor),
-                        "/reloot listLootables " + (entityType.equalsIgnoreCase("blocks") ? "block" : "entity") + " " + world.getName() + " " + (page+1)) : textWithColor(new TextComponent("|||"), titleColor),
+                        "/reloot listLootables " + (entityType.equalsIgnoreCase("blocks") ? "block" : "entity") + " " + world.getName() + " " + (page+2)) : textWithColor(new TextComponent("|||"), titleColor),
                 textWithColor(new TextComponent("-".repeat((int) Math.ceil(amount / 2f))), minusColor)
         );
         sender.spigot().sendMessage(comps);
