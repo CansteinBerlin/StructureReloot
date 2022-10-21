@@ -38,6 +38,13 @@ info:
   timeBetweenReloot: "&6Time Between Reloot&7:"
   timeBetweenRelootHover: "&6This setting defines the duration between two cycles. E.g.: 2h30m"
 
+  relootOnStartupLine:
+    "[%relootOnStartup%](hover=%relootOnStartupHover%) [true](color=%colorTrue% run_command=/reloot settings setRelootOnStartup %commandType% %world% true hover=%setHover%)[ &7| ](run_command= hover=%setHover%)[false](color=%colorFalse% run_command=/reloot settings setRelootOnStartup %commandType% %world% false hover=%setHover%)"
+  setMaxAmountLine:
+    "[%maxRelootAmount%](hover=%maxRelootAmountHover%) [%amount%](color=white suggest_command=/reloot settings setMaxRelootAmount %commandType% %world% hover=%setHover%)"
+  timeBetweenRelootLine:
+    "[%timeBetweenReloot%](hover=%timeBetweenRelootHover%) [%time%](color=white suggest_command=/reloot settings setDuration %commandType% %world% hover=%setHover%)"
+
 listLootTables:
   title: "&aList Lootable %type% for world:"
   teleport: "&8Click to teleport"

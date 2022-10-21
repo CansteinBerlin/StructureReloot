@@ -9,5 +9,5 @@ commands:
   reloot:
     description: Reloot Commands
 
-relootDebug:
-    description: Reloot debugCommands. Only available if debug is turned on in the config
+  relootDebug:
+      description: Reloot debugCommands. Only available if debug is turned on in the config

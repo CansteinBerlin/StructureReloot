@@ -1,5 +1,6 @@
 package me.hasenzahn1.structurereloot.commands.reloot;
 
+import de.themoep.minedown.MineDown;
 import me.hasenzahn1.structurereloot.StructureReloot;
 import me.hasenzahn1.structurereloot.general.RelootSettings;
 import me.hasenzahn1.structurereloot.commandsystem.BaseCommand;
@@ -96,22 +97,35 @@ public class RelootInfoCommand extends SubCommand {
     private static BaseComponent[] convertSettings(String type, World world, RelootSettings settings, String commandType){
         TextComponent typeText = new TextComponent(type);
 
-        BaseComponent[] relootOnStartup = combineComponents(
-                textWithHover(new TextComponent(StructureReloot.getLang("info.relootOnStartup")), StructureReloot.getLang("info.relootOnStartupHover")),
-                textWithCommand(textWithHover(new TextComponent(settings.isRelootOnStartup() ? "§ftrue" : "§8true"), StructureReloot.getLang("info.set")), "/reloot settings setRelootOnStartup " + commandType + " " + world.getName() + " true"),
-                new TextComponent("§7|"),
-                textWithCommand(textWithHover(new TextComponent(!settings.isRelootOnStartup() ? "§ffalse" : "§8false"), StructureReloot.getLang("info.set")), "/reloot settings setRelootOnStartup " + commandType + " " + world.getName() + " false")
-        );
+        BaseComponent[] relootOnStartup = new MineDown(StructureReloot.getLang("info.relootOnStartupLine",
 
-        BaseComponent[] maxRelootAmount = combineComponents(
-                textWithHover(new TextComponent(StructureReloot.getLang("info.maxRelootAmount")), StructureReloot.getLang("info.maxRelootAmountHover")),
-                textWithSuggestCommand(textWithHover(new TextComponent("§f" + (settings.getMaxRelootAmount() == Integer.MAX_VALUE ? "all" : settings.getMaxRelootAmount())), StructureReloot.getLang("info.set")), "/reloot settings setMaxRelootAmount " + commandType + " " + world.getName() + " ")
-        );
+                "relootOnStartup", StructureReloot.getLang("info.relootOnStartup"),
+                "relootOnStartupHover", StructureReloot.getLang("info.relootOnStartupHover"),
+                "colorTrue", settings.isRelootOnStartup() ? "white" : "dark_gray",
+                "colorFalse", settings.isRelootOnStartup() ? "dark_gray" : "white",
+                "setHover", StructureReloot.getLang("info.set"),
+                "commandType", commandType,
+                "world", world.getName())
+        ).toComponent();
 
-        BaseComponent[] timeBetweenReloot = combineComponents(
-                textWithHover(new TextComponent(StructureReloot.getLang("info.timeBetweenReloot")), StructureReloot.getLang("info.timeBetweenRelootHover")),
-                textWithSuggestCommand(textWithHover(new TextComponent("§f" + settings.getDurationPattern()), StructureReloot.getLang("info.set")), "/reloot settings setDuration " + commandType + " " + world.getName() + " ")
-        );
+        BaseComponent[] maxRelootAmount = new MineDown(StructureReloot.getLang("info.setMaxAmountLine",
+                "maxRelootAmount", StructureReloot.getLang("info.maxRelootAmount"),
+                "maxRelootAmountHover", StructureReloot.getLang("info.maxRelootAmountHover"),
+                "amount", settings.getMaxRelootAmount() == Integer.MAX_VALUE ? "all" : settings.getMaxRelootAmount() + "",
+                "commandType", commandType,
+                "world", world.getName(),
+                "setHover", StructureReloot.getLang("info.set"))
+        ).toComponent();
+
+        BaseComponent[] timeBetweenReloot = new MineDown(StructureReloot.getLang("info.timeBetweenRelootLine",
+                "timeBetweenReloot", StructureReloot.getLang("info.timeBetweenReloot"),
+                "timeBetweenRelootHover", StructureReloot.getLang("info.timeBetweenRelootHover"),
+                "time", settings.getDurationPattern(),
+                "commandType", commandType,
+                "world", world.getName(),
+                "setHover", StructureReloot.getLang("info.set"))
+        ).toComponent();
+
 
         return new ComponentBuilder()
                 .retain(ComponentBuilder.FormatRetention.NONE)

@@ -66,7 +66,7 @@ public final class StructureReloot extends JavaPlugin {
 
         commandManager = new CommandManager(this);
         commandManager.addCommand(new RelootCommand());
-        //if(debugMode) commandManager.addCommand(new RelootDebugCommand());
+        commandManager.addCommand(new RelootDebugCommand());
 
         Bukkit.getPluginManager().registerEvents(new BlockListener(), this);
         Bukkit.getPluginManager().registerEvents(new EntityListener(), this);
@@ -163,7 +163,7 @@ public final class StructureReloot extends JavaPlugin {
         defaultConfig = new DefaultConfig();
         PREFIX = ChatColor.translateAlternateColorCodes('&', defaultConfig.getConfig().getString("prefix", PREFIX));
         debugMode = defaultConfig.getConfig().getBoolean("debugMode", false);
-        databasePath = defaultConfig.getConfig().getString("databaseFolder", "data");
+        databasePath = "data";
         LootValueChangeTask.CHANGE_AMOUNT = defaultConfig.getConfig().getInt("changesPerTick", 20);
     }
 

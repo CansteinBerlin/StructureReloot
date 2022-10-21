@@ -22,6 +22,11 @@ public class CommandManager implements CommandExecutor, TabCompleter {
         commands.add(command);
 
         PluginCommand cmd = main.getCommand(command.getName());
+        if(cmd == null){
+            main.getLogger().severe("Could not register command " + command.getName() + " as it is not registered in the plugin.yml");
+            return;
+
+        }
         cmd.setExecutor(this);
         cmd.setTabCompleter(this);
     }
