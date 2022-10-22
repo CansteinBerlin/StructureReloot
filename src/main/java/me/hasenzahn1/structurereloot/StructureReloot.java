@@ -175,6 +175,7 @@ public final class StructureReloot extends JavaPlugin {
     }
 
     public WorldDatabase getDatabase(World world){
+        if(!databases.containsKey(world)) createDatabase(world);
         return databases.get(world);
     }
 

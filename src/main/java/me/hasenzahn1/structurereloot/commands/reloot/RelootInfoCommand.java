@@ -75,21 +75,18 @@ public class RelootInfoCommand extends SubCommand {
             return;
         }
 
-        TextComponent firstLine = new TextComponent(StructureReloot.PREFIX + StructureReloot.getLang("info.title"));
-        BaseComponent[] titleLine = centerTextWithMinus(
-                world.getName(),
-                50,
-                StructureReloot.getChatColor("info.minusColor"),
-                StructureReloot.getChatColor("info.titleColor"));
+        TextComponent titleLine = new TextComponent(StructureReloot.getLang("info.header"));
+        BaseComponent[] worldLine = new MineDown(StructureReloot.getLang("info.worldLine", "world", world.getName())).toComponent();
 
 
         BaseComponent[] blockSettingsText = convertSettings(StructureReloot.getLang("info.blocks"), world, blockSettings, "block");
         BaseComponent[] entitySettingsText = convertSettings(StructureReloot.getLang("info.entities"), world, entitySettings, "entity");
 
-        sender.spigot().sendMessage(firstLine);
+        //sender.spigot().sendMessage(firstLine);
         sender.spigot().sendMessage(titleLine);
+        sender.spigot().sendMessage(worldLine);
         sender.spigot().sendMessage(blockSettingsText);
-        sender.spigot().sendMessage(new TextComponent("\n"));
+        sender.spigot().sendMessage(new TextComponent(""));
         sender.spigot().sendMessage(entitySettingsText);
         sender.spigot().sendMessage(titleLine);
     }

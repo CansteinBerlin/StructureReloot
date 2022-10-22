@@ -25,7 +25,8 @@ commands:
 
 
 info:
-  title: "&aSettings for world&8:"
+  header: "---------------[StructureReloot]---------------"
+  worldLine: "&aSettings for world: %world%"
   minusColor: GRAY
   titleColor: GOLD
   blocks: "&9Blocks:"

@@ -1,6 +1,5 @@
-prefix: "&b[&6StructureReloot&b] &r"
-changesPerTick: 20
-
-
+prefix: "&8[&6Structure&8Reloot]&f: "
+# the number of blocks to be changed in one tick
+changesPerTick: 5
+# When it is enabled, a debug command is activated.
 debugMode: true
-
