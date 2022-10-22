@@ -118,9 +118,9 @@ public class RelootListLootablesCommand extends SubCommand {
             BaseComponent[] comps = combineComponents(
                 new TextComponent("§6  " + lootTable),
                     textWithHover(textWithCommand(new TextComponent("§8(" + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ")"), sender.hasPermission("minecraft.command.teleport") ? "/minecraft:tp " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ() : ""), sender.hasPermission("minecraft.command.teleport") ? StructureReloot.getLang("listLootTables.teleport") : ""),
-                    sender.hasPermission("structurereloot.commandregen") ? textWithCommand(new TextComponent(StructureReloot.getLang("listLootTables.reloot")),
+                    sender.hasPermission("structurereloot.command.regen") ? textWithCommand(new TextComponent(StructureReloot.getLang("listLootTables.reloot")),
                             "/reloot internal regen " + world.getName() + " " + (entityType.equalsIgnoreCase("blocks") ? "block" : "entity") + " " + locString) : null,
-                    sender.hasPermission("structurereloot.commandreset") ? textWithCommand(new TextComponent("§c[x]"),
+                    sender.hasPermission("structurereloot.command.reset") ? textWithCommand(new TextComponent("§c[x]"),
                             "/reloot internal remove " + world.getName() + " " + (entityType.equalsIgnoreCase("blocks") ? "block" : "entity") + " " + locString) : null
             );
             sender.spigot().sendMessage(comps);

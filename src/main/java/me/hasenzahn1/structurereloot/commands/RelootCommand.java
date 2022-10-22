@@ -10,7 +10,7 @@ import java.lang.reflect.InvocationTargetException;
 public class RelootCommand extends BaseCommand {
 
     public RelootCommand() {
-        super("reloot", "structurereloot.command.reloot"); //
+        super("reloot", "structurereloot.command.reloot");
 
 
         for (Class<? extends SubCommand> command : ReflectionUtil.getAllClasses("me.hasenzahn1.structurereloot.commands.reloot", SubCommand.class)) {
