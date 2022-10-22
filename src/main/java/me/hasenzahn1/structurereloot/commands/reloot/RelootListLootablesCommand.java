@@ -30,7 +30,7 @@ public class RelootListLootablesCommand extends SubCommand {
 
 
     public RelootListLootablesCommand(BaseCommand parent) {
-        super(parent, "listLootables", null); // "reloot.commands.listLootables"
+        super(parent, "listLootables", null); // "structurereloot.commandlistLootables"
     }
 
     @Override
@@ -118,9 +118,9 @@ public class RelootListLootablesCommand extends SubCommand {
             BaseComponent[] comps = combineComponents(
                 new TextComponent("§6  " + lootTable),
                     textWithHover(textWithCommand(new TextComponent("§8(" + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ")"), sender.hasPermission("minecraft.command.teleport") ? "/minecraft:tp " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ() : ""), sender.hasPermission("minecraft.command.teleport") ? StructureReloot.getLang("listLootTables.teleport") : ""),
-                    sender.hasPermission("reloot.commands.regen") ? textWithCommand(new TextComponent(StructureReloot.getLang("listLootTables.reloot")),
+                    sender.hasPermission("structurereloot.commandregen") ? textWithCommand(new TextComponent(StructureReloot.getLang("listLootTables.reloot")),
                             "/reloot internal regen " + world.getName() + " " + (entityType.equalsIgnoreCase("blocks") ? "block" : "entity") + " " + locString) : null,
-                    sender.hasPermission("reloot.commands.reset") ? textWithCommand(new TextComponent("§c[x]"),
+                    sender.hasPermission("structurereloot.commandreset") ? textWithCommand(new TextComponent("§c[x]"),
                             "/reloot internal remove " + world.getName() + " " + (entityType.equalsIgnoreCase("blocks") ? "block" : "entity") + " " + locString) : null
             );
             sender.spigot().sendMessage(comps);

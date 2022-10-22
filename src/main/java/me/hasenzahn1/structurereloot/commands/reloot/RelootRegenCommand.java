@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 public class RelootRegenCommand extends SubCommand {
 
     public RelootRegenCommand(BaseCommand parent) {
-        super(parent, "regen", "reloot.commands.regen");
+        super(parent, "regen", "structurereloot.commandregen");
     }
 
     @Override

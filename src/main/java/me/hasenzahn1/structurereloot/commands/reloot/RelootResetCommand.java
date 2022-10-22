@@ -16,7 +16,7 @@ import java.util.stream.Collectors;
 public class RelootResetCommand extends SubCommand {
 
     public RelootResetCommand(BaseCommand parent) {
-        super(parent, "reset", "reloot.commands.reset");
+        super(parent, "reset", "structurereloot.commandreset");
     }
 
     @Override

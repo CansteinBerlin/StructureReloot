@@ -19,7 +19,7 @@ import java.util.List;
 public class RemoveCommand extends SubCommand {
 
     public RemoveCommand(BaseCommand parent) {
-        super(parent, "remove", "reloot.commands.reset");
+        super(parent, "remove", "structurereloot.commandreset");
     }
 
     @Override

@@ -20,7 +20,7 @@ import java.util.List;
 public class RegenCommand extends SubCommand {
 
     public RegenCommand(BaseCommand parent) {
-        super(parent, "regen", "reloot.commands.regen");
+        super(parent, "regen", "structurereloot.commandregen");
     }
 
     @Override

@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 public class RelootReloadConfigCommand extends SubCommand {
 
     public RelootReloadConfigCommand(BaseCommand parent) {
-        super(parent, "reloadConfig", "reloot.commands.reloadConfig");
+        super(parent, "reloadConfig", "structurereloot.commandreloadConfig");
     }
 
     @Override
