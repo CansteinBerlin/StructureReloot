@@ -21,7 +21,7 @@ import static me.hasenzahn1.structurereloot.util.TextComponentUtil.*;
 public class RelootInfoCommand extends SubCommand {
 
     public RelootInfoCommand(BaseCommand parent) {
-        super(parent, "info", "structurereloot.commandinfo");
+        super(parent, "info", "structurereloot.command.info");
     }
 
     @Override

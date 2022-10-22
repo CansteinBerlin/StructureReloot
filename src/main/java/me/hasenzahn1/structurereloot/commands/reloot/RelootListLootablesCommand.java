@@ -30,7 +30,7 @@ public class RelootListLootablesCommand extends SubCommand {
 
 
     public RelootListLootablesCommand(BaseCommand parent) {
-        super(parent, "listLootables", null); // "structurereloot.commandlistLootables"
+        super(parent, "listLootables", null); // "structurereloot.command.listLootables"
     }
 
     @Override
