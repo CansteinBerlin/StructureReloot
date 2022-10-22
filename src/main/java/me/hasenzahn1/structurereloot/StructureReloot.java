@@ -58,7 +58,7 @@ public final class StructureReloot extends JavaPlugin {
         LOGGER = getLogger();
 
         initConfigs();
-        initDatabase();
+        databases = new HashMap<>();
 
         changes = new ChangesPerDay();
 
@@ -74,7 +74,7 @@ public final class StructureReloot extends JavaPlugin {
         relootElementsInWorld(true);
 
         autoRelootScheduler = new AutoRelootScheduler();
-        autoRelootScheduler.runTaskTimer(this, 20, 20*5);
+        autoRelootScheduler.runTaskTimer(this, 20*5, 20*5);
 
     }
 
@@ -114,17 +114,6 @@ public final class StructureReloot extends JavaPlugin {
         }
 
         if(updated) entityUpdateConfig.update();
-    }
-
-    private void initDatabase() {
-        databases = new HashMap<>();
-        for(World world : Bukkit.getWorlds()){
-            //System.out.println(world);
-            WorldDatabase database = new WorldDatabase(databasePath, world);
-            database.init();
-            databases.put(world, database);
-        }
-
     }
 
     public static String getLang(String key, String... args) {
@@ -231,5 +220,12 @@ public final class StructureReloot extends JavaPlugin {
 
     public LootValueChangeTask getLootValueChangeTask() {
         return lootValueChangeTask;
+    }
+
+    public void createDatabase(World world) {
+        LOGGER.info("Found new world with name: " + world.getName());
+        WorldDatabase database = new WorldDatabase(databasePath, world);
+        database.init();
+        databases.put(world, database);
     }
 }

@@ -17,6 +17,8 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.LootGenerateEvent;
+import org.bukkit.event.world.WorldLoadEvent;
+import org.bukkit.event.world.WorldSaveEvent;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -45,10 +47,16 @@ public class EntityListener implements Listener {
 
 
     /*
-        If an itemframe is spawned mark it
+        If an Itemframe is spawned mark it
      */
     @EventHandler
     public void onChunkLoad(ChunkLoadEvent event){
+        //If a chunk is loaded in world with no database create a database
+        if(StructureReloot.getInstance().getDatabase(event.getWorld()) == null){
+            StructureReloot.getInstance().createDatabase(event.getWorld());
+        }
+
+        //Check only for newly created chunks
         if(!event.isNewChunk()) return;
         if(!event.getWorld().getEnvironment().equals(World.Environment.THE_END)) return;
         new BukkitRunnable(){

@@ -43,9 +43,9 @@ public class RelootListLootablesCommand extends SubCommand {
         }
 
         if(!args[0].equalsIgnoreCase("block") && !args[0].equalsIgnoreCase("entity")){
-            sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.invalidCommand"),
+            sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.invalidCommand",
                     "command", getCommandHistory(),
-                    "args", "<block/entity> <world> <page>");
+                    "args", "<block/entity> <world> <page>"));
             return true;
         }
 
@@ -67,9 +67,9 @@ public class RelootListLootablesCommand extends SubCommand {
         int page = 0;
         if(args.length == 3){
             if(!SetMaxRelootCommand.isInt(args[2])){
-                sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.invalidCommand"),
+                sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.invalidCommand",
                         "command", getCommandHistory(),
-                        "args", "<block/entity> <world> <page>");
+                        "args", "<block/entity> <world> <page>"));
                 return true;
             }else{
                 page = Math.max(Integer.parseInt(args[2]) - 1, 0);

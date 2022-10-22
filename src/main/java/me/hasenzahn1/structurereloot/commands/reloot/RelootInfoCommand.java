@@ -108,6 +108,8 @@ public class RelootInfoCommand extends SubCommand {
                 "world", world.getName())
         ).toComponent();
 
+
+
         BaseComponent[] maxRelootAmount = new MineDown(StructureReloot.getLang("info.setMaxAmountLine",
                 "maxRelootAmount", StructureReloot.getLang("info.maxRelootAmount"),
                 "maxRelootAmountHover", StructureReloot.getLang("info.maxRelootAmountHover"),
