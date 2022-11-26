@@ -27,9 +27,8 @@ public class RelootSettings implements ConfigurationSerializable {
         duration = TimeUtil.parsePeriodToSeconds(durationPattern);
         nextDate = LocalDateTime.now().plusSeconds(duration);
     }
-
-
-    public RelootSettings(Map<String, Object> fields){
+    
+    public RelootSettings(Map<String, Object> fields) {
         relootOnStartup = (boolean) fields.get("relootOnStartup");
         maxRelootAmount = (int) fields.get("maxRelootAmount");
         nextDate = LocalDateTime.parse((String) fields.get("nextReloot"), FORMATTER);
@@ -37,11 +36,11 @@ public class RelootSettings implements ConfigurationSerializable {
         duration = TimeUtil.parsePeriodToSeconds(durationPattern);
     }
 
-    public void nextDate(){
+    public void nextDate() {
         nextDate = LocalDateTime.now().plusSeconds(duration);
     }
 
-    public boolean needsUpdate(){
+    public boolean needsUpdate() {
         return ChronoUnit.SECONDS.between(LocalDateTime.now(), nextDate) <= 0;
     }
 

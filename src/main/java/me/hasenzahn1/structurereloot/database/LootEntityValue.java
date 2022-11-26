@@ -12,7 +12,7 @@ import org.bukkit.persistence.PersistentDataType;
 
 import java.util.UUID;
 
-public class LootEntityValue extends LootValue{
+public class LootEntityValue extends LootValue {
 
     private final EntityType entity;
     private final UUID uuid;
@@ -24,7 +24,7 @@ public class LootEntityValue extends LootValue{
         this.uuid = uuid;
     }
 
-    public LootEntityValue(World world, String entityType, String location, NamespacedKey lootTable, String uuid){
+    public LootEntityValue(World world, String entityType, String location, NamespacedKey lootTable, String uuid) {
         super(world, location, lootTable);
 
         this.entity = EntityType.valueOf(entityType);
@@ -34,27 +34,27 @@ public class LootEntityValue extends LootValue{
     @Override
     public void reloot() {
         Entity remove = Bukkit.getEntity(uuid); //Get Old Entity
-        if(remove != null){
+        if (remove != null) {
             remove.teleport(remove.getLocation().add(0, -500, 0)); //Remove old Entity if exists
         }
         loc.add(0.5, 0.5, 0.5);
 
         Entity spawned = loc.getWorld().spawnEntity(loc, entity); //Spawn Entity
-        if(lootTable == null && spawned instanceof ItemFrame){
+        if (lootTable == null && spawned instanceof ItemFrame) {
             ((ItemFrame) spawned).setItem(new ItemStack(Material.ELYTRA)); //If itemframe set item
             spawned.getPersistentDataContainer().set(EntityListener.markEntityKey, PersistentDataType.BYTE, (byte) 1); //Mark entity
 
-        } else if (spawned instanceof Lootable){
+        } else if (spawned instanceof Lootable) {
             ((Lootable) spawned).setLootTable(lootTable); //If StorageMinecart set LootTable
         }
     }
 
     //Getter and Setter
-    public String getEntityString(){
+    public String getEntityString() {
         return entity.name();
     }
 
-    public String getUUIDString(){
+    public String getUUIDString() {
         return uuid.toString();
     }
 

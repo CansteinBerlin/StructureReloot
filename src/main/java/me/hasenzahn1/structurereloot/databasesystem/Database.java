@@ -19,16 +19,16 @@ public abstract class Database {
     private final HashMap<Class<? extends Table>, Table> tables;
 
 
-    public Database(JavaPlugin plugin, String fileName){
+    public Database(JavaPlugin plugin, String fileName) {
         this.plugin = plugin;
         this.fileName = fileName.replace(".db", "");
         tables = new HashMap<>();
     }
 
-    public void init(){
+    public void init() {
         Connection connection = getSQLConnection();
 
-        for(Table table : tables.values()){
+        for (Table table : tables.values()) {
             try {
                 Statement statement = connection.createStatement();
                 statement.executeUpdate(table.getCreationString());
@@ -43,7 +43,7 @@ public abstract class Database {
 
     protected Connection getSQLConnection() {
         File dataFolder = new File(plugin.getDataFolder(), fileName + ".db");
-        if(!dataFolder.exists()){
+        if (!dataFolder.exists()) {
             try {
                 dataFolder.getParentFile().mkdirs();
                 dataFolder.createNewFile();
@@ -55,28 +55,27 @@ public abstract class Database {
             Class.forName("org.sqlite.JDBC");
             return DriverManager.getConnection("jdbc:sqlite:" + dataFolder);
         } catch (SQLException e) {
-            plugin.getLogger().log(Level.SEVERE,"SQLite exception on initialize", e);
+            plugin.getLogger().log(Level.SEVERE, "SQLite exception on initialize", e);
         } catch (ClassNotFoundException e) {
             plugin.getLogger().log(Level.SEVERE, "You need the SQLite JBDC library. Google it. Put it in /lib folder.");
         }
-
-
+        
         return null;
     }
 
-    public <T extends Table> void addTable(T table){
+    public <T extends Table> void addTable(T table) {
         tables.put(table.getClass(), table);
     }
 
-    public <T extends Table> T getTable(Class<T> table){
+    public <T extends Table> T getTable(Class<T> table) {
         return (T) tables.get(table);
     }
 
-    public Logger getLogger(){
+    public Logger getLogger() {
         return plugin.getLogger();
     }
 
-    public void close(Connection connection){
+    public void close(Connection connection) {
         try {
             connection.close();
         } catch (SQLException e) {

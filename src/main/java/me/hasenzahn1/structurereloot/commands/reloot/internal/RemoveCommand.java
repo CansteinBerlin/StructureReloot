@@ -51,7 +51,7 @@ public class RemoveCommand extends SubCommand {
             page = values.indexOf(value) / 10;
             database.removeEntity(value);
         }
-
+        
         RelootListLootablesCommand.listAllElements(sender,
                 world,
                 page,

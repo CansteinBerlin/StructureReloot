@@ -143,7 +143,7 @@ public class RelootListLootablesCommand extends SubCommand {
     @Override
     public List<String> tabComplete(CommandSender sender, String[] args) {
         if (args.length == 1) {
-            return Arrays.asList(new String[]{"block", "entity"}).stream().filter(s -> s.startsWith(args[0])).sorted().collect(Collectors.toList());
+            return Arrays.stream(new String[]{"block", "entity"}).filter(s -> s.startsWith(args[0])).sorted().collect(Collectors.toList());
         }
         if (args.length == 2) {
             return Bukkit.getWorlds().stream().map(World::getName).filter(s -> s.startsWith(args[0])).sorted().collect(Collectors.toList());

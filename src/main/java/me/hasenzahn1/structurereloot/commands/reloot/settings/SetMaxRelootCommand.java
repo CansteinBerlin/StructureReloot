@@ -1,10 +1,10 @@
 package me.hasenzahn1.structurereloot.commands.reloot.settings;
 
 import me.hasenzahn1.structurereloot.StructureReloot;
-import me.hasenzahn1.structurereloot.general.RelootSettings;
 import me.hasenzahn1.structurereloot.commands.reloot.RelootInfoCommand;
 import me.hasenzahn1.structurereloot.commandsystem.BaseCommand;
 import me.hasenzahn1.structurereloot.commandsystem.SubCommand;
+import me.hasenzahn1.structurereloot.general.RelootSettings;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -14,10 +14,10 @@ public class SetMaxRelootCommand extends SubCommand {
     public SetMaxRelootCommand(BaseCommand parent) {
         super(parent, "setMaxRelootAmount", null);
     }
-
+    
     @Override
     public boolean performCommand(CommandSender sender, String[] args) {
-        if(args.length != 3){
+        if (args.length != 3) {
             sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.invalidCommand",
                     "command", getCommandHistory(),
                     "args", "<world> <block/entity> <amount>"));
@@ -25,7 +25,7 @@ public class SetMaxRelootCommand extends SubCommand {
         }
 
         World world = Bukkit.getWorld(args[1]);
-        if(world == null){
+        if (world == null) {
             sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.reset.invalidWorld", "world", args[1]));
             return true;
         }
@@ -42,9 +42,9 @@ public class SetMaxRelootCommand extends SubCommand {
 
         settings.setMaxRelootAmount(Integer.parseInt(args[2]));
 
-        if(args[0].equalsIgnoreCase("block")){
+        if (args[0].equalsIgnoreCase("block")) {
             StructureReloot.getInstance().getBlockUpdateConfig().update();
-        }else{
+        } else {
             StructureReloot.getInstance().getEntityUpdateConfig().update();
         }
 
@@ -53,12 +53,12 @@ public class SetMaxRelootCommand extends SubCommand {
         return true;
     }
 
-    public static boolean isInt(String s){
-        try{
+    public static boolean isInt(String s) {
+        try {
 
             Integer.parseInt(s);
             return true;
-        }catch (NumberFormatException e){
+        } catch (NumberFormatException e) {
             return false;
         }
     }

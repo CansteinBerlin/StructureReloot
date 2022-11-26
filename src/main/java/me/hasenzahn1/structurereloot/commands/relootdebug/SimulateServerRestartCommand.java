@@ -10,7 +10,7 @@ public class SimulateServerRestartCommand extends SubCommand {
     public SimulateServerRestartCommand(BaseCommand parent) {
         super(parent, "simulateServerRestart", null);
     }
-
+    
     @Override
     public boolean performCommand(CommandSender sender, String[] args) {
 

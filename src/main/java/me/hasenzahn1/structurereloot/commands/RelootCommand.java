@@ -12,13 +12,12 @@ public class RelootCommand extends BaseCommand {
     public RelootCommand() {
         super("reloot", "structurereloot.command.reloot");
 
-
         for (Class<? extends SubCommand> command : ReflectionUtil.getAllClasses("me.hasenzahn1.structurereloot.commands.reloot", SubCommand.class)) {
-            if(command.getPackage().getName() != "me.hasenzahn1.structurereloot.commands.reloot") continue;
+            if (!command.getPackage().getName().equals("me.hasenzahn1.structurereloot.commands.reloot")) continue;
             try {
                 addSubCommand(command.getConstructor(BaseCommand.class).newInstance(this));
             } catch (NoSuchMethodException | InstantiationException | IllegalAccessException |
-                     InvocationTargetException e) {
+                    InvocationTargetException e) {
                 StructureReloot.LOGGER.severe("§cCould not register Subcommand for " + name);
             }
         }

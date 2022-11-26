@@ -1,19 +1,18 @@
 package me.hasenzahn1.structurereloot.database;
 
 
-import org.bukkit.*;
+import org.bukkit.Location;
+import org.bukkit.Material;
+import org.bukkit.NamespacedKey;
+import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
-import org.bukkit.block.Chest;
-import org.bukkit.block.Dispenser;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.loot.LootTable;
 import org.bukkit.loot.Lootable;
 
-import java.awt.image.BufferedImage;
-
-public class LootBlockValue extends LootValue{
+public class LootBlockValue extends LootValue {
 
     private final Material blockMaterial;
     private final BlockFace facing;
@@ -23,9 +22,9 @@ public class LootBlockValue extends LootValue{
 
         blockMaterial = loc.getBlock().getType();
         BlockData data = loc.getBlock().getBlockData();
-        if(data instanceof Directional){
+        if (data instanceof Directional) {
             facing = ((Directional) data).getFacing();
-        }else{
+        } else {
             facing = BlockFace.NORTH;
         }
     }
@@ -50,7 +49,7 @@ public class LootBlockValue extends LootValue{
         loc.getBlock().setType(blockMaterial); //Set Block
 
         //Set Directional Block Data
-        if(loc.getBlock().getBlockData() instanceof Directional){
+        if (loc.getBlock().getBlockData() instanceof Directional) {
             Directional data = ((Directional) loc.getBlock().getBlockData());
             data.setFacing(facing); //Set Facing Direction
             loc.getBlock().setBlockData(data);
@@ -58,7 +57,7 @@ public class LootBlockValue extends LootValue{
 
         //Set Loottable of Lootable Chest and Dispenser
         BlockState state = loc.getBlock().getState();
-        if(state instanceof Lootable){
+        if (state instanceof Lootable) {
             ((Lootable) state).setLootTable(lootTable);
             state.update();
         }
@@ -66,15 +65,15 @@ public class LootBlockValue extends LootValue{
 
 
     //Getter and Setter
-    public String getLocationString(){
+    public String getLocationString() {
         return locationToLocationString(loc);
     }
 
-    public String getBlockMaterialString(){
+    public String getBlockMaterialString() {
         return blockMaterial.name();
     }
 
-    public String getFacingString(){
+    public String getFacingString() {
         return facing.name();
     }
 

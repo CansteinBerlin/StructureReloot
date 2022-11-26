@@ -13,16 +13,16 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
     private final Set<BaseCommand> commands = new HashSet<>();
     private final JavaPlugin main;
-
+    
     public CommandManager(JavaPlugin main) {
         this.main = main;
     }
 
-    public void addCommand(BaseCommand command){
+    public void addCommand(BaseCommand command) {
         commands.add(command);
 
         PluginCommand cmd = main.getCommand(command.getName());
-        if(cmd == null){
+        if (cmd == null) {
             main.getLogger().severe("Could not register command " + command.getName() + " as it is not registered in the plugin.yml");
             return;
 
@@ -53,10 +53,10 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
     @Override
     public List<String> onTabComplete(CommandSender sender, Command command, String alias, String[] args) {
-        for (BaseCommand cmd : commands){
-            if(cmd.getName().equalsIgnoreCase(command.getLabel())){
+        for (BaseCommand cmd : commands) {
+            if (cmd.getName().equalsIgnoreCase(command.getLabel())) {
                 List<String> list = cmd.tabComplete(sender, args);
-                if(list == null) return null;
+                if (list == null) return null;
                 Collections.sort(list);
                 return list;
             }

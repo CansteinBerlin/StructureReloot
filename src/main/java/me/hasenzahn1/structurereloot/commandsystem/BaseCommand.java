@@ -12,14 +12,14 @@ public abstract class BaseCommand {
     protected String name, permission;
     protected String noPermissionMessage = StructureReloot.PREFIX + "§cYou don't have permission to use this command";
     protected ArrayList<SubCommand> subCommands;
-
+    
     public BaseCommand(String name, String permission) {
         this.name = name;
         this.permission = permission;
         subCommands = new ArrayList<>();
     }
 
-    public boolean performCommand(CommandSender sender, String[] args){
+    public boolean performCommand(CommandSender sender, String[] args) {
         if (args.length > 0) {
             for (SubCommand cmd : subCommands) {
                 if (cmd.getName().equalsIgnoreCase(args[0])) {
@@ -40,17 +40,17 @@ public abstract class BaseCommand {
         return true;
     }
 
-    public void addSubCommand(SubCommand cmd){
+    public void addSubCommand(SubCommand cmd) {
         subCommands.add(cmd);
     }
 
-    public List<String> tabComplete(CommandSender sender, String[] args){
+    public List<String> tabComplete(CommandSender sender, String[] args) {
         List<String> out = new ArrayList<>();
         //Bingo.LOGGER.info(name + "; " + args[0].length());
-        if (args.length == 1){
+        if (args.length == 1) {
             for (BaseCommand cmd : subCommands) {
-                if(cmd.getName().equalsIgnoreCase("internal")) continue;
-                if(cmd.getPermission() == null || sender.hasPermission(cmd.getPermission())) {
+                if (cmd.getName().equalsIgnoreCase("internal")) continue;
+                if (cmd.getPermission() == null || sender.hasPermission(cmd.getPermission())) {
                     if (args[0].length() != 0) {
                         if (cmd.getName().toLowerCase().startsWith(args[0].toLowerCase())) {
                             out.add(cmd.getName());
@@ -61,9 +61,9 @@ public abstract class BaseCommand {
                     }
                 }
             }
-        }else{
-            for(BaseCommand cmd : subCommands){
-                if (cmd.getName().equalsIgnoreCase(args[0])){
+        } else {
+            for (BaseCommand cmd : subCommands) {
+                if (cmd.getName().equalsIgnoreCase(args[0])) {
                     return cmd.tabComplete(sender, Arrays.copyOfRange(args, 1, args.length));
                 }
             }
@@ -87,11 +87,11 @@ public abstract class BaseCommand {
         return noPermissionMessage;
     }
 
-    public String getValidCommands(){
+    public String getValidCommands() {
         if (subCommands.size() > 0) {
             StringBuilder sb = new StringBuilder(subCommands.get(0).getName());
-            for (int i = 1; i < subCommands.size(); i++){
-                if(subCommands.get(i).getName().equalsIgnoreCase("internal")) continue;
+            for (int i = 1; i < subCommands.size(); i++) {
+                if (subCommands.get(i).getName().equalsIgnoreCase("internal")) continue;
                 sb.append("/").append(subCommands.get(i).getName());
             }
             return sb.toString();

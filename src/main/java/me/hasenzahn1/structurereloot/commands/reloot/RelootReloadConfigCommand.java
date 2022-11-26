@@ -55,7 +55,7 @@ public class RelootReloadConfigCommand extends SubCommand {
             }
 
             case "entityupdatesettings" -> {
-                if(replace){
+                if (replace) {
                     StructureReloot.getInstance().getEntityUpdateConfig().delete();
                     StructureReloot.getInstance().setEntityUpdateConfig(null);
                 }
@@ -63,7 +63,7 @@ public class RelootReloadConfigCommand extends SubCommand {
             }
 
             case "blockupdatesettings" -> {
-                if(replace){
+                if (replace) {
                     StructureReloot.getInstance().getBlockUpdateConfig().delete();
                     StructureReloot.getInstance().setBlockUpdateConfig(null);
                 }

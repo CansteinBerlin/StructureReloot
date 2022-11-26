@@ -17,10 +17,10 @@ public class SummonItemFrameCommand extends SubCommand {
     public SummonItemFrameCommand(BaseCommand parent) {
         super(parent, "summonItemFrame", null);
     }
-
+    
     @Override
     public boolean performCommand(CommandSender sender, String[] args) {
-        if(!(sender instanceof Player)){
+        if (!(sender instanceof Player)) {
             sender.sendMessage(StructureReloot.PREFIX + "§cYou have to be a player to use this command");
             return true;
         }

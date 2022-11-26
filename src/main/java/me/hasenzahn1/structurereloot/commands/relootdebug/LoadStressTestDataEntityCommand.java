@@ -29,7 +29,7 @@ public class LoadStressTestDataEntityCommand extends SubCommand {
         }
 
         World world = Bukkit.getWorld("world_the_end");
-        int amount = 0;
+        int amount;
         try {
             amount = Integer.parseInt(args[0]);
         } catch (IllegalArgumentException e) {

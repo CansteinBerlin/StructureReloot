@@ -16,33 +16,33 @@ public class ChangesPerDay {
 
     File file;
     DateTimeFormatter formatter;
-
-    public ChangesPerDay(){
+    
+    public ChangesPerDay() {
         formatter = DateTimeFormatter.ofPattern("dd-MM-yyy hh:mm:ss");
     }
 
-    public void markAddBlock(LootBlockValue value){
+    public void markAddBlock(LootBlockValue value) {
         logToTextFile("Added new LootBlock at " + value.getLocationString() + " in " + value.getLocation().getWorld().getName() + "\n");
     }
 
-    public void markAddEntity(LootEntityValue value){
+    public void markAddEntity(LootEntityValue value) {
         logToTextFile("Added new LootEntity at " + value.getLocationString() + " in " + value.getLocation().getWorld().getName() + "\n");
     }
 
-    public void markRemoveBlock(LootBlockValue value){
+    public void markRemoveBlock(LootBlockValue value) {
         logToTextFile("Removed or relooted LootBlock at " + value.getLocationString() + " in " + value.getLocation().getWorld().getName() + "\n");
     }
 
-    public void markRemoveEntity(LootEntityValue value){
+    public void markRemoveEntity(LootEntityValue value) {
         logToTextFile("Removed or relooted LootEntity at " + value.getLocationString() + " in " + value.getLocation().getWorld().getName() + "\n");
     }
 
-    private void create(){
+    private void create() {
         DateTimeFormatter f = DateTimeFormatter.ISO_LOCAL_DATE;
         String fileTitle = f.format(LocalDateTime.now()) + ".txt";
         file = new File(StructureReloot.getInstance().getDataFolder(), "logs/" + fileTitle);
         file.getParentFile().mkdirs();
-        if(!file.exists()) {
+        if (!file.exists()) {
             try {
                 file.createNewFile();
             } catch (IOException e) {
@@ -51,7 +51,7 @@ public class ChangesPerDay {
         }
     }
 
-    private void logToTextFile(String text){
+    private void logToTextFile(String text) {
         create();
         try {
             Files.writeString(

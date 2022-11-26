@@ -181,7 +181,7 @@ public class EntityTable extends Table {
         for (LootEntityValue value : values) StructureReloot.getInstance().getChangesPerDay().markRemoveEntity(value);
         close(con);
     }
-
+    
     //Caching
     public void setCacheRemove(boolean value) {
         this.cacheRemove = value;

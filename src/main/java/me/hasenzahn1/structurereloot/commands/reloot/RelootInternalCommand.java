@@ -11,7 +11,7 @@ public class RelootInternalCommand extends SubCommand {
 
     public RelootInternalCommand(BaseCommand parent) {
         super(parent, "internal", null);
-
+        
         for (Class<? extends SubCommand> command : ReflectionUtil.getAllClasses("me.hasenzahn1.structurereloot.commands.reloot.internal", SubCommand.class)) {
             try {
                 addSubCommand(command.getConstructor(BaseCommand.class).newInstance(this));

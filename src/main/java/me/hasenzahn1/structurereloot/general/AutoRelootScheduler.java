@@ -9,5 +9,5 @@ public class AutoRelootScheduler extends BukkitRunnable {
     public void run() {
         StructureReloot.getInstance().relootElementsInWorld(false);
     }
-
+    
 }

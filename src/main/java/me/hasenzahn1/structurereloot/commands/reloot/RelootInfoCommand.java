@@ -2,9 +2,9 @@ package me.hasenzahn1.structurereloot.commands.reloot;
 
 import de.themoep.minedown.MineDown;
 import me.hasenzahn1.structurereloot.StructureReloot;
-import me.hasenzahn1.structurereloot.general.RelootSettings;
 import me.hasenzahn1.structurereloot.commandsystem.BaseCommand;
 import me.hasenzahn1.structurereloot.commandsystem.SubCommand;
+import me.hasenzahn1.structurereloot.general.RelootSettings;
 import net.md_5.bungee.api.chat.BaseComponent;
 import net.md_5.bungee.api.chat.ComponentBuilder;
 import net.md_5.bungee.api.chat.TextComponent;
@@ -16,8 +16,6 @@ import org.bukkit.entity.Player;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import static me.hasenzahn1.structurereloot.util.TextComponentUtil.*;
-
 public class RelootInfoCommand extends SubCommand {
 
     public RelootInfoCommand(BaseCommand parent) {
@@ -26,24 +24,23 @@ public class RelootInfoCommand extends SubCommand {
 
     @Override
     public boolean performCommand(CommandSender sender, String[] args) {
-        if(args.length > 1){
+        if (args.length > 1) {
             sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.invalidCommand"),
                     "command", getCommandHistory(),
                     "args", "<world>");
             return true;
         }
 
-        World world = null;
-        if(args.length == 0){
-            if(!(sender instanceof Player)){
+        World world;
+        if (args.length == 0) {
+            if (!(sender instanceof Player)) {
                 sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.noPlayer"));
                 return true;
             }
             world = ((Player) sender).getWorld();
-        }
-        else {
+        } else {
             world = Bukkit.getWorld(args[0]);
-            if(world == null){
+            if (world == null) {
                 sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.reset.invalidWorld", "world", args[0]));
                 return true;
             }
@@ -62,15 +59,15 @@ public class RelootInfoCommand extends SubCommand {
                 .collect(Collectors.toList());
     }
 
-    public static void sendPlayerInfoScreen(CommandSender sender, World world){
+    public static void sendPlayerInfoScreen(CommandSender sender, World world) {
         RelootSettings blockSettings = StructureReloot.getInstance().getBlockUpdateConfig().getSettingsForWorld(world);
-        if(blockSettings == null){
+        if (blockSettings == null) {
             sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.info.noSettings", "world", world.getName()));
             return;
         }
 
         RelootSettings entitySettings = StructureReloot.getInstance().getEntityUpdateConfig().getSettingsForWorld(world);
-        if(entitySettings == null){
+        if (entitySettings == null) {
             sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.info.noSettings", "world", world.getName()));
             return;
         }
@@ -91,7 +88,7 @@ public class RelootInfoCommand extends SubCommand {
         sender.spigot().sendMessage(titleLine);
     }
 
-    private static BaseComponent[] convertSettings(String type, World world, RelootSettings settings, String commandType){
+    private static BaseComponent[] convertSettings(String type, World world, RelootSettings settings, String commandType) {
         TextComponent typeText = new TextComponent(type);
 
         BaseComponent[] relootOnStartup = new MineDown(StructureReloot.getLang("info.relootOnStartupLine",
@@ -104,7 +101,6 @@ public class RelootInfoCommand extends SubCommand {
                 "commandType", commandType,
                 "world", world.getName())
         ).toComponent();
-
 
 
         BaseComponent[] maxRelootAmount = new MineDown(StructureReloot.getLang("info.setMaxAmountLine",

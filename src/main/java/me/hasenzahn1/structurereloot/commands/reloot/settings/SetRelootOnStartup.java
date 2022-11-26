@@ -1,10 +1,10 @@
 package me.hasenzahn1.structurereloot.commands.reloot.settings;
 
 import me.hasenzahn1.structurereloot.StructureReloot;
-import me.hasenzahn1.structurereloot.general.RelootSettings;
 import me.hasenzahn1.structurereloot.commands.reloot.RelootInfoCommand;
 import me.hasenzahn1.structurereloot.commandsystem.BaseCommand;
 import me.hasenzahn1.structurereloot.commandsystem.SubCommand;
+import me.hasenzahn1.structurereloot.general.RelootSettings;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -18,10 +18,10 @@ public class SetRelootOnStartup extends SubCommand {
     public SetRelootOnStartup(BaseCommand parent) {
         super(parent, "setRelootOnStartup", null);
     }
-
+    
     @Override
     public boolean performCommand(CommandSender sender, String[] args) {
-        if(args.length != 3){
+        if (args.length != 3) {
             sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.invalidCommand",
                     "command", getCommandHistory(),
                     "args", "<world> <block/entity> <true/false>"));
@@ -29,7 +29,7 @@ public class SetRelootOnStartup extends SubCommand {
         }
 
         World world = Bukkit.getWorld(args[1]);
-        if(world == null){
+        if (world == null) {
             sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.reset.invalidWorld", "world", args[1]));
             return true;
         }
@@ -46,9 +46,9 @@ public class SetRelootOnStartup extends SubCommand {
 
         settings.setRelootOnStartup(Boolean.parseBoolean(args[2]));
 
-        if(args[0].equalsIgnoreCase("block")){
+        if (args[0].equalsIgnoreCase("block")) {
             StructureReloot.getInstance().getBlockUpdateConfig().update();
-        }else{
+        } else {
             StructureReloot.getInstance().getEntityUpdateConfig().update();
         }
 

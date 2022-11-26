@@ -45,7 +45,7 @@ public class RegenCommand extends SubCommand {
             page = values.indexOf(value) / 10;
             value.reloot();
             database.removeBlock(value);
-
+            
         } else {
             LootEntityValue value = database.getEntity(LootValue.getLocFromString(world, args[2]));
             if (value == null) return true;

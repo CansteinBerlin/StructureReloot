@@ -1,8 +1,5 @@
 package me.hasenzahn1.structurereloot;
 
-import me.hasenzahn1.structurereloot.general.AutoRelootScheduler;
-import me.hasenzahn1.structurereloot.general.ChangesPerDay;
-import me.hasenzahn1.structurereloot.general.RelootSettings;
 import me.hasenzahn1.structurereloot.commands.RelootCommand;
 import me.hasenzahn1.structurereloot.commands.RelootDebugCommand;
 import me.hasenzahn1.structurereloot.commandsystem.CommandManager;
@@ -12,6 +9,9 @@ import me.hasenzahn1.structurereloot.config.LanguageConfig;
 import me.hasenzahn1.structurereloot.config.update.BlockUpdateConfig;
 import me.hasenzahn1.structurereloot.config.update.EntityUpdateConfig;
 import me.hasenzahn1.structurereloot.database.WorldDatabase;
+import me.hasenzahn1.structurereloot.general.AutoRelootScheduler;
+import me.hasenzahn1.structurereloot.general.ChangesPerDay;
+import me.hasenzahn1.structurereloot.general.RelootSettings;
 import me.hasenzahn1.structurereloot.listeners.BlockListener;
 import me.hasenzahn1.structurereloot.listeners.EntityListener;
 import me.hasenzahn1.structurereloot.reloot.LootValueChangeTask;
@@ -26,7 +26,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
 
-
 public final class StructureReloot extends JavaPlugin {
 
     public static String PREFIX = "§b[§6StructureReloot§b] §r";
@@ -40,7 +39,7 @@ public final class StructureReloot extends JavaPlugin {
     private CommandManager commandManager;
     private CustomConfig defaultConfig;
     private LanguageConfig languageConfig;
-    private HashMap<World, WorldDatabase>  databases;
+    private HashMap<World, WorldDatabase> databases;
 
     private LootValueChangeTask lootValueChangeTask;
 
@@ -74,7 +73,7 @@ public final class StructureReloot extends JavaPlugin {
         relootElementsInWorld(true);
 
         autoRelootScheduler = new AutoRelootScheduler();
-        autoRelootScheduler.runTaskTimer(this, 20*5, 20*5);
+        autoRelootScheduler.runTaskTimer(this, 20 * 5, 20 * 5);
 
     }
 
@@ -84,9 +83,9 @@ public final class StructureReloot extends JavaPlugin {
         boolean updated = false;
 
         //Blocks
-        for(World world : neededBlockUpdateSettings){
+        for (World world : neededBlockUpdateSettings) {
             RelootSettings settings = blockUpdateConfig.getSettingsForWorld(world);
-            if(isStartup != settings.isRelootOnStartup()){
+            if (isStartup != settings.isRelootOnStartup()) {
                 continue;
             }
 
@@ -96,14 +95,14 @@ public final class StructureReloot extends JavaPlugin {
             settings.nextDate();
         }
 
-        if(updated) blockUpdateConfig.update();
+        if (updated) blockUpdateConfig.update();
 
         //Entities
         updated = false;
-        for(World world : neededEntityUpdateSettings){
+        for (World world : neededEntityUpdateSettings) {
             RelootSettings settings = entityUpdateConfig.getSettingsForWorld(world);
 
-            if(isStartup != settings.isRelootOnStartup()){
+            if (isStartup != settings.isRelootOnStartup()) {
                 continue;
             }
 
@@ -113,7 +112,7 @@ public final class StructureReloot extends JavaPlugin {
             settings.nextDate();
         }
 
-        if(updated) entityUpdateConfig.update();
+        if (updated) entityUpdateConfig.update();
     }
 
     public static String getLang(String key, String... args) {
@@ -122,7 +121,7 @@ public final class StructureReloot extends JavaPlugin {
             lang = lang.replace("%" + args[i] + "%", args[i + 1]);
         }
 
-        if(!StructureReloot.getInstance().languageConfig.getConfig().contains(key)){
+        if (!StructureReloot.getInstance().languageConfig.getConfig().contains(key)) {
             StructureReloot.getInstance().languageConfig.getConfig().set(key, "&cUnknown or empty language key please check the config &6" + key);
             StructureReloot.getInstance().languageConfig.saveConfig();
         }
@@ -130,10 +129,10 @@ public final class StructureReloot extends JavaPlugin {
         return ChatColor.translateAlternateColorCodes('&', lang).replace("\\n", "\n");
     }
 
-    public static net.md_5.bungee.api.ChatColor getChatColor(String key){
+    public static net.md_5.bungee.api.ChatColor getChatColor(String key) {
         String color = StructureReloot.getInstance().languageConfig.getConfig().getString(key, "MAGIC");
 
-        if(!StructureReloot.getInstance().languageConfig.getConfig().contains(key)){
+        if (!StructureReloot.getInstance().languageConfig.getConfig().contains(key)) {
             StructureReloot.getInstance().languageConfig.getConfig().set(key, "&cUnknown or empty language key please check the config &6" + key);
             StructureReloot.getInstance().languageConfig.saveConfig();
         }
@@ -156,11 +155,10 @@ public final class StructureReloot extends JavaPlugin {
         LootValueChangeTask.CHANGE_AMOUNT = defaultConfig.getConfig().getInt("changesPerTick", 20);
     }
 
-    public void reloadLanguageConfig(){
-        if(languageConfig != null){
+    public void reloadLanguageConfig() {
+        if (languageConfig != null) {
             languageConfig.reloadConfig();
-        }
-        else{
+        } else {
             languageConfig = new LanguageConfig(this);
         }
     }
@@ -174,8 +172,8 @@ public final class StructureReloot extends JavaPlugin {
         return instance;
     }
 
-    public WorldDatabase getDatabase(World world){
-        if(!databases.containsKey(world)) createDatabase(world);
+    public WorldDatabase getDatabase(World world) {
+        if (!databases.containsKey(world)) createDatabase(world);
         return databases.get(world);
     }
 
@@ -215,7 +213,7 @@ public final class StructureReloot extends JavaPlugin {
         this.entityUpdateConfig = entityUpdateConfig;
     }
 
-    public ChangesPerDay getChangesPerDay(){
+    public ChangesPerDay getChangesPerDay() {
         return changes;
     }
 

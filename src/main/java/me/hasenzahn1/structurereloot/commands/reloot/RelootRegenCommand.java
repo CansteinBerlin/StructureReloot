@@ -103,7 +103,6 @@ public class RelootRegenCommand extends SubCommand {
         return true;
     }
 
-
     @Override
     public List<String> tabComplete(CommandSender sender, String[] args) {
         if (args.length == 1) {

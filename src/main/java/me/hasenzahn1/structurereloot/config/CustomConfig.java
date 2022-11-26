@@ -16,20 +16,20 @@ public abstract class CustomConfig {
     private FileConfiguration config;
     private final JavaPlugin plugin;
     protected boolean isNew;
-
-    public CustomConfig(JavaPlugin plugin, String name){
+    
+    public CustomConfig(JavaPlugin plugin, String name) {
         this.plugin = plugin;
         isNew = false;
         createCustomConfig(plugin, name);
     }
 
-    public void createCustomConfig(JavaPlugin plugin, String name){
+    public void createCustomConfig(JavaPlugin plugin, String name) {
         configFile = new File(plugin.getDataFolder(), name);
-        if(!configFile.exists()){
+        if (!configFile.exists()) {
             isNew = true;
             configFile.getParentFile().mkdirs();
-            if(plugin.getResource(name) != null) plugin.saveResource(name, false);
-            else{
+            if (plugin.getResource(name) != null) plugin.saveResource(name, false);
+            else {
                 try {
                     configFile.createNewFile();
                 } catch (IOException e) {
@@ -41,19 +41,19 @@ public abstract class CustomConfig {
         config = YamlConfiguration.loadConfiguration(configFile);
     }
 
-    public void delete(){
+    public void delete() {
         String name = configFile.getName();
-        try{
+        try {
             boolean val = configFile.delete();
-            if(!val){
+            if (!val) {
                 plugin.getLogger().severe("Could not delete config file: " + name);
             }
-        }catch (SecurityException e){
+        } catch (SecurityException e) {
             plugin.getLogger().severe("Could not delete config file: " + name);
         }
     }
 
-    public void reloadConfig(){
+    public void reloadConfig() {
         config = YamlConfiguration.loadConfiguration(configFile);
 
         final InputStream defConfigStream = plugin.getResource(configFile.getName());
@@ -64,7 +64,7 @@ public abstract class CustomConfig {
         config.setDefaults(YamlConfiguration.loadConfiguration(new InputStreamReader(defConfigStream, Charsets.UTF_8)));
     }
 
-    public void saveConfig(){
+    public void saveConfig() {
         try {
             config.save(configFile);
         } catch (IOException e) {

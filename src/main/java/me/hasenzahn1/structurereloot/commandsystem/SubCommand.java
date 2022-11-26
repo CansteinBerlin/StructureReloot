@@ -8,7 +8,7 @@ import java.util.Arrays;
 public class SubCommand extends BaseCommand {
 
     protected BaseCommand parent;
-
+    
     public SubCommand(BaseCommand parent, String name, String permission) {
         super(name, permission);
         this.parent = parent;
@@ -36,10 +36,10 @@ public class SubCommand extends BaseCommand {
         return true;
     }
 
-    public String getCommandHistory(){
+    public String getCommandHistory() {
         StringBuilder sb = new StringBuilder(name);
         BaseCommand p = parent;
-        while (p instanceof SubCommand){
+        while (p instanceof SubCommand) {
             sb.insert(0, p.getName() + " ");
             p = ((SubCommand) p).parent;
         }

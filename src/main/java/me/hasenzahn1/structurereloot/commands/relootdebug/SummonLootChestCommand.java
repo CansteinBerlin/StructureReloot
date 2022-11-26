@@ -19,19 +19,19 @@ public class SummonLootChestCommand extends SubCommand {
     public SummonLootChestCommand(BaseCommand parent) {
         super(parent, "summonLootchest", null);
     }
-
+    
     @Override
     public boolean performCommand(CommandSender sender, String[] args) {
 
-        if(!(sender instanceof Player)){
+        if (!(sender instanceof Player)) {
             sender.sendMessage(StructureReloot.PREFIX + "§cYou have to be a player to use this command");
             return true;
         }
         LootTables lootTable = LootTables.ABANDONED_MINESHAFT;
-        if(args.length >= 1){
+        if (args.length >= 1) {
             try {
                 lootTable = LootTables.valueOf(args[0]);
-            }catch (IllegalArgumentException e){
+            } catch (IllegalArgumentException e) {
                 sender.sendMessage(StructureReloot.PREFIX + "§cUnknown LootTable " + args[0]);
                 return true;
             }
@@ -41,7 +41,7 @@ public class SummonLootChestCommand extends SubCommand {
         p.getLocation().getBlock().setType(Material.AIR);
         p.getLocation().getBlock().setType(Material.CHEST);
         BlockState state = p.getLocation().getBlock().getState();
-        if(!(state instanceof Chest)){
+        if (!(state instanceof Chest)) {
             sender.sendMessage(StructureReloot.PREFIX + "§cError placing chest");
             return true;
         }

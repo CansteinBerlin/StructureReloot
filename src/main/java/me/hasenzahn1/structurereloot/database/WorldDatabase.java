@@ -22,37 +22,37 @@ public class WorldDatabase extends Database {
 
     //############## Blocks ##############//
     //get Value
-    public LootBlockValue getBlock(Location loc){
-        if(loc == null) return null;
+    public LootBlockValue getBlock(Location loc) {
+        if (loc == null) return null;
         return getTable(BlockTable.class).getBlock(loc);
     }
 
-    public ArrayList<LootBlockValue> getAllBlocks(){
+    public ArrayList<LootBlockValue> getAllBlocks() {
         return getTable(BlockTable.class).getAllBlocks();
     }
 
 
     //add Value
-    public WorldDatabase addBlock(LootBlockValue value){
+    public WorldDatabase addBlock(LootBlockValue value) {
         getTable(BlockTable.class).addBlock(value);
         return this;
     }
 
-    public void addMultipleBlocks(List<LootBlockValue> values){
+    public void addMultipleBlocks(List<LootBlockValue> values) {
         getTable(BlockTable.class).addMultipleBlocks(values);
     }
 
 
     //remove Value
-    public void removeBlock(LootBlockValue value){
+    public void removeBlock(LootBlockValue value) {
         getTable(BlockTable.class).removeBlock(value);
     }
 
-    public void removeMultipleBlocks(List<LootBlockValue> values){
+    public void removeMultipleBlocks(List<LootBlockValue> values) {
         getTable(BlockTable.class).removeMultipleBlocks(values);
     }
 
-    public void removeAllBlocks(){
+    public void removeAllBlocks() {
         removeMultipleBlocks(getAllBlocks());
     }
 
@@ -60,43 +60,43 @@ public class WorldDatabase extends Database {
     //############# Entities #############//
 
     //get Value
-    public LootEntityValue getEntity(Location location){
-        if(location == null) return null;
+    public LootEntityValue getEntity(Location location) {
+        if (location == null) return null;
         return getTable(EntityTable.class).getEntity(location);
     }
 
-    public ArrayList<LootEntityValue> getAllEntities(){
+    public ArrayList<LootEntityValue> getAllEntities() {
         return getTable(EntityTable.class).getAllEntities();
     }
 
 
     //add Value
-    public WorldDatabase addEntity(LootEntityValue value){
+    public WorldDatabase addEntity(LootEntityValue value) {
         getTable(EntityTable.class).addEntity(value);
         return this;
     }
 
-    public void addMultipleEntities(List<LootEntityValue> values){
+    public void addMultipleEntities(List<LootEntityValue> values) {
         getTable(EntityTable.class).addMultipleEntities(values);
     }
 
 
     //remove Value
-    public void removeEntity(LootEntityValue value){
+    public void removeEntity(LootEntityValue value) {
         getTable(EntityTable.class).removeEntity(value);
     }
 
-    public void removeMultipleEntities(List<LootEntityValue> values){
+    public void removeMultipleEntities(List<LootEntityValue> values) {
         getTable(EntityTable.class).removeMultipleEntities(values);
     }
 
-    public void removeAllEntitys(){
+    public void removeAllEntitys() {
         removeMultipleEntities(getAllEntities());
     }
 
 
     //############# Caching ##############//
-    public void setCacheRemove(boolean value){
+    public void setCacheRemove(boolean value) {
         getTable(EntityTable.class).setCacheRemove(value);
         getTable(BlockTable.class).setCacheRemove(value);
     }

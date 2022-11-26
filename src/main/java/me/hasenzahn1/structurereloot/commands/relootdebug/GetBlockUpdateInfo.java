@@ -1,9 +1,9 @@
 package me.hasenzahn1.structurereloot.commands.relootdebug;
 
 import me.hasenzahn1.structurereloot.StructureReloot;
-import me.hasenzahn1.structurereloot.general.RelootSettings;
 import me.hasenzahn1.structurereloot.commandsystem.BaseCommand;
 import me.hasenzahn1.structurereloot.commandsystem.SubCommand;
+import me.hasenzahn1.structurereloot.general.RelootSettings;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
@@ -19,19 +19,19 @@ public class GetBlockUpdateInfo extends SubCommand {
 
     @Override
     public boolean performCommand(CommandSender sender, String[] args) {
-
-        if(!(sender instanceof Player)){
+        
+        if (!(sender instanceof Player)) {
             sender.sendMessage(StructureReloot.PREFIX + "§cNo Player");
             return true;
         }
 
-        if(args.length != 1){
+        if (args.length != 1) {
             sender.sendMessage(StructureReloot.PREFIX + "§cUse " + getCommandHistory() + " <world>");
             return true;
         }
 
         World world = Bukkit.getWorld(args[0]);
-        if(world == null){
+        if (world == null) {
             sender.sendMessage(StructureReloot.PREFIX + "§cUnknown world: " + args[0]);
             return true;
         }

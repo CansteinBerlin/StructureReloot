@@ -13,15 +13,15 @@ public abstract class LootValue {
 
     protected Location loc;
     protected LootTable lootTable;
-    
+
     public abstract void reloot();
 
-    protected LootValue(Location loc, LootTable lootTable){
+    protected LootValue(Location loc, LootTable lootTable) {
         this.loc = loc;
         this.lootTable = lootTable;
     }
 
-    protected LootValue(World world, String loc, NamespacedKey lootTable){
+    protected LootValue(World world, String loc, NamespacedKey lootTable) {
         this.loc = getLocFromString(world, loc);
         this.lootTable = lootTable != null ? Bukkit.getLootTable(lootTable) : null;
     }
@@ -30,29 +30,29 @@ public abstract class LootValue {
         String[] strings = loc.split(",");
         try {
             return new Location(world, Integer.parseInt(strings[0]), Integer.parseInt(strings[1]), Integer.parseInt(strings[2]));
-        }catch (IndexOutOfBoundsException|NumberFormatException e){
+        } catch (IndexOutOfBoundsException | NumberFormatException e) {
             StructureReloot.LOGGER.log(Level.WARNING, "Malformed location string in database: " + loc);
         }
         return null;
     }
 
-    public Location getLocation(){
+    public Location getLocation() {
         return loc;
     }
 
-    public LootTable getLootTable(){
+    public LootTable getLootTable() {
         return lootTable;
     }
 
-    public String getStringLootTable(){
+    public String getStringLootTable() {
         return lootTable != null ? lootTable.toString() : "";
     }
 
-    public String getLocationString(){
+    public String getLocationString() {
         return locationToLocationString(loc);
     }
 
-    public static String locationToLocationString(Location loc){
+    public static String locationToLocationString(Location loc) {
         return loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ();
     }
 

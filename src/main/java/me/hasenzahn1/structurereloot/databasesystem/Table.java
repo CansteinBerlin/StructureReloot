@@ -13,18 +13,18 @@ public abstract class Table {
         this.tableName = tableName;
         this.database = database;
     }
-
+    
     public abstract String getCreationString();
 
     public String getTableName() {
         return tableName;
     }
 
-    protected Connection getConnection(){
+    protected Connection getConnection() {
         return database.getSQLConnection();
     }
 
-    protected void close(Connection con){
+    protected void close(Connection con) {
         try {
             con.close();
         } catch (SQLException e) {

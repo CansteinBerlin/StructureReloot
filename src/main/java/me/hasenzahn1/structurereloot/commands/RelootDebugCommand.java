@@ -11,12 +11,12 @@ public class RelootDebugCommand extends BaseCommand {
 
     public RelootDebugCommand() {
         super("relootDebug", "structurereloot.commandrelootDebug");
-
+        
         for (Class<? extends SubCommand> command : ReflectionUtil.getAllClasses("me.hasenzahn1.structurereloot.commands.relootdebug", SubCommand.class)) {
             try {
                 addSubCommand(command.getConstructor(BaseCommand.class).newInstance(this));
             } catch (NoSuchMethodException | InstantiationException | IllegalAccessException |
-                     InvocationTargetException e) {
+                    InvocationTargetException e) {
                 StructureReloot.LOGGER.severe("§cCould not register Subcommand for " + name);
             }
         }
