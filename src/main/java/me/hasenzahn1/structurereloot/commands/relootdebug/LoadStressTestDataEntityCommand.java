@@ -23,7 +23,7 @@ public class LoadStressTestDataEntityCommand extends SubCommand {
 
     @Override
     public boolean performCommand(CommandSender sender, String[] args) {
-        if(args.length != 1){
+        if (args.length != 1) {
             sender.sendMessage(StructureReloot.PREFIX + "§cNo amount provided");
             return true;
         }
@@ -32,7 +32,7 @@ public class LoadStressTestDataEntityCommand extends SubCommand {
         int amount = 0;
         try {
             amount = Integer.parseInt(args[0]);
-        }catch (IllegalArgumentException e){
+        } catch (IllegalArgumentException e) {
             sender.sendMessage(StructureReloot.PREFIX + "§cAmount has to be int");
             return true;
         }
@@ -41,7 +41,7 @@ public class LoadStressTestDataEntityCommand extends SubCommand {
         int x = 0;
         int y = 0;
         List<LootEntityValue> values = new ArrayList<>();
-        for(int i = 1; i < amount + 1; i++){
+        for (int i = 1; i < amount + 1; i++) {
             values.add(new LootEntityValue(
                     EntityType.ITEM_FRAME, new Location(world, 3000 + x * 16, 204, y * 16), null, UUID.randomUUID()
             ));
@@ -49,7 +49,6 @@ public class LoadStressTestDataEntityCommand extends SubCommand {
             y = i / div;
         }
         StructureReloot.getInstance().getDatabase(world).addMultipleEntities(values);
-        StructureReloot.getInstance().getDatabase(world).close();
 
         sender.sendMessage(StructureReloot.PREFIX + "§aAdded " + amount + " new LootEntities");
         return true;

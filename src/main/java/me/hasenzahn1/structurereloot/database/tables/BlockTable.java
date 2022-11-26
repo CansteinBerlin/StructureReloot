@@ -4,7 +4,6 @@ import me.hasenzahn1.structurereloot.StructureReloot;
 import me.hasenzahn1.structurereloot.database.LootBlockValue;
 import me.hasenzahn1.structurereloot.databasesystem.Database;
 import me.hasenzahn1.structurereloot.databasesystem.Table;
-import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
@@ -15,7 +14,6 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 public class BlockTable extends Table {
 
@@ -44,47 +42,46 @@ public class BlockTable extends Table {
     }
 
     //get Value
-    public LootBlockValue getBlock(Location loc){
+    public LootBlockValue getBlock(Location loc) {
         Connection con = getConnection();
-        try(PreparedStatement statement = con.prepareStatement(
+        LootBlockValue value = null;
+        try (PreparedStatement statement = con.prepareStatement(
                 "SELECT * FROM " + getTableName() + " WHERE location='" + LootBlockValue.locationToLocationString(loc) + "'"
-        )){
+        )) {
             ResultSet set = statement.executeQuery();
-            if(set.next()){
-                return new LootBlockValue(world, set.getString("location"), getNamespacedKey(set.getString("lootTable")), set.getString("block"), set.getString("facing"));
-            }else{
-                return null;
+            if (set.next()) {
+                value = new LootBlockValue(world, set.getString("location"), getNamespacedKey(set.getString("lootTable")), set.getString("block"), set.getString("facing"));
             }
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
+        close(con);
+        return value;
     }
 
-    public ArrayList<LootBlockValue> getAllBlocks(){
+    public ArrayList<LootBlockValue> getAllBlocks() {
         Connection con = getConnection();
-        try(PreparedStatement statement = con.prepareStatement(
+        ArrayList<LootBlockValue> values = new ArrayList<>();
+        try (PreparedStatement statement = con.prepareStatement(
                 "SELECT * FROM " + getTableName()
         )) {
             ResultSet set = statement.executeQuery();
-            ArrayList<LootBlockValue> values = new ArrayList<>();
-            while(set.next()){
+            while (set.next()) {
                 values.add(new LootBlockValue(world, set.getString("location"), getNamespacedKey(set.getString("lootTable")), set.getString("block"), set.getString("facing")));
             }
-            return values;
-
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return new ArrayList<>();
+        close(con);
+        return values;
     }
 
     //add Value
-    public void addBlock(LootBlockValue value){
+    public void addBlock(LootBlockValue value) {
         Connection con = getConnection();
-        try(PreparedStatement statement = con.prepareStatement(
+        try (PreparedStatement statement = con.prepareStatement(
                 "INSERT OR REPLACE INTO " + getTableName() + " (location, lootTable, block, facing) VALUES(?,?,?,?)"
-        )){
+        )) {
             statement.setString(1, value.getLocationString());
             statement.setString(2, value.getStringLootTable());
             statement.setString(3, value.getBlockMaterialString());
@@ -97,51 +94,53 @@ public class BlockTable extends Table {
 
         //Update Changes per day
         StructureReloot.getInstance().getChangesPerDay().markAddBlock(value);
+        close(con);
     }
 
-    public void addMultipleBlocks(List<LootBlockValue> values){
-        if(values.size() > 1000){
+    public void addMultipleBlocks(List<LootBlockValue> values) {
+        if (values.size() > 1000) {
             _addMultipleBlocks(values.subList(0, 999));
             addMultipleBlocks(values.subList(1000, values.size()));
-        }else{
+        } else {
             _addMultipleBlocks(values);
         }
         //Update Changes per day
-        for(LootBlockValue value : values) StructureReloot.getInstance().getChangesPerDay().markAddBlock(value);
+        for (LootBlockValue value : values) StructureReloot.getInstance().getChangesPerDay().markAddBlock(value);
     }
 
-    public void _addMultipleBlocks(List<LootBlockValue> values){
+    public void _addMultipleBlocks(List<LootBlockValue> values) {
         Connection con = getConnection();
-        if(values.size() == 0) return;
+        if (values.size() == 0) return;
         StringBuilder sqlString = new StringBuilder("INSERT OR REPLACE INTO " + getTableName() + " (location, lootTable, block, facing) VALUES ");
-        for(LootBlockValue val : values){
+        for (LootBlockValue val : values) {
             sqlString.append("('");
             sqlString.append(val.getLocationString()).append("','");
             sqlString.append(val.getStringLootTable()).append("','");
             sqlString.append(val.getBlockMaterialString()).append("','");
             sqlString.append(val.getFacingString()).append("'),");
         }
-        sqlString.deleteCharAt(sqlString.length()-1);
+        sqlString.deleteCharAt(sqlString.length() - 1);
         //Bukkit.broadcastMessage(sqlString.toString());
-        try(PreparedStatement statement = con.prepareStatement(
+        try (PreparedStatement statement = con.prepareStatement(
                 sqlString.toString()
-        )){
+        )) {
             statement.executeUpdate();
         } catch (SQLException throwables) {
             throwables.printStackTrace();
         }
+        close(con);
     }
 
     // remove Value
-    public void removeBlock(LootBlockValue value){
-        if(cacheRemove){
+    public void removeBlock(LootBlockValue value) {
+        if (cacheRemove) {
             cachedLootBlockValues.add(value);
             return;
         }
         Connection con = getConnection();
-        try(PreparedStatement statement = con.prepareStatement(
+        try (PreparedStatement statement = con.prepareStatement(
                 "DELETE FROM " + getTableName() + " WHERE location='" + value.getLocationString() + "'"
-        )){
+        )) {
             statement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -149,30 +148,32 @@ public class BlockTable extends Table {
 
         //Update Changes per day
         StructureReloot.getInstance().getChangesPerDay().markRemoveBlock(value);
+        close(con);
     }
 
-    public void removeMultipleBlocks(List<LootBlockValue> values){
-        if(values.size() == 0) return;
+    public void removeMultipleBlocks(List<LootBlockValue> values) {
+        if (values.size() == 0) return;
         Connection con = getConnection();
         StringBuilder sqlString = new StringBuilder("DELETE FROM ").append(getTableName()).append(" WHERE location IN ('").append(values.get(0).getLocationString()).append("'");
 
-        for(int i = 1; i < values.size(); i++){
+        for (int i = 1; i < values.size(); i++) {
             sqlString.append(", '").append(values.get(i).getLocationString()).append("'");
         }
         sqlString.append(")");
-        try(PreparedStatement statement = con.prepareStatement(sqlString.toString())){
+        try (PreparedStatement statement = con.prepareStatement(sqlString.toString())) {
             statement.execute();
         } catch (SQLException e) {
             e.printStackTrace();
         }
         //Update Changes per day
-        for(LootBlockValue value : values) StructureReloot.getInstance().getChangesPerDay().markRemoveBlock(value);
+        for (LootBlockValue value : values) StructureReloot.getInstance().getChangesPerDay().markRemoveBlock(value);
+        close(con);
     }
 
     //Caching
-    public void setCacheRemove(boolean value){
+    public void setCacheRemove(boolean value) {
         this.cacheRemove = value;
-        if(!value) {
+        if (!value) {
             removeMultipleBlocks(cachedLootBlockValues);
             cachedLootBlockValues.clear();
         }
@@ -182,7 +183,7 @@ public class BlockTable extends Table {
     //Whatever
     public static NamespacedKey getNamespacedKey(String lootTable) {
         String[] strings = lootTable.split(":");
-        if(strings.length == 1) return null;
+        if (strings.length == 1) return null;
         return new NamespacedKey(strings[0], strings[1]);
     }
 

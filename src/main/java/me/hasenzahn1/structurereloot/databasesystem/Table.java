@@ -2,6 +2,7 @@ package me.hasenzahn1.structurereloot.databasesystem;
 
 
 import java.sql.Connection;
+import java.sql.SQLException;
 
 public abstract class Table {
 
@@ -21,5 +22,13 @@ public abstract class Table {
 
     protected Connection getConnection(){
         return database.getSQLConnection();
+    }
+
+    protected void close(Connection con){
+        try {
+            con.close();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 }

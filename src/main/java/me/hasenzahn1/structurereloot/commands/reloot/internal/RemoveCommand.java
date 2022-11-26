@@ -8,12 +8,10 @@ import me.hasenzahn1.structurereloot.database.LootBlockValue;
 import me.hasenzahn1.structurereloot.database.LootEntityValue;
 import me.hasenzahn1.structurereloot.database.LootValue;
 import me.hasenzahn1.structurereloot.database.WorldDatabase;
-import me.hasenzahn1.structurereloot.reloot.RelootHelper;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 
-import java.util.ArrayList;
 import java.util.List;
 
 public class RemoveCommand extends SubCommand {
@@ -24,31 +22,31 @@ public class RemoveCommand extends SubCommand {
 
     @Override
     public boolean performCommand(CommandSender sender, String[] args) {
-        if(args.length != 3){
+        if (args.length != 3) {
             return true;
         }
 
         World world = Bukkit.getWorld(args[0]);
-        if(world == null){
+        if (world == null) {
             return true;
         }
 
-        if(!args[1].equalsIgnoreCase("block") && !args[1].equalsIgnoreCase("entity")){
+        if (!args[1].equalsIgnoreCase("block") && !args[1].equalsIgnoreCase("entity")) {
             return true;
         }
 
         WorldDatabase database = StructureReloot.getInstance().getDatabase(world);
         int page;
-        if(args[1].equalsIgnoreCase("block")){
+        if (args[1].equalsIgnoreCase("block")) {
             LootBlockValue value = database.getBlock(LootValue.getLocFromString(world, args[2]));
-            if(value == null) return true;
+            if (value == null) return true;
             List<LootBlockValue> values = database.getAllBlocks();
             page = values.indexOf(value) / 10;
             database.removeBlock(value);
 
-        }else{
+        } else {
             LootEntityValue value = database.getEntity(LootValue.getLocFromString(world, args[2]));
-            if(value == null) return true;
+            if (value == null) return true;
             List<LootEntityValue> values = database.getAllEntities();
             page = values.indexOf(value) / 10;
             database.removeEntity(value);
@@ -60,7 +58,6 @@ public class RemoveCommand extends SubCommand {
                 args[1].equalsIgnoreCase("block") ? database.getAllBlocks() : database.getAllEntities(),
                 args[1].equalsIgnoreCase("block") ? "blocks" : "entities");
 
-        database.close();
         return true;
     }
 }

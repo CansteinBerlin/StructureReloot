@@ -17,8 +17,6 @@ import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.hanging.HangingBreakEvent;
 import org.bukkit.event.world.ChunkLoadEvent;
 import org.bukkit.event.world.LootGenerateEvent;
-import org.bukkit.event.world.WorldLoadEvent;
-import org.bukkit.event.world.WorldSaveEvent;
 import org.bukkit.persistence.PersistentDataType;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -33,16 +31,17 @@ public class EntityListener implements Listener {
         LootTable.fillInventory(org.bukkit.inventory.Inventory, java.util.Random, LootContext).
      */
     @EventHandler
-    public void onLootGenerate(LootGenerateEvent event){
-        if(event.isPlugin()) return;
-        if(!(event.getInventoryHolder() instanceof StorageMinecart)) return;
+    public void onLootGenerate(LootGenerateEvent event) {
+        if (event.isPlugin()) return;
+        if (!(event.getInventoryHolder() instanceof StorageMinecart)) return;
         StorageMinecart minecart = (StorageMinecart) event.getInventoryHolder();
         Entity e = Bukkit.getEntity(minecart.getUniqueId());
-        if(e == null) return;
+        if (e == null) return;
         LootEntityValue lev = new LootEntityValue(e.getType(), e.getLocation(), event.getLootTable(), minecart.getUniqueId());
-        StructureReloot.getInstance().getDatabase(event.getWorld()).addEntity(lev).close();
+        StructureReloot.getInstance().getDatabase(event.getWorld()).addEntity(lev);
 
-        if(StructureReloot.getInstance().isDebugMode()) StructureReloot.LOGGER.log(Level.INFO, "Added new LootEntity to Database at location " + lev.getLocationString() + " with lootTable: " + event.getLootTable());
+        if (StructureReloot.getInstance().isDebugMode())
+            StructureReloot.LOGGER.log(Level.INFO, "Added new LootEntity to Database at location " + lev.getLocationString() + " with lootTable: " + event.getLootTable());
     }
 
 
@@ -50,24 +49,25 @@ public class EntityListener implements Listener {
         If an Itemframe is spawned mark it
      */
     @EventHandler
-    public void onChunkLoad(ChunkLoadEvent event){
+    public void onChunkLoad(ChunkLoadEvent event) {
         //If a chunk is loaded in world with no database create a database
-        if(StructureReloot.getInstance().getDatabase(event.getWorld()) == null){
+        if (StructureReloot.getInstance().getDatabase(event.getWorld()) == null) {
             StructureReloot.getInstance().createDatabase(event.getWorld());
         }
 
         //Check only for newly created chunks
-        if(!event.isNewChunk()) return;
-        if(!event.getWorld().getEnvironment().equals(World.Environment.THE_END)) return;
-        new BukkitRunnable(){
+        if (!event.isNewChunk()) return;
+        if (!event.getWorld().getEnvironment().equals(World.Environment.THE_END)) return;
+        new BukkitRunnable() {
 
             @Override
             public void run() {
-                for(Entity e : event.getChunk().getEntities()){
-                    if(e instanceof ItemFrame){
-                        e.getPersistentDataContainer().set(markEntityKey, PersistentDataType.BYTE, (byte)1);
+                for (Entity e : event.getChunk().getEntities()) {
+                    if (e instanceof ItemFrame) {
+                        e.getPersistentDataContainer().set(markEntityKey, PersistentDataType.BYTE, (byte) 1);
 
-                        if(StructureReloot.getInstance().isDebugMode()) StructureReloot.LOGGER.log(Level.INFO, "Marked Itemframe as LootItemFrame at: " + LootBlockValue.locationToLocationString(e.getLocation()) + " in World " + event.getWorld().getName());
+                        if (StructureReloot.getInstance().isDebugMode())
+                            StructureReloot.LOGGER.log(Level.INFO, "Marked Itemframe as LootItemFrame at: " + LootBlockValue.locationToLocationString(e.getLocation()) + " in World " + event.getWorld().getName());
                     }
                 }
             }
@@ -79,31 +79,33 @@ public class EntityListener implements Listener {
         If itemframe get's damaged
      */
     @EventHandler
-    public void onPlayerDamageItemFrame(EntityDamageByEntityEvent event){
-        if(!(event.getEntity() instanceof ItemFrame)) return;
-        if(!event.getEntity().getPersistentDataContainer().has(markEntityKey, PersistentDataType.BYTE)) return;
+    public void onPlayerDamageItemFrame(EntityDamageByEntityEvent event) {
+        if (!(event.getEntity() instanceof ItemFrame)) return;
+        if (!event.getEntity().getPersistentDataContainer().has(markEntityKey, PersistentDataType.BYTE)) return;
 
         ItemFrame entity = ((ItemFrame) event.getEntity());
-        if(!entity.getItem().getType().equals(Material.ELYTRA)) return; //Don't know what happened here
+        if (!entity.getItem().getType().equals(Material.ELYTRA)) return; //Don't know what happened here
         LootEntityValue lev = new LootEntityValue(EntityType.ITEM_FRAME, entity.getLocation(), null, entity.getUniqueId());
-        StructureReloot.getInstance().getDatabase(entity.getWorld()).addEntity(lev).close(); // Save to database
+        StructureReloot.getInstance().getDatabase(entity.getWorld()).addEntity(lev); // Save to database
         entity.getPersistentDataContainer().remove(markEntityKey); //IMPORTANT: Remove markerkey
 
-        if(StructureReloot.getInstance().isDebugMode()) StructureReloot.LOGGER.log(Level.INFO, "Added new ItemFrame to Database at location " + lev.getLocationString());
+        if (StructureReloot.getInstance().isDebugMode())
+            StructureReloot.LOGGER.log(Level.INFO, "Added new ItemFrame to Database at location " + lev.getLocationString());
     }
 
     @EventHandler
-    public void onHangingBreak(HangingBreakEvent event){
-        if(!(event.getEntity() instanceof ItemFrame)) return;
-        if(!event.getEntity().getPersistentDataContainer().has(markEntityKey, PersistentDataType.BYTE)) return;
+    public void onHangingBreak(HangingBreakEvent event) {
+        if (!(event.getEntity() instanceof ItemFrame)) return;
+        if (!event.getEntity().getPersistentDataContainer().has(markEntityKey, PersistentDataType.BYTE)) return;
 
         ItemFrame entity = ((ItemFrame) event.getEntity());
-        if(!entity.getItem().getType().equals(Material.ELYTRA)) return; //Don't know what happened here
+        if (!entity.getItem().getType().equals(Material.ELYTRA)) return; //Don't know what happened here
         LootEntityValue lev = new LootEntityValue(EntityType.ITEM_FRAME, entity.getLocation(), null, entity.getUniqueId());
-        StructureReloot.getInstance().getDatabase(entity.getWorld()).addEntity(lev).close(); // Save to database
+        StructureReloot.getInstance().getDatabase(entity.getWorld()).addEntity(lev); // Save to database
         entity.getPersistentDataContainer().remove(markEntityKey); //IMPORTANT: Remove markerkey
 
-        if(StructureReloot.getInstance().isDebugMode()) StructureReloot.LOGGER.log(Level.INFO, "Added new ItemFrame to Database at location " + lev.getLocationString());
+        if (StructureReloot.getInstance().isDebugMode())
+            StructureReloot.LOGGER.log(Level.INFO, "Added new ItemFrame to Database at location " + lev.getLocationString());
 
     }
 

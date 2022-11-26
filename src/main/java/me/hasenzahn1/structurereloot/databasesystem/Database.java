@@ -16,7 +16,6 @@ public abstract class Database {
 
     JavaPlugin plugin;
     private final String fileName;
-    private Connection connection;
     private final HashMap<Class<? extends Table>, Table> tables;
 
 
@@ -27,7 +26,7 @@ public abstract class Database {
     }
 
     public void init(){
-        connection = getSQLConnection();
+        Connection connection = getSQLConnection();
 
         for(Table table : tables.values()){
             try {
@@ -39,7 +38,7 @@ public abstract class Database {
             }
 
         }
-        close();
+        close(connection);
     }
 
     protected Connection getSQLConnection() {
@@ -53,12 +52,8 @@ public abstract class Database {
             }
         }
         try {
-            if(connection != null && !connection.isClosed()){
-                return connection;
-            }
             Class.forName("org.sqlite.JDBC");
-            connection = DriverManager.getConnection("jdbc:sqlite:" + dataFolder);
-            return connection;
+            return DriverManager.getConnection("jdbc:sqlite:" + dataFolder);
         } catch (SQLException e) {
             plugin.getLogger().log(Level.SEVERE,"SQLite exception on initialize", e);
         } catch (ClassNotFoundException e) {
@@ -81,12 +76,11 @@ public abstract class Database {
         return plugin.getLogger();
     }
 
-    public void close(){
+    public void close(Connection connection){
         try {
-            if(connection != null) connection.close();
+            connection.close();
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            e.printStackTrace();
         }
-
     }
 }

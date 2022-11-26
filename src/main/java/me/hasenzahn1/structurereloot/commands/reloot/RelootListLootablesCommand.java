@@ -4,8 +4,6 @@ import me.hasenzahn1.structurereloot.StructureReloot;
 import me.hasenzahn1.structurereloot.commands.reloot.settings.SetMaxRelootCommand;
 import me.hasenzahn1.structurereloot.commandsystem.BaseCommand;
 import me.hasenzahn1.structurereloot.commandsystem.SubCommand;
-import me.hasenzahn1.structurereloot.database.LootBlockValue;
-import me.hasenzahn1.structurereloot.database.LootEntityValue;
 import me.hasenzahn1.structurereloot.database.LootValue;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -15,9 +13,7 @@ import org.bukkit.Location;
 import org.bukkit.World;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
-import org.bukkit.generator.WorldInfo;
 import org.bukkit.loot.LootTable;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -35,14 +31,14 @@ public class RelootListLootablesCommand extends SubCommand {
 
     @Override
     public boolean performCommand(CommandSender sender, String[] args) {
-        if(args.length > 3 || args.length == 0){
+        if (args.length > 3 || args.length == 0) {
             sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.invalidCommand",
                     "command", getCommandHistory(),
                     "args", "<block/entity> <world> <page>"));
             return true;
         }
 
-        if(!args[0].equalsIgnoreCase("block") && !args[0].equalsIgnoreCase("entity")){
+        if (!args[0].equalsIgnoreCase("block") && !args[0].equalsIgnoreCase("entity")) {
             sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.invalidCommand",
                     "command", getCommandHistory(),
                     "args", "<block/entity> <world> <page>"));
@@ -50,28 +46,28 @@ public class RelootListLootablesCommand extends SubCommand {
         }
 
         World world;
-        if(args.length == 1){
-            if(!(sender instanceof Player)){
+        if (args.length == 1) {
+            if (!(sender instanceof Player)) {
                 sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.noPlayer"));
                 return true;
             }
             world = ((Player) sender).getWorld();
-        }else{
+        } else {
             world = Bukkit.getWorld(args[1]);
-            if(world == null){
+            if (world == null) {
                 sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.reset.invalidWorld", "world", args[1]));
                 return true;
             }
         }
 
         int page = 0;
-        if(args.length == 3){
-            if(!SetMaxRelootCommand.isInt(args[2])){
+        if (args.length == 3) {
+            if (!SetMaxRelootCommand.isInt(args[2])) {
                 sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.invalidCommand",
                         "command", getCommandHistory(),
                         "args", "<block/entity> <world> <page>"));
                 return true;
-            }else{
+            } else {
                 page = Math.max(Integer.parseInt(args[2]) - 1, 0);
             }
         }
@@ -80,15 +76,14 @@ public class RelootListLootablesCommand extends SubCommand {
                 StructureReloot.getInstance().getDatabase(world).getAllBlocks() :
                 StructureReloot.getInstance().getDatabase(world).getAllEntities();
 
-        StructureReloot.getInstance().getDatabase(world).close();
         listAllElements(sender, world, page, values, args[0].equalsIgnoreCase("block") ? "blocks" : "entities");
 
         return true;
     }
 
-    public static void listAllElements(CommandSender sender, World world, int page, List<? extends LootValue> values, String entityType){
+    public static void listAllElements(CommandSender sender, World world, int page, List<? extends LootValue> values, String entityType) {
 
-        if(values.size() == 0){
+        if (values.size() == 0) {
             sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.listlootables.noLootables", "type", entityType, "world", world.getName()));
             return;
         }
@@ -109,14 +104,14 @@ public class RelootListLootablesCommand extends SubCommand {
         sender.spigot().sendMessage(titleLine);
 
         //For Every element in "page"
-        for(int i = page * 10; i < Math.min((page + 1) * 10, values.size()); i++){ //Loop through all elements on "page"
+        for (int i = page * 10; i < Math.min((page + 1) * 10, values.size()); i++) { //Loop through all elements on "page"
             String lootTable = values.get(i).getLootTable() == null ? "Item Frame" : getNameFromLootTable(values.get(i).getLootTable());
             Location loc = values.get(i).getLocation();
             String locString = values.get(i).getLocationString();
 
             //Element text <lootTable> (<loc>) [Reloot if perm] [x if perm]
             BaseComponent[] comps = combineComponents(
-                new TextComponent("§6  " + lootTable),
+                    new TextComponent("§6  " + lootTable),
                     textWithHover(textWithCommand(new TextComponent("§8(" + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ")"), sender.hasPermission("minecraft.command.teleport") ? "/minecraft:tp " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ() : ""), sender.hasPermission("minecraft.command.teleport") ? StructureReloot.getLang("listLootTables.teleport") : ""),
                     sender.hasPermission("structurereloot.command.regen") ? textWithCommand(new TextComponent(StructureReloot.getLang("listLootTables.reloot")),
                             "/reloot internal regen " + world.getName() + " " + (entityType.equalsIgnoreCase("blocks") ? "block" : "entity") + " " + locString) : null,
@@ -128,7 +123,7 @@ public class RelootListLootablesCommand extends SubCommand {
 
         //Bottom Line with "page selection"
         int amount = 58 - 18 - ("" + page).length() - ("" + (int) Math.ceil(values.size() / 10f)).length();
-        if(page > 0 && page < ((int) Math.ceil(values.size() / 10f)) - 1) amount -= 2;
+        if (page > 0 && page < ((int) Math.ceil(values.size() / 10f)) - 1) amount -= 2;
         BaseComponent[] comps = combineComponents(
                 textWithColor(new TextComponent("-".repeat((int) Math.floor(amount / 2f))), minusColor),
                 page > 0 ? textWithCommand(textWithColor(new TextComponent("<<<"), titleColor),
@@ -138,7 +133,7 @@ public class RelootListLootablesCommand extends SubCommand {
                 textWithColor(new TextComponent("/"), titleColor),
                 textWithColor(new TextComponent("" + ((int) Math.ceil(values.size() / 10f))), titleColor),
                 page < ((int) Math.ceil(values.size() / 10f)) - 1 ? textWithCommand(textWithColor(new TextComponent(">>>"), titleColor),
-                        "/reloot listLootables " + (entityType.equalsIgnoreCase("blocks") ? "block" : "entity") + " " + world.getName() + " " + (page+2)) : textWithColor(new TextComponent("|||"), titleColor),
+                        "/reloot listLootables " + (entityType.equalsIgnoreCase("blocks") ? "block" : "entity") + " " + world.getName() + " " + (page + 2)) : textWithColor(new TextComponent("|||"), titleColor),
                 textWithColor(new TextComponent("-".repeat((int) Math.ceil(amount / 2f))), minusColor)
         );
         sender.spigot().sendMessage(comps);
@@ -147,17 +142,17 @@ public class RelootListLootablesCommand extends SubCommand {
 
     @Override
     public List<String> tabComplete(CommandSender sender, String[] args) {
-        if(args.length == 1){
+        if (args.length == 1) {
             return Arrays.asList(new String[]{"block", "entity"}).stream().filter(s -> s.startsWith(args[0])).sorted().collect(Collectors.toList());
         }
-        if(args.length == 2){
+        if (args.length == 2) {
             return Bukkit.getWorlds().stream().map(World::getName).filter(s -> s.startsWith(args[0])).sorted().collect(Collectors.toList());
         }
 
         return new ArrayList<>();
     }
 
-    private static String getNameFromLootTable(LootTable lootTable){
+    private static String getNameFromLootTable(LootTable lootTable) {
         String s = lootTable.getKey().getKey();
         String[] splits = s.split("/");
         String name = splits[splits.length - 1];

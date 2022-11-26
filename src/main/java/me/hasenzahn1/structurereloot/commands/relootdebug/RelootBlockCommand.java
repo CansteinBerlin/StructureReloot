@@ -19,11 +19,11 @@ public class RelootBlockCommand extends SubCommand {
 
     @Override
     public boolean performCommand(CommandSender sender, String[] args) {
-        if(args.length != 1){
+        if (args.length != 1) {
             sender.sendMessage(StructureReloot.PREFIX + "No Location provided");
         }
 
-        if(!(sender instanceof Player)) {
+        if (!(sender instanceof Player)) {
             sender.sendMessage(StructureReloot.PREFIX + "No PLayer");
             return true;
         }
@@ -38,20 +38,18 @@ public class RelootBlockCommand extends SubCommand {
 
         RelootHelper.relootMultipleBlocks(valid);
 
-        if(valid.size() != 0){
+        if (valid.size() != 0) {
             player.teleport(valid.get(0).getLocation());
         }
 
         sender.sendMessage(StructureReloot.PREFIX + "Relooted " + valid.size() + " blocks");
-        StructureReloot.getInstance().getDatabase(((Player) sender).getWorld()).close();
         return true;
     }
 
     @Override
     public List<String> tabComplete(CommandSender sender, String[] args) {
-        if(!(sender instanceof Player)) return null;
+        if (!(sender instanceof Player)) return null;
         List<LootBlockValue> lootBlockValues = StructureReloot.getInstance().getDatabase(((Player) sender).getWorld()).getAllBlocks(); //Not Performant i know
-        StructureReloot.getInstance().getDatabase(((Player) sender).getWorld()).close();
         return lootBlockValues.stream()
                 .map(LootBlockValue::getLocationString)
                 .filter(s -> s.startsWith(args[0]))

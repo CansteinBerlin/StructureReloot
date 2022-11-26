@@ -21,7 +21,7 @@ public class RelootResetCommand extends SubCommand {
 
     @Override
     public boolean performCommand(CommandSender sender, String[] args) {
-        if(args.length != 2){
+        if (args.length != 2) {
             sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.invalidCommand",
                     "command", getCommandHistory(),
                     "args", StringUtils.listToCommandArgs(tabComplete(null, new String[]{""})) +
@@ -30,18 +30,16 @@ public class RelootResetCommand extends SubCommand {
             return true;
         }
         World world = Bukkit.getWorld(args[1]);
-        if(world == null){
+        if (world == null) {
             sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.reset.invalidWorld", "world", args[1]));
             return true;
         }
 
-        if(args[0].equalsIgnoreCase("entity")){
+        if (args[0].equalsIgnoreCase("entity")) {
             StructureReloot.getInstance().getDatabase(world).removeAllEntitys();
-            StructureReloot.getInstance().getDatabase(world).close();
             sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.reset.removedEntities"));
         } else if (args[0].equalsIgnoreCase("block")) {
             StructureReloot.getInstance().getDatabase(world).removeAllBlocks();
-            StructureReloot.getInstance().getDatabase(world).close();
             sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.reset.removedBlocks"));
         } else {
             sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.invalidCommand",
@@ -57,14 +55,14 @@ public class RelootResetCommand extends SubCommand {
 
     @Override
     public List<String> tabComplete(CommandSender sender, String[] args) {
-        if(args.length == 1)
+        if (args.length == 1)
             return Arrays.stream(new String[]{"entity", "block"}).filter(s -> s.startsWith(args[0])).sorted().collect(Collectors.toList());
-        if(args.length == 2)
+        if (args.length == 2)
             return Bukkit.getWorlds().stream()
-                .map(World::getName)
-                .filter(s -> s.startsWith(args[1]))
-                .sorted()
-                .collect(Collectors.toList());
+                    .map(World::getName)
+                    .filter(s -> s.startsWith(args[1]))
+                    .sorted()
+                    .collect(Collectors.toList());
         return new ArrayList<>();
     }
 }
