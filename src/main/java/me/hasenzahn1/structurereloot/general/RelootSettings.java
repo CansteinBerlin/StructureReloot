@@ -6,13 +6,12 @@ import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
-import java.time.format.FormatStyle;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
 
 public class RelootSettings implements ConfigurationSerializable {
 
-    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofLocalizedDateTime(FormatStyle.MEDIUM);
+    private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm:ss");
 
     public boolean relootOnStartup;
     public int maxRelootAmount;
@@ -27,7 +26,7 @@ public class RelootSettings implements ConfigurationSerializable {
         duration = TimeUtil.parsePeriodToSeconds(durationPattern);
         nextDate = LocalDateTime.now().plusSeconds(duration);
     }
-    
+
     public RelootSettings(Map<String, Object> fields) {
         relootOnStartup = (boolean) fields.get("relootOnStartup");
         maxRelootAmount = (int) fields.get("maxRelootAmount");
