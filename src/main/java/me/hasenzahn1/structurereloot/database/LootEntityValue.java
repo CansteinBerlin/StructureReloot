@@ -10,6 +10,8 @@ import org.bukkit.loot.LootTable;
 import org.bukkit.loot.Lootable;
 import org.bukkit.persistence.PersistentDataType;
 
+import java.util.Collection;
+import java.util.List;
 import java.util.UUID;
 
 public class LootEntityValue extends LootValue {
@@ -33,11 +35,16 @@ public class LootEntityValue extends LootValue {
 
     @Override
     public void reloot() {
-        Entity remove = Bukkit.getEntity(uuid); //Get Old Entity
-        if (remove != null) {
-            remove.teleport(remove.getLocation().add(0, -500, 0)); //Remove old Entity if exists
-        }
         loc.add(0.5, 0.5, 0.5);
+
+        Collection<Entity> entities = loc.getWorld().getNearbyEntities(loc, 0.5, 0.5, 0.5);
+        for(Entity e : entities){
+            e.teleport(e.getLocation().add(0, -500, 0));
+        }
+        if(!loc.clone().subtract(1, 0, 0).getBlock().getType().isSolid() && !loc.clone().subtract(0, 0, 1).getBlock().getType().isSolid()
+         && !loc.clone().add(1, 0, 0).getBlock().getType().isSolid() && !loc.clone().add(0, 0, 1).getBlock().getType().isSolid() && entity == EntityType.ITEM_FRAME){
+            loc.clone().subtract(0, 1, 0).getBlock().setType(Material.PURPUR_BLOCK);
+        }
 
         Entity spawned = loc.getWorld().spawnEntity(loc, entity); //Spawn Entity
         if (lootTable == null && spawned instanceof ItemFrame) {
