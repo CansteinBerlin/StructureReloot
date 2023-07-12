@@ -2,6 +2,7 @@ package me.hasenzahn1.structurereloot.database;
 
 import me.hasenzahn1.structurereloot.listeners.EntityListener;
 import org.bukkit.*;
+import org.bukkit.block.BlockFace;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.EntityType;
 import org.bukkit.entity.ItemFrame;
@@ -41,9 +42,15 @@ public class LootEntityValue extends LootValue {
         for(Entity e : entities){
             e.teleport(e.getLocation().add(0, -500, 0));
         }
-        if(!loc.clone().subtract(1, 0, 0).getBlock().getType().isSolid() && !loc.clone().subtract(0, 0, 1).getBlock().getType().isSolid()
-         && !loc.clone().add(1, 0, 0).getBlock().getType().isSolid() && !loc.clone().add(0, 0, 1).getBlock().getType().isSolid() && entity == EntityType.ITEM_FRAME){
+
+        //Check for surrounding blocks, if not present place supporting block below
+        if(!checkSurroundingBlock(loc, BlockFace.NORTH, BlockFace.SOUTH, BlockFace.EAST, BlockFace.WEST, BlockFace.DOWN) && entity == EntityType.ITEM_FRAME){
             loc.clone().subtract(0, 1, 0).getBlock().setType(Material.PURPUR_BLOCK);
+        }
+
+        //Check if the block the item frame is placed does not destroy the frame
+        if(!loc.getBlock().getType().isAir()){
+            loc.getBlock().setType(Material.AIR);
         }
 
         Entity spawned = loc.getWorld().spawnEntity(loc, entity); //Spawn Entity
@@ -54,6 +61,15 @@ public class LootEntityValue extends LootValue {
         } else if (spawned instanceof Lootable) {
             ((Lootable) spawned).setLootTable(lootTable); //If StorageMinecart set LootTable
         }
+    }
+
+    public boolean checkSurroundingBlock(Location location, BlockFace... faces){
+        for(BlockFace face : faces){
+            if(location.clone().add(face.getDirection()).getBlock().getType().isSolid()){
+                return true;
+            }
+        }
+        return false;
     }
 
     //Getter and Setter
