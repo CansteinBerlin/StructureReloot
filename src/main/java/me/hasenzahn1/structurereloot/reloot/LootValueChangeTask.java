@@ -1,19 +1,20 @@
 package me.hasenzahn1.structurereloot.reloot;
 
+import lombok.Getter;
 import me.hasenzahn1.structurereloot.StructureReloot;
-import me.hasenzahn1.structurereloot.config.LanguageConfig;
 import me.hasenzahn1.structurereloot.database.LootValue;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Getter
 public class LootValueChangeTask extends BukkitRunnable {
 
     public static int CHANGE_AMOUNT = 10;
 
-    private ArrayList<LootValue> values;
-    private ArrayList<Runnable> finishCallbacks;
+    private final ArrayList<LootValue> values;
+    private final ArrayList<Runnable> finishCallbacks;
 
     public LootValueChangeTask() {
         values = new ArrayList<>();

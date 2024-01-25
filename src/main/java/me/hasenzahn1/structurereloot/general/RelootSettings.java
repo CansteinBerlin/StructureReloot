@@ -1,6 +1,8 @@
 package me.hasenzahn1.structurereloot.general;
 
 import com.google.common.collect.ImmutableMap;
+import lombok.Getter;
+import lombok.Setter;
 import me.hasenzahn1.structurereloot.util.TimeUtil;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 
@@ -9,6 +11,8 @@ import java.time.format.DateTimeFormatter;
 import java.time.temporal.ChronoUnit;
 import java.util.Map;
 
+@Getter
+@Setter
 public class RelootSettings implements ConfigurationSerializable {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm:ss");
@@ -43,49 +47,14 @@ public class RelootSettings implements ConfigurationSerializable {
         return ChronoUnit.SECONDS.between(LocalDateTime.now(), nextDate) <= 0;
     }
 
-    //Getter
-    public boolean isRelootOnStartup() {
-        return relootOnStartup;
-    }
-
     public int getMaxRelootAmount() {
         return maxRelootAmount < 0 ? Integer.MAX_VALUE : maxRelootAmount;
-    }
-
-    public LocalDateTime getNextDate() {
-        return nextDate;
-    }
-
-    public long getDuration() {
-        return duration;
-    }
-
-    public String getDurationPattern() {
-        return durationPattern;
-    }
-
-
-    //Setter
-    public void setRelootOnStartup(boolean relootOnStartup) {
-        this.relootOnStartup = relootOnStartup;
-    }
-
-    public void setMaxRelootAmount(int maxRelootAmount) {
-        this.maxRelootAmount = maxRelootAmount;
     }
 
     public long setDurationPattern(String durationPattern) {
         this.durationPattern = durationPattern;
         this.duration = TimeUtil.parsePeriodToSeconds(durationPattern);
         return this.duration;
-    }
-
-    public void setNextDate(LocalDateTime nextDate) {
-        this.nextDate = nextDate;
-    }
-
-    public void setDuration(long duration) {
-        this.duration = duration;
     }
 
     @Override

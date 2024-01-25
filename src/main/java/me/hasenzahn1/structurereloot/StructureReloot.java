@@ -1,5 +1,7 @@
 package me.hasenzahn1.structurereloot;
 
+import lombok.Getter;
+import lombok.Setter;
 import me.hasenzahn1.structurereloot.commands.RelootCommand;
 import me.hasenzahn1.structurereloot.commands.RelootDebugCommand;
 import me.hasenzahn1.structurereloot.commandsystem.CommandManager;
@@ -24,6 +26,8 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.logging.Logger;
 
+@Getter
+@Setter
 public final class StructureReloot extends JavaPlugin {
 
     public static String PREFIX = "§b[§6StructureReloot§b] §r";
@@ -48,7 +52,7 @@ public final class StructureReloot extends JavaPlugin {
 
     private AutoRelootScheduler autoRelootScheduler;
 
-    private ChangesPerDay changes;
+    private ChangesPerDay changesPerDay;
 
     @Override
     public void onEnable() {
@@ -60,7 +64,7 @@ public final class StructureReloot extends JavaPlugin {
         initConfigs();
         databases = new HashMap<>();
 
-        changes = new ChangesPerDay();
+        changesPerDay = new ChangesPerDay();
 
         lootValueChangeTask = new LootValueChangeTask();
 
@@ -138,53 +142,9 @@ public final class StructureReloot extends JavaPlugin {
         // Plugin shutdown logic
     }
 
-    public static StructureReloot getInstance() {
-        return instance;
-    }
-
     public WorldDatabase getDatabase(World world) {
         if (!databases.containsKey(world)) createDatabase(world);
         return databases.get(world);
-    }
-
-    public boolean isDebugMode() {
-        return debugMode;
-    }
-
-    public void setDefaultConfig(CustomConfig defaultConfig) {
-        this.defaultConfig = defaultConfig;
-    }
-
-    public CustomConfig getDefaultConfig() {
-        return defaultConfig;
-    }
-
-    public LanguageConfig getLanguageConfig() {
-        return languageConfig;
-    }
-
-    public UpdateConfig getBlockUpdateConfig() {
-        return blockUpdateConfig;
-    }
-
-    public UpdateConfig getEntityUpdateConfig() {
-        return entityUpdateConfig;
-    }
-
-    public void setBlockUpdateConfig(UpdateConfig blockUpdateConfig) {
-        this.blockUpdateConfig = blockUpdateConfig;
-    }
-
-    public void setEntityUpdateConfig(UpdateConfig entityUpdateConfig) {
-        this.entityUpdateConfig = entityUpdateConfig;
-    }
-
-    public ChangesPerDay getChangesPerDay() {
-        return changes;
-    }
-
-    public LootValueChangeTask getLootValueChangeTask() {
-        return lootValueChangeTask;
     }
 
     public void createDatabase(World world) {
@@ -192,5 +152,9 @@ public final class StructureReloot extends JavaPlugin {
         WorldDatabase database = new WorldDatabase(databasePath, world);
         database.init();
         databases.put(world, database);
+    }
+
+    public static StructureReloot getInstance() {
+        return instance;
     }
 }

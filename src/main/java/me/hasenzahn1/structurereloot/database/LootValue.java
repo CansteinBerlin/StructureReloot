@@ -1,7 +1,7 @@
 package me.hasenzahn1.structurereloot.database;
 
+import lombok.Getter;
 import me.hasenzahn1.structurereloot.StructureReloot;
-import me.hasenzahn1.structurereloot.config.LanguageConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;
@@ -10,20 +10,21 @@ import org.bukkit.loot.LootTable;
 
 import java.util.logging.Level;
 
+@Getter
 public abstract class LootValue {
 
-    protected Location loc;
+    protected Location location;
     protected LootTable lootTable;
 
     public abstract void reloot();
 
-    protected LootValue(Location loc, LootTable lootTable) {
-        this.loc = loc;
+    protected LootValue(Location location, LootTable lootTable) {
+        this.location = location;
         this.lootTable = lootTable;
     }
 
-    protected LootValue(World world, String loc, NamespacedKey lootTable) {
-        this.loc = getLocFromString(world, loc);
+    protected LootValue(World world, String location, NamespacedKey lootTable) {
+        this.location = getLocFromString(world, location);
         this.lootTable = lootTable != null ? Bukkit.getLootTable(lootTable) : null;
     }
 
@@ -37,20 +38,12 @@ public abstract class LootValue {
         return null;
     }
 
-    public Location getLocation() {
-        return loc;
-    }
-
-    public LootTable getLootTable() {
-        return lootTable;
-    }
-
     public String getStringLootTable() {
         return lootTable != null ? lootTable.toString() : "";
     }
 
     public String getLocationString() {
-        return locationToLocationString(loc);
+        return locationToLocationString(location);
     }
 
     public static String locationToLocationString(Location loc) {

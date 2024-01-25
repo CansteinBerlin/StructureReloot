@@ -1,6 +1,7 @@
 package me.hasenzahn1.structurereloot.database;
 
 
+import lombok.Getter;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
@@ -12,6 +13,7 @@ import org.bukkit.block.data.Directional;
 import org.bukkit.loot.LootTable;
 import org.bukkit.loot.Lootable;
 
+@Getter
 public class LootBlockValue extends LootValue {
 
     private final Material blockMaterial;
@@ -45,18 +47,17 @@ public class LootBlockValue extends LootValue {
 
     @Override
     public void reloot() {
-        loc.getBlock().setType(Material.AIR); //Reset block
-        loc.getBlock().setType(blockMaterial); //Set Block
+        location.getBlock().setType(Material.AIR); //Reset block
+        location.getBlock().setType(blockMaterial); //Set Block
 
         //Set Directional Block Data
-        if (loc.getBlock().getBlockData() instanceof Directional) {
-            Directional data = ((Directional) loc.getBlock().getBlockData());
+        if (location.getBlock().getBlockData() instanceof Directional data) {
             data.setFacing(facing); //Set Facing Direction
-            loc.getBlock().setBlockData(data);
+            location.getBlock().setBlockData(data);
         }
 
         //Set Loottable of Lootable Chest and Dispenser
-        BlockState state = loc.getBlock().getState();
+        BlockState state = location.getBlock().getState();
         if (state instanceof Lootable) {
             ((Lootable) state).setLootTable(lootTable);
             state.update();
@@ -66,7 +67,7 @@ public class LootBlockValue extends LootValue {
 
     //Getter and Setter
     public String getLocationString() {
-        return locationToLocationString(loc);
+        return locationToLocationString(location);
     }
 
     public String getBlockMaterialString() {
@@ -77,18 +78,11 @@ public class LootBlockValue extends LootValue {
         return facing.name();
     }
 
-    public Material getBlockMaterial() {
-        return blockMaterial;
-    }
-
-    public BlockFace getFacing() {
-        return facing;
-    }
 
     @Override
     public String toString() {
         return "LootBlockValue{" +
-                "loc=" + loc +
+                "loc=" + location +
                 ", lootTable=" + lootTable.toString() +
                 ", blockMaterial=" + blockMaterial +
                 ", facing=" + facing +
