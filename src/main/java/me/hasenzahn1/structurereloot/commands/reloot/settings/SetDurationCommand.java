@@ -1,10 +1,10 @@
 package me.hasenzahn1.structurereloot.commands.reloot.settings;
 
 import me.hasenzahn1.structurereloot.StructureReloot;
-import me.hasenzahn1.structurereloot.config.LanguageConfig;
 import me.hasenzahn1.structurereloot.commands.reloot.RelootInfoCommand;
 import me.hasenzahn1.structurereloot.commandsystem.BaseCommand;
 import me.hasenzahn1.structurereloot.commandsystem.SubCommand;
+import me.hasenzahn1.structurereloot.config.LanguageConfig;
 import me.hasenzahn1.structurereloot.general.RelootSettings;
 import me.hasenzahn1.structurereloot.util.TimeUtil;
 import org.bukkit.Bukkit;
@@ -25,7 +25,7 @@ public class SetDurationCommand extends SubCommand {
                     "args", "<world> <block/entity> <duration>"));
             return true;
         }
-        
+
         World world = Bukkit.getWorld(args[1]);
         if (world == null) {
             sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.reset.invalidWorld", "world", args[1]));

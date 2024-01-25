@@ -1,7 +1,6 @@
 package me.hasenzahn1.structurereloot.commands.relootdebug;
 
 import me.hasenzahn1.structurereloot.StructureReloot;
-import me.hasenzahn1.structurereloot.config.LanguageConfig;
 import me.hasenzahn1.structurereloot.commandsystem.BaseCommand;
 import me.hasenzahn1.structurereloot.commandsystem.SubCommand;
 import me.hasenzahn1.structurereloot.general.RelootSettings;
@@ -20,7 +19,7 @@ public class GetEntityUpdateInfo extends SubCommand {
 
     @Override
     public boolean performCommand(CommandSender sender, String[] args) {
-        
+
         if (!(sender instanceof Player)) {
             sender.sendMessage(StructureReloot.PREFIX + "§cNo Player");
             return true;

@@ -1,7 +1,6 @@
 package me.hasenzahn1.structurereloot.commandsystem;
 
 import me.hasenzahn1.structurereloot.StructureReloot;
-import me.hasenzahn1.structurereloot.config.LanguageConfig;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;
@@ -13,7 +12,7 @@ public abstract class BaseCommand {
     protected String name, permission;
     protected String noPermissionMessage = StructureReloot.PREFIX + "§cYou don't have permission to use this command";
     protected ArrayList<SubCommand> subCommands;
-    
+
     public BaseCommand(String name, String permission) {
         this.name = name;
         this.permission = permission;

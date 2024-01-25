@@ -1,7 +1,6 @@
 package me.hasenzahn1.structurereloot.commands.reloot.internal;
 
 import me.hasenzahn1.structurereloot.StructureReloot;
-import me.hasenzahn1.structurereloot.config.LanguageConfig;
 import me.hasenzahn1.structurereloot.commands.reloot.RelootListLootablesCommand;
 import me.hasenzahn1.structurereloot.commandsystem.BaseCommand;
 import me.hasenzahn1.structurereloot.commandsystem.SubCommand;
@@ -52,7 +51,7 @@ public class RemoveCommand extends SubCommand {
             page = values.indexOf(value) / 10;
             database.removeEntity(value);
         }
-        
+
         RelootListLootablesCommand.listAllElements(sender,
                 world,
                 page,

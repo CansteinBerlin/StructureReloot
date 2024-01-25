@@ -1,7 +1,6 @@
 package me.hasenzahn1.structurereloot.commandsystem;
 
 import me.hasenzahn1.structurereloot.StructureReloot;
-import me.hasenzahn1.structurereloot.config.LanguageConfig;
 import org.bukkit.command.*;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -14,7 +13,7 @@ public class CommandManager implements CommandExecutor, TabCompleter {
 
     private final Set<BaseCommand> commands = new HashSet<>();
     private final JavaPlugin main;
-    
+
     public CommandManager(JavaPlugin main) {
         this.main = main;
     }

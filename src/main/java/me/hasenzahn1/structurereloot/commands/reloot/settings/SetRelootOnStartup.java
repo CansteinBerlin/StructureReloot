@@ -1,10 +1,10 @@
 package me.hasenzahn1.structurereloot.commands.reloot.settings;
 
 import me.hasenzahn1.structurereloot.StructureReloot;
-import me.hasenzahn1.structurereloot.config.LanguageConfig;
 import me.hasenzahn1.structurereloot.commands.reloot.RelootInfoCommand;
 import me.hasenzahn1.structurereloot.commandsystem.BaseCommand;
 import me.hasenzahn1.structurereloot.commandsystem.SubCommand;
+import me.hasenzahn1.structurereloot.config.LanguageConfig;
 import me.hasenzahn1.structurereloot.general.RelootSettings;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -19,7 +19,7 @@ public class SetRelootOnStartup extends SubCommand {
     public SetRelootOnStartup(BaseCommand parent) {
         super(parent, "setRelootOnStartup", null);
     }
-    
+
     @Override
     public boolean performCommand(CommandSender sender, String[] args) {
         if (args.length != 3) {

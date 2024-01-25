@@ -1,7 +1,6 @@
 package me.hasenzahn1.structurereloot.commandsystem;
 
 import me.hasenzahn1.structurereloot.StructureReloot;
-import me.hasenzahn1.structurereloot.config.LanguageConfig;
 import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;
@@ -9,7 +8,7 @@ import java.util.Arrays;
 public class SubCommand extends BaseCommand {
 
     protected BaseCommand parent;
-    
+
     public SubCommand(BaseCommand parent, String name, String permission) {
         super(name, permission);
         this.parent = parent;
