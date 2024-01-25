@@ -23,12 +23,10 @@ public class RelootBlockCommand extends SubCommand {
             sender.sendMessage(StructureReloot.PREFIX + "No Location provided");
         }
 
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage(StructureReloot.PREFIX + "No PLayer");
             return true;
         }
-
-        Player player = ((Player) sender);
 
         List<LootBlockValue> lootBlockValues = StructureReloot.getInstance().getDatabase(((Player) sender).getWorld()).getAllBlocks();
 
@@ -36,7 +34,7 @@ public class RelootBlockCommand extends SubCommand {
                 .filter(value -> value.getLocationString().equalsIgnoreCase(args[0]))
                 .collect(Collectors.toList());
 
-        RelootHelper.relootMultipleBlocks(valid);
+        RelootHelper.relootMultipleBlocks(valid, List.of());
 
         if (valid.size() != 0) {
             player.teleport(valid.get(0).getLocation());

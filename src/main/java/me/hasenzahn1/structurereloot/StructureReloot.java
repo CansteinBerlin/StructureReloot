@@ -14,8 +14,7 @@ import me.hasenzahn1.structurereloot.general.RelootActivityLogger;
 import me.hasenzahn1.structurereloot.general.RelootSettings;
 import me.hasenzahn1.structurereloot.listeners.BlockListener;
 import me.hasenzahn1.structurereloot.listeners.EntityListener;
-import me.hasenzahn1.structurereloot.reloot.LootValueChangeTask;
-import me.hasenzahn1.structurereloot.reloot.RelootHelper;
+import me.hasenzahn1.structurereloot.reloot.LootValueProcessor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -23,7 +22,6 @@ import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
-import java.util.List;
 
 @Getter
 @Setter
@@ -34,6 +32,7 @@ public final class StructureReloot extends JavaPlugin {
 
     //Data Handling
     private boolean debugMode;
+    private RelootActivityLogger relootActivityLogger;
 
     //Configs
     private CustomConfig defaultConfig;
@@ -48,72 +47,37 @@ public final class StructureReloot extends JavaPlugin {
     private String databasePath;
     private HashMap<World, WorldDatabase> databases;
 
-    private LootValueChangeTask lootValueChangeTask;
+    private LootValueProcessor lootValueProcessor;
     private AutoRelootScheduler autoRelootScheduler;
-    private RelootActivityLogger relootActivityLogger;
+
 
     @Override
     public void onEnable() {
         ConfigurationSerialization.registerClass(RelootSettings.class);
 
+        //Static References
         instance = this;
+
+        //Logging
         relootActivityLogger = new RelootActivityLogger(getLogger());
 
+        //Config and Database
         initConfigs();
         databases = new HashMap<>();
-        
-        lootValueChangeTask = new LootValueChangeTask();
 
+        lootValueProcessor = new LootValueProcessor();
+
+        //Commands
         commandManager = new CommandManager(this);
         commandManager.addCommand(new RelootCommand());
         commandManager.addCommand(new RelootDebugCommand());
 
+        //Register Listeners
         Bukkit.getPluginManager().registerEvents(new BlockListener(), this);
         Bukkit.getPluginManager().registerEvents(new EntityListener(), this);
 
-        relootElementsInWorld(true);
-
         autoRelootScheduler = new AutoRelootScheduler();
-        autoRelootScheduler.runTaskTimer(this, 20 * 5, 20 * 5);
-
-    }
-
-    public void relootElementsInWorld(boolean isStartup) {
-        List<World> neededBlockUpdateSettings = blockUpdateConfig.getNeededUpdates();
-        List<World> neededEntityUpdateSettings = entityUpdateConfig.getNeededUpdates();
-        boolean updated = false;
-
-        //Blocks
-        for (World world : neededBlockUpdateSettings) {
-            RelootSettings settings = blockUpdateConfig.getSettingsForWorld(world);
-            if (isStartup != settings.isRelootOnStartup()) {
-                continue;
-            }
-
-            //Bukkit.broadcastMessage("Update blocks in world: " + world.getName());
-            RelootHelper.regenNBlocks(world, settings.getMaxRelootAmount(), null);
-            updated = true;
-            settings.nextDate();
-        }
-
-        if (updated) blockUpdateConfig.update();
-
-        //Entities
-        updated = false;
-        for (World world : neededEntityUpdateSettings) {
-            RelootSettings settings = entityUpdateConfig.getSettingsForWorld(world);
-
-            if (isStartup != settings.isRelootOnStartup()) {
-                continue;
-            }
-
-            //Bukkit.broadcastMessage("Update entity in world: " + world.getName());
-            RelootHelper.regenNEntities(world, settings.getMaxRelootAmount(), null);
-            updated = true;
-            settings.nextDate();
-        }
-
-        if (updated) entityUpdateConfig.update();
+        autoRelootScheduler.runTaskTimer(this, 20 * 5, 20 * 60);
     }
 
 
@@ -130,12 +94,12 @@ public final class StructureReloot extends JavaPlugin {
         PREFIX = ChatColor.translateAlternateColorCodes('&', defaultConfig.getConfig().getString("prefix", PREFIX));
         debugMode = defaultConfig.getConfig().getBoolean("debugMode", false);
         databasePath = "data";
-        LootValueChangeTask.CHANGE_AMOUNT = defaultConfig.getConfig().getInt("changesPerTick", 20);
+        LootValueProcessor.CHANGE_AMOUNT = defaultConfig.getConfig().getInt("changesPerTick", 20);
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        autoRelootScheduler.cancel();
     }
 
     public WorldDatabase getDatabase(World world) {

@@ -24,12 +24,10 @@ public class RelootEntityCommand extends SubCommand {
             return true;
         }
 
-        if (!(sender instanceof Player)) {
+        if (!(sender instanceof Player player)) {
             sender.sendMessage(StructureReloot.PREFIX + "No Player");
             return true;
         }
-
-        Player player = ((Player) sender);
 
         List<LootEntityValue> lootBlockValues = StructureReloot.getInstance().getDatabase(((Player) sender).getWorld()).getAllEntities();
 
@@ -37,7 +35,7 @@ public class RelootEntityCommand extends SubCommand {
                 .filter(value -> value.getLocationString().equalsIgnoreCase(args[0]))
                 .collect(Collectors.toList());
 
-        RelootHelper.relootMultipleEntities(valid);
+        RelootHelper.relootMultipleEntities(valid, List.of());
 
         if (valid.size() != 0) {
             player.teleport(valid.get(0).getLocation());

@@ -33,7 +33,7 @@ info:
   entities: "&9Entities:"
   setHover: "§6Click to Change"
   relootOnStartup: "&6Reloot on Startup&7:"
-  relootOnStartupHover: "&6This setting determines if the RelootTime should only be checked at server startup"
+  relootOnStartupHover: "&6This setting determines if the blocks/entities should be relooted on server start"
   maxRelootAmount: "&6Max Reloot Amount&7:"
   maxRelootAmountHover: "&6This setting determines the maximum number of blocks that are regenerated per cycle"
   timeBetweenReloot: "&6Time Between Reloot&7:"

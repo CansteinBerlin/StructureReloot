@@ -11,13 +11,13 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class RelootHelper {
-    
-    public static void relootMultipleBlocks(List<LootBlockValue> values) {
-        StructureReloot.getInstance().getLootValueChangeTask().addValues(values);
+
+    public static void relootMultipleBlocks(List<LootBlockValue> values, List<Runnable> callbacks) {
+        StructureReloot.getInstance().getLootValueProcessor().addElement(new LootValueProcessor.LootValueQueueElement(values, callbacks));
     }
 
-    public static void relootMultipleEntities(List<LootEntityValue> values) {
-        StructureReloot.getInstance().getLootValueChangeTask().addValues(values);
+    public static void relootMultipleEntities(List<LootEntityValue> values, List<Runnable> callbacks) {
+        StructureReloot.getInstance().getLootValueProcessor().addElement(new LootValueProcessor.LootValueQueueElement(values, callbacks));
     }
 
     public static void regenNEntities(World world, int amount, Runnable runnable) {
@@ -26,9 +26,8 @@ public class RelootHelper {
         List<LootEntityValue> values = levs.stream().limit(Math.min(levs.size(), amount)).collect(Collectors.toList());
 
         WorldDatabase database = StructureReloot.getInstance().getDatabase(world);
-        StructureReloot.getInstance().getLootValueChangeTask().addCallback(runnable);
         database.setCacheRemove(true);
-        RelootHelper.relootMultipleEntities(values);
+        RelootHelper.relootMultipleEntities(values, runnable != null ? List.of(runnable) : List.of());
         database.removeMultipleEntities(values);
         database.setCacheRemove(false);
     }
@@ -39,9 +38,8 @@ public class RelootHelper {
         List<LootBlockValue> values = lbvs.stream().limit(Math.min(lbvs.size(), amount)).collect(Collectors.toList());
 
         WorldDatabase database = StructureReloot.getInstance().getDatabase(world);
-        StructureReloot.getInstance().getLootValueChangeTask().addCallback(runnable);
         database.setCacheRemove(true);
-        RelootHelper.relootMultipleBlocks(values);
+        RelootHelper.relootMultipleBlocks(values, runnable != null ? List.of(runnable) : List.of());
         database.removeMultipleBlocks(values);
         database.setCacheRemove(false);
     }

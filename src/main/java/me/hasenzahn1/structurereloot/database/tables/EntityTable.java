@@ -164,7 +164,7 @@ public class EntityTable extends Table {
     }
 
     public void removeMultipleEntities(List<LootEntityValue> values) {
-        if (values.size() == 0) return;
+        if (values.isEmpty()) return;
         Connection con = getConnection();
         StringBuilder sqlString = new StringBuilder("DELETE FROM ").append(getTableName()).append(" WHERE location IN ('").append(values.get(0).getLocationString()).append("'");
 

@@ -22,6 +22,7 @@ public class RelootSettings implements ConfigurationSerializable {
     public LocalDateTime nextDate;
     public long duration;
     public String durationPattern;
+    private boolean shouldBeRelooted;
 
     public RelootSettings(boolean relootOnStartup, int maxRelootAmount, String durationPattern) {
         this.relootOnStartup = relootOnStartup;
@@ -29,6 +30,7 @@ public class RelootSettings implements ConfigurationSerializable {
         this.durationPattern = durationPattern;
         duration = TimeUtil.parsePeriodToSeconds(durationPattern);
         nextDate = LocalDateTime.now().plusSeconds(duration);
+        shouldBeRelooted = relootOnStartup;
     }
 
     public RelootSettings(Map<String, Object> fields) {
@@ -37,14 +39,16 @@ public class RelootSettings implements ConfigurationSerializable {
         nextDate = LocalDateTime.parse((String) fields.get("nextReloot"), FORMATTER);
         durationPattern = (String) fields.get("duration");
         duration = TimeUtil.parsePeriodToSeconds(durationPattern);
+        shouldBeRelooted = relootOnStartup;
     }
 
     public void nextDate() {
         nextDate = LocalDateTime.now().plusSeconds(duration);
+        shouldBeRelooted = false;
     }
 
     public boolean needsUpdate() {
-        return ChronoUnit.SECONDS.between(LocalDateTime.now(), nextDate) <= 0;
+        return ChronoUnit.SECONDS.between(LocalDateTime.now(), nextDate) <= 0 || shouldBeRelooted;
     }
 
     public int getMaxRelootAmount() {
