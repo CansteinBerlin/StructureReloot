@@ -115,29 +115,6 @@ public final class StructureReloot extends JavaPlugin {
         if (updated) entityUpdateConfig.update();
     }
 
-    public static String getLang(String key, String... args) {
-        String lang = StructureReloot.getInstance().languageConfig.getConfig().getString(key, "&cUnknown or empty language key please check the config &6" + key);
-        for (int i = 0; i + 1 < args.length; i += 2) {
-            lang = lang.replace("%" + args[i] + "%", args[i + 1]);
-        }
-
-        if (!StructureReloot.getInstance().languageConfig.getConfig().contains(key)) {
-            StructureReloot.getInstance().languageConfig.getConfig().set(key, "&cUnknown or empty language key please check the config &6" + key);
-            StructureReloot.getInstance().languageConfig.saveConfig();
-        }
-
-        return ChatColor.translateAlternateColorCodes('&', lang).replace("\\n", "\n");
-    }
-
-    public static net.md_5.bungee.api.ChatColor getChatColor(String key) {
-        String color = StructureReloot.getInstance().languageConfig.getConfig().getString(key, "MAGIC");
-
-        if (!StructureReloot.getInstance().languageConfig.getConfig().contains(key)) {
-            StructureReloot.getInstance().languageConfig.getConfig().set(key, "&cUnknown or empty language key please check the config &6" + key);
-            StructureReloot.getInstance().languageConfig.saveConfig();
-        }
-        return net.md_5.bungee.api.ChatColor.of(color);
-    }
 
     private void initConfigs() {
         languageConfig = new LanguageConfig(this);
@@ -153,14 +130,6 @@ public final class StructureReloot extends JavaPlugin {
         debugMode = defaultConfig.getConfig().getBoolean("debugMode", false);
         databasePath = "data";
         LootValueChangeTask.CHANGE_AMOUNT = defaultConfig.getConfig().getInt("changesPerTick", 20);
-    }
-
-    public void reloadLanguageConfig() {
-        if (languageConfig != null) {
-            languageConfig.reloadConfig();
-        } else {
-            languageConfig = new LanguageConfig(this);
-        }
     }
 
     @Override
@@ -183,10 +152,6 @@ public final class StructureReloot extends JavaPlugin {
 
     public void setDefaultConfig(CustomConfig defaultConfig) {
         this.defaultConfig = defaultConfig;
-    }
-
-    public void setLanguageConfig(LanguageConfig languageConfig) {
-        this.languageConfig = languageConfig;
     }
 
     public CustomConfig getDefaultConfig() {

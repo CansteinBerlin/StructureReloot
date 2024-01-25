@@ -1,6 +1,7 @@
 package me.hasenzahn1.structurereloot.database;
 
 import me.hasenzahn1.structurereloot.StructureReloot;
+import me.hasenzahn1.structurereloot.config.LanguageConfig;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.NamespacedKey;

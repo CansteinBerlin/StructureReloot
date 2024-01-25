@@ -1,6 +1,7 @@
 package me.hasenzahn1.structurereloot.general;
 
 import me.hasenzahn1.structurereloot.StructureReloot;
+import me.hasenzahn1.structurereloot.config.LanguageConfig;
 import me.hasenzahn1.structurereloot.database.LootBlockValue;
 import me.hasenzahn1.structurereloot.database.LootEntityValue;
 

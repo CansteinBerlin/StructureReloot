@@ -1,6 +1,7 @@
 package me.hasenzahn1.structurereloot.listeners;
 
 import me.hasenzahn1.structurereloot.StructureReloot;
+import me.hasenzahn1.structurereloot.config.LanguageConfig;
 import me.hasenzahn1.structurereloot.database.LootBlockValue;
 import org.bukkit.Location;
 import org.bukkit.Material;

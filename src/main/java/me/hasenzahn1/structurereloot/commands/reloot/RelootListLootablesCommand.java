@@ -4,6 +4,7 @@ import me.hasenzahn1.structurereloot.StructureReloot;
 import me.hasenzahn1.structurereloot.commands.reloot.settings.SetMaxRelootCommand;
 import me.hasenzahn1.structurereloot.commandsystem.BaseCommand;
 import me.hasenzahn1.structurereloot.commandsystem.SubCommand;
+import me.hasenzahn1.structurereloot.config.LanguageConfig;
 import me.hasenzahn1.structurereloot.database.LootValue;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.BaseComponent;
@@ -32,14 +33,14 @@ public class RelootListLootablesCommand extends SubCommand {
     @Override
     public boolean performCommand(CommandSender sender, String[] args) {
         if (args.length > 3 || args.length == 0) {
-            sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.invalidCommand",
+            sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.invalidCommand",
                     "command", getCommandHistory(),
                     "args", "<block/entity> <world> <page>"));
             return true;
         }
 
         if (!args[0].equalsIgnoreCase("block") && !args[0].equalsIgnoreCase("entity")) {
-            sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.invalidCommand",
+            sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.invalidCommand",
                     "command", getCommandHistory(),
                     "args", "<block/entity> <world> <page>"));
             return true;
@@ -48,14 +49,14 @@ public class RelootListLootablesCommand extends SubCommand {
         World world;
         if (args.length == 1) {
             if (!(sender instanceof Player)) {
-                sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.noPlayer"));
+                sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.noPlayer"));
                 return true;
             }
             world = ((Player) sender).getWorld();
         } else {
             world = Bukkit.getWorld(args[1]);
             if (world == null) {
-                sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.reset.invalidWorld", "world", args[1]));
+                sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.reset.invalidWorld", "world", args[1]));
                 return true;
             }
         }
@@ -63,7 +64,7 @@ public class RelootListLootablesCommand extends SubCommand {
         int page = 0;
         if (args.length == 3) {
             if (!SetMaxRelootCommand.isInt(args[2])) {
-                sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.invalidCommand",
+                sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.invalidCommand",
                         "command", getCommandHistory(),
                         "args", "<block/entity> <world> <page>"));
                 return true;
@@ -84,15 +85,15 @@ public class RelootListLootablesCommand extends SubCommand {
     public static void listAllElements(CommandSender sender, World world, int page, List<? extends LootValue> values, String entityType) {
 
         if (values.size() == 0) {
-            sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.listlootables.noLootables", "type", entityType, "world", world.getName()));
+            sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.listlootables.noLootables", "type", entityType, "world", world.getName()));
             return;
         }
         //Get Chatcolor from config
-        ChatColor minusColor = StructureReloot.getChatColor("info.minusColor");
-        ChatColor titleColor = StructureReloot.getChatColor("info.titleColor");
+        ChatColor minusColor = LanguageConfig.getChatColor("info.minusColor");
+        ChatColor titleColor = LanguageConfig.getChatColor("info.titleColor");
 
         //First line with Prefix
-        TextComponent firstLine = new TextComponent(StructureReloot.PREFIX + StructureReloot.getLang("listLootTables.title", "type", entityType));
+        TextComponent firstLine = new TextComponent(StructureReloot.PREFIX + LanguageConfig.getLang("listLootTables.title", "type", entityType));
         sender.spigot().sendMessage(firstLine);
 
         //Title Line ---- world ---
@@ -112,8 +113,8 @@ public class RelootListLootablesCommand extends SubCommand {
             //Element text <lootTable> (<loc>) [Reloot if perm] [x if perm]
             BaseComponent[] comps = combineComponents(
                     new TextComponent("§6  " + lootTable),
-                    textWithHover(textWithCommand(new TextComponent("§8(" + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ")"), sender.hasPermission("minecraft.command.teleport") ? "/minecraft:tp " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ() : ""), sender.hasPermission("minecraft.command.teleport") ? StructureReloot.getLang("listLootTables.teleport") : ""),
-                    sender.hasPermission("structurereloot.command.regen") ? textWithCommand(new TextComponent(StructureReloot.getLang("listLootTables.reloot")),
+                    textWithHover(textWithCommand(new TextComponent("§8(" + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ")"), sender.hasPermission("minecraft.command.teleport") ? "/minecraft:tp " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ() : ""), sender.hasPermission("minecraft.command.teleport") ? LanguageConfig.getLang("listLootTables.teleport") : ""),
+                    sender.hasPermission("structurereloot.command.regen") ? textWithCommand(new TextComponent(LanguageConfig.getLang("listLootTables.reloot")),
                             "/reloot internal regen " + world.getName() + " " + (entityType.equalsIgnoreCase("blocks") ? "block" : "entity") + " " + locString) : null,
                     sender.hasPermission("structurereloot.command.reset") ? textWithCommand(new TextComponent("§c[x]"),
                             "/reloot internal remove " + world.getName() + " " + (entityType.equalsIgnoreCase("blocks") ? "block" : "entity") + " " + locString) : null

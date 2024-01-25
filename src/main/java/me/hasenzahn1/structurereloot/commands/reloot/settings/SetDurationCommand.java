@@ -1,6 +1,7 @@
 package me.hasenzahn1.structurereloot.commands.reloot.settings;
 
 import me.hasenzahn1.structurereloot.StructureReloot;
+import me.hasenzahn1.structurereloot.config.LanguageConfig;
 import me.hasenzahn1.structurereloot.commands.reloot.RelootInfoCommand;
 import me.hasenzahn1.structurereloot.commandsystem.BaseCommand;
 import me.hasenzahn1.structurereloot.commandsystem.SubCommand;
@@ -19,7 +20,7 @@ public class SetDurationCommand extends SubCommand {
     @Override
     public boolean performCommand(CommandSender sender, String[] args) {
         if (args.length != 3) {
-            sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.invalidCommand",
+            sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.invalidCommand",
                     "command", getCommandHistory(),
                     "args", "<world> <block/entity> <duration>"));
             return true;
@@ -27,11 +28,11 @@ public class SetDurationCommand extends SubCommand {
         
         World world = Bukkit.getWorld(args[1]);
         if (world == null) {
-            sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.reset.invalidWorld", "world", args[1]));
+            sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.reset.invalidWorld", "world", args[1]));
             return true;
         }
         if (!args[0].equalsIgnoreCase("block") && !args[0].equalsIgnoreCase("entity")) {
-            sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.settings.invalidType", "value", args[0]));
+            sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.settings.invalidType", "value", args[0]));
             return true;
         }
 
@@ -40,7 +41,7 @@ public class SetDurationCommand extends SubCommand {
         long amount = TimeUtil.parsePeriodToSeconds(args[2]);
 
         if (amount == 0) {
-            sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.settings.invalidPattern", "value", args[2]));
+            sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.settings.invalidPattern", "value", args[2]));
             return true;
         }
 

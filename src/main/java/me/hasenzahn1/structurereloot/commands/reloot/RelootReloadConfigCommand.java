@@ -1,6 +1,7 @@
 package me.hasenzahn1.structurereloot.commands.reloot;
 
 import me.hasenzahn1.structurereloot.StructureReloot;
+import me.hasenzahn1.structurereloot.config.LanguageConfig;
 import me.hasenzahn1.structurereloot.commandsystem.BaseCommand;
 import me.hasenzahn1.structurereloot.commandsystem.SubCommand;
 import me.hasenzahn1.structurereloot.config.update.BlockUpdateConfig;
@@ -23,7 +24,7 @@ public class RelootReloadConfigCommand extends SubCommand {
     @Override
     public boolean performCommand(CommandSender sender, String[] args) {
         if (args.length == 0 || args.length > 2) {
-            sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.invalidCommand",
+            sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.invalidCommand",
                     "command", getCommandHistory(),
                     "args", StringUtils.listToCommandArgs(tabComplete(sender, new String[]{""}))));
 
@@ -41,9 +42,8 @@ public class RelootReloadConfigCommand extends SubCommand {
             case "lang" -> {
                 if (replace) {
                     StructureReloot.getInstance().getLanguageConfig().delete();
-                    StructureReloot.getInstance().setLanguageConfig(null);
                 }
-                StructureReloot.getInstance().reloadLanguageConfig();
+                StructureReloot.getInstance().getLanguageConfig().reloadConfig();
             }
 
             case "config" -> {
@@ -71,7 +71,7 @@ public class RelootReloadConfigCommand extends SubCommand {
             }
 
             default -> {
-                sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.invalidCommand",
+                sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.invalidCommand",
                         "command", getCommandHistory(),
                         "args", StringUtils.listToCommandArgs(tabComplete(sender, new String[]{""}))));
                 return true;
@@ -80,9 +80,9 @@ public class RelootReloadConfigCommand extends SubCommand {
 
 
         if (!replace)
-            sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.reloadConfig.reloadSuccess",
+            sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.reloadConfig.reloadSuccess",
                     "config", args[0].toLowerCase(Locale.ROOT)));
-        else sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.reloadConfig.replaceSuccess",
+        else sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.reloadConfig.replaceSuccess",
                 "config", args[0].toLowerCase(Locale.ROOT)));
         return true;
     }

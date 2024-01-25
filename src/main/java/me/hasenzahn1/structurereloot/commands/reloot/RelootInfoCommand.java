@@ -2,6 +2,7 @@ package me.hasenzahn1.structurereloot.commands.reloot;
 
 import de.themoep.minedown.MineDown;
 import me.hasenzahn1.structurereloot.StructureReloot;
+import me.hasenzahn1.structurereloot.config.LanguageConfig;
 import me.hasenzahn1.structurereloot.commandsystem.BaseCommand;
 import me.hasenzahn1.structurereloot.commandsystem.SubCommand;
 import me.hasenzahn1.structurereloot.general.RelootSettings;
@@ -25,7 +26,7 @@ public class RelootInfoCommand extends SubCommand {
     @Override
     public boolean performCommand(CommandSender sender, String[] args) {
         if (args.length > 1) {
-            sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.invalidCommand"),
+            sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.invalidCommand"),
                     "command", getCommandHistory(),
                     "args", "<world>");
             return true;
@@ -34,14 +35,14 @@ public class RelootInfoCommand extends SubCommand {
         World world;
         if (args.length == 0) {
             if (!(sender instanceof Player)) {
-                sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.noPlayer"));
+                sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.noPlayer"));
                 return true;
             }
             world = ((Player) sender).getWorld();
         } else {
             world = Bukkit.getWorld(args[0]);
             if (world == null) {
-                sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.reset.invalidWorld", "world", args[0]));
+                sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.reset.invalidWorld", "world", args[0]));
                 return true;
             }
         }
@@ -62,22 +63,22 @@ public class RelootInfoCommand extends SubCommand {
     public static void sendPlayerInfoScreen(CommandSender sender, World world) {
         RelootSettings blockSettings = StructureReloot.getInstance().getBlockUpdateConfig().getSettingsForWorld(world);
         if (blockSettings == null) {
-            sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.info.noSettings", "world", world.getName()));
+            sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.info.noSettings", "world", world.getName()));
             return;
         }
 
         RelootSettings entitySettings = StructureReloot.getInstance().getEntityUpdateConfig().getSettingsForWorld(world);
         if (entitySettings == null) {
-            sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.info.noSettings", "world", world.getName()));
+            sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.info.noSettings", "world", world.getName()));
             return;
         }
 
-        TextComponent titleLine = new TextComponent(StructureReloot.getLang("info.header"));
-        BaseComponent[] worldLine = new MineDown(StructureReloot.getLang("info.worldLine", "world", world.getName())).toComponent();
+        TextComponent titleLine = new TextComponent(LanguageConfig.getLang("info.header"));
+        BaseComponent[] worldLine = new MineDown(LanguageConfig.getLang("info.worldLine", "world", world.getName())).toComponent();
 
 
-        BaseComponent[] blockSettingsText = convertSettings(StructureReloot.getLang("info.blocks"), world, blockSettings, "block");
-        BaseComponent[] entitySettingsText = convertSettings(StructureReloot.getLang("info.entities"), world, entitySettings, "entity");
+        BaseComponent[] blockSettingsText = convertSettings(LanguageConfig.getLang("info.blocks"), world, blockSettings, "block");
+        BaseComponent[] entitySettingsText = convertSettings(LanguageConfig.getLang("info.entities"), world, entitySettings, "entity");
 
         //sender.spigot().sendMessage(firstLine);
         sender.spigot().sendMessage(titleLine);
@@ -91,34 +92,34 @@ public class RelootInfoCommand extends SubCommand {
     private static BaseComponent[] convertSettings(String type, World world, RelootSettings settings, String commandType) {
         TextComponent typeText = new TextComponent(type);
 
-        BaseComponent[] relootOnStartup = new MineDown(StructureReloot.getLang("info.relootOnStartupLine",
+        BaseComponent[] relootOnStartup = new MineDown(LanguageConfig.getLang("info.relootOnStartupLine",
 
-                "relootOnStartup", StructureReloot.getLang("info.relootOnStartup"),
-                "relootOnStartupHover", StructureReloot.getLang("info.relootOnStartupHover"),
+                "relootOnStartup", LanguageConfig.getLang("info.relootOnStartup"),
+                "relootOnStartupHover", LanguageConfig.getLang("info.relootOnStartupHover"),
                 "colorTrue", settings.isRelootOnStartup() ? "white" : "dark_gray",
                 "colorFalse", settings.isRelootOnStartup() ? "dark_gray" : "white",
-                "setHover", StructureReloot.getLang("info.setHover"),
+                "setHover", LanguageConfig.getLang("info.setHover"),
                 "commandType", commandType,
                 "world", world.getName())
         ).toComponent();
 
 
-        BaseComponent[] maxRelootAmount = new MineDown(StructureReloot.getLang("info.setMaxAmountLine",
-                "maxRelootAmount", StructureReloot.getLang("info.maxRelootAmount"),
-                "maxRelootAmountHover", StructureReloot.getLang("info.maxRelootAmountHover"),
+        BaseComponent[] maxRelootAmount = new MineDown(LanguageConfig.getLang("info.setMaxAmountLine",
+                "maxRelootAmount", LanguageConfig.getLang("info.maxRelootAmount"),
+                "maxRelootAmountHover", LanguageConfig.getLang("info.maxRelootAmountHover"),
                 "amount", settings.getMaxRelootAmount() == Integer.MAX_VALUE ? "all" : settings.getMaxRelootAmount() + "",
                 "commandType", commandType,
                 "world", world.getName(),
-                "setHover", StructureReloot.getLang("info.setHover"))
+                "setHover", LanguageConfig.getLang("info.setHover"))
         ).toComponent();
 
-        BaseComponent[] timeBetweenReloot = new MineDown(StructureReloot.getLang("info.timeBetweenRelootLine",
-                "timeBetweenReloot", StructureReloot.getLang("info.timeBetweenReloot"),
-                "timeBetweenRelootHover", StructureReloot.getLang("info.timeBetweenRelootHover"),
+        BaseComponent[] timeBetweenReloot = new MineDown(LanguageConfig.getLang("info.timeBetweenRelootLine",
+                "timeBetweenReloot", LanguageConfig.getLang("info.timeBetweenReloot"),
+                "timeBetweenRelootHover", LanguageConfig.getLang("info.timeBetweenRelootHover"),
                 "time", settings.getDurationPattern(),
                 "commandType", commandType,
                 "world", world.getName(),
-                "setHover", StructureReloot.getLang("info.setHover"))
+                "setHover", LanguageConfig.getLang("info.setHover"))
         ).toComponent();
 
 

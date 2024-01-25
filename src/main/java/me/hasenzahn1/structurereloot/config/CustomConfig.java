@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public abstract class CustomConfig {
+public class CustomConfig {
 
     private File configFile;
     private FileConfiguration config;
@@ -54,8 +54,12 @@ public abstract class CustomConfig {
     }
 
     public void reloadConfig() {
-        config = YamlConfiguration.loadConfiguration(configFile);
+        if(!configFile.exists()){
+            createCustomConfig(plugin, configFile.getName());
+            return;
+        }
 
+        config = YamlConfiguration.loadConfiguration(configFile);
         final InputStream defConfigStream = plugin.getResource(configFile.getName());
         if (defConfigStream == null) {
             return;

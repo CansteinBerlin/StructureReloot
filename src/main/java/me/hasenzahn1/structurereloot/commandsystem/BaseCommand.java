@@ -1,6 +1,7 @@
 package me.hasenzahn1.structurereloot.commandsystem;
 
 import me.hasenzahn1.structurereloot.StructureReloot;
+import me.hasenzahn1.structurereloot.config.LanguageConfig;
 import org.bukkit.command.CommandSender;
 
 import java.util.ArrayList;

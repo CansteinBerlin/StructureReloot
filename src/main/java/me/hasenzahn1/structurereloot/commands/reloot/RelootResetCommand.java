@@ -1,6 +1,7 @@
 package me.hasenzahn1.structurereloot.commands.reloot;
 
 import me.hasenzahn1.structurereloot.StructureReloot;
+import me.hasenzahn1.structurereloot.config.LanguageConfig;
 import me.hasenzahn1.structurereloot.commandsystem.BaseCommand;
 import me.hasenzahn1.structurereloot.commandsystem.SubCommand;
 import me.hasenzahn1.structurereloot.util.StringUtils;
@@ -22,7 +23,7 @@ public class RelootResetCommand extends SubCommand {
     @Override
     public boolean performCommand(CommandSender sender, String[] args) {
         if (args.length != 2) {
-            sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.invalidCommand",
+            sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.invalidCommand",
                     "command", getCommandHistory(),
                     "args", StringUtils.listToCommandArgs(tabComplete(null, new String[]{""})) +
                             " " +
@@ -31,18 +32,18 @@ public class RelootResetCommand extends SubCommand {
         }
         World world = Bukkit.getWorld(args[1]);
         if (world == null) {
-            sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.reset.invalidWorld", "world", args[1]));
+            sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.reset.invalidWorld", "world", args[1]));
             return true;
         }
 
         if (args[0].equalsIgnoreCase("entity")) {
             StructureReloot.getInstance().getDatabase(world).removeAllEntitys();
-            sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.reset.removedEntities"));
+            sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.reset.removedEntities"));
         } else if (args[0].equalsIgnoreCase("block")) {
             StructureReloot.getInstance().getDatabase(world).removeAllBlocks();
-            sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.reset.removedBlocks"));
+            sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.reset.removedBlocks"));
         } else {
-            sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.invalidCommand",
+            sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.invalidCommand",
                     "command", getCommandHistory(),
                     "args", StringUtils.listToCommandArgs(tabComplete(null, new String[]{""})) +
                             " " +

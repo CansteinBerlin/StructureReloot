@@ -1,6 +1,7 @@
 package me.hasenzahn1.structurereloot.config.update;
 
 import me.hasenzahn1.structurereloot.StructureReloot;
+import me.hasenzahn1.structurereloot.config.LanguageConfig;
 import me.hasenzahn1.structurereloot.config.CustomConfig;
 import me.hasenzahn1.structurereloot.general.RelootSettings;
 import org.bukkit.Bukkit;

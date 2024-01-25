@@ -1,6 +1,7 @@
 package me.hasenzahn1.structurereloot.commands.reloot;
 
 import me.hasenzahn1.structurereloot.StructureReloot;
+import me.hasenzahn1.structurereloot.config.LanguageConfig;
 import me.hasenzahn1.structurereloot.commandsystem.BaseCommand;
 import me.hasenzahn1.structurereloot.commandsystem.SubCommand;
 import me.hasenzahn1.structurereloot.reloot.RelootHelper;
@@ -24,7 +25,7 @@ public class RelootRegenCommand extends SubCommand {
     @Override
     public boolean performCommand(CommandSender sender, String[] args) {
         if (args.length != 3) {
-            sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.invalidCommand",
+            sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.invalidCommand",
                     "command", getCommandHistory(),
                     "args", StringUtils.listToCommandArgs(tabComplete(null, new String[]{""})) +
                             " " +
@@ -39,7 +40,7 @@ public class RelootRegenCommand extends SubCommand {
         //Check World
         World world = Bukkit.getWorld(args[1]);
         if (world == null) {
-            sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.reset.invalidWorld", "world", args[1]));
+            sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.reset.invalidWorld", "world", args[1]));
             return true;
         }
 
@@ -51,7 +52,7 @@ public class RelootRegenCommand extends SubCommand {
             try {
                 amount = Integer.parseInt(args[2]);
             } catch (NumberFormatException e) {
-                sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.invalidCommand",
+                sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.invalidCommand",
                         "command", getCommandHistory(),
                         "args", StringUtils.listToCommandArgs(tabComplete(null, new String[]{""})) +
                                 " " +
@@ -67,14 +68,14 @@ public class RelootRegenCommand extends SubCommand {
 
         if (args[0].equalsIgnoreCase("entity")) {
             RelootHelper.regenNEntities(world, amount, () -> {
-                sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.regen.sucEntity",
+                sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.regen.sucEntity",
                         "amount", args[2].toLowerCase(Locale.ROOT),
                         "time", ((System.currentTimeMillis() - millis) / 1000) + ""));
             });
 
         } else if (args[0].equalsIgnoreCase("block")) {
             RelootHelper.regenNBlocks(world, amount, () ->
-                    sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.regen.sucBlock",
+                    sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.regen.sucBlock",
                             "amount", args[2].toLowerCase(Locale.ROOT),
                             "time", ((System.currentTimeMillis() - millis) / 1000) + ""))
             );
@@ -83,7 +84,7 @@ public class RelootRegenCommand extends SubCommand {
             RelootHelper.regenNEntities(world, amount, () -> {
             });
             RelootHelper.regenNBlocks(world, amount, () -> {
-                        sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.regen.sucBoth",
+                        sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.regen.sucBoth",
                                 "amount", args[2].toLowerCase(Locale.ROOT),
                                 "time", ((System.currentTimeMillis() - millis) / 1000) + ""));
                     }
@@ -91,7 +92,7 @@ public class RelootRegenCommand extends SubCommand {
 
 
         } else {
-            sender.sendMessage(StructureReloot.PREFIX + StructureReloot.getLang("commands.invalidCommand",
+            sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.invalidCommand",
                     "command", getCommandHistory(),
                     "args", StringUtils.listToCommandArgs(tabComplete(null, new String[]{""})) +
                             " " +
