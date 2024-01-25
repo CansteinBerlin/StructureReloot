@@ -1,8 +1,6 @@
-package me.hasenzahn1.structurereloot.config.update;
+package me.hasenzahn1.structurereloot.config;
 
 import me.hasenzahn1.structurereloot.StructureReloot;
-import me.hasenzahn1.structurereloot.config.LanguageConfig;
-import me.hasenzahn1.structurereloot.config.CustomConfig;
 import me.hasenzahn1.structurereloot.general.RelootSettings;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -13,7 +11,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
-public abstract class UpdateConfig extends CustomConfig {
+public class UpdateConfig extends CustomConfig {
 
     private final HashMap<World, RelootSettings> settings;
 

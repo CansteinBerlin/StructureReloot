@@ -1,11 +1,10 @@
 package me.hasenzahn1.structurereloot.commands.reloot;
 
 import me.hasenzahn1.structurereloot.StructureReloot;
-import me.hasenzahn1.structurereloot.config.LanguageConfig;
 import me.hasenzahn1.structurereloot.commandsystem.BaseCommand;
 import me.hasenzahn1.structurereloot.commandsystem.SubCommand;
-import me.hasenzahn1.structurereloot.config.update.BlockUpdateConfig;
-import me.hasenzahn1.structurereloot.config.update.EntityUpdateConfig;
+import me.hasenzahn1.structurereloot.config.LanguageConfig;
+import me.hasenzahn1.structurereloot.config.UpdateConfig;
 import me.hasenzahn1.structurereloot.util.StringUtils;
 import org.bukkit.command.CommandSender;
 
@@ -38,36 +37,36 @@ public class RelootReloadConfigCommand extends SubCommand {
             }
         }
 
+        StructureReloot instance = StructureReloot.getInstance();
+
         switch (args[0].toLowerCase(Locale.ROOT)) {
             case "lang" -> {
                 if (replace) {
-                    StructureReloot.getInstance().getLanguageConfig().delete();
+                    instance.getLanguageConfig().delete();
                 }
-                StructureReloot.getInstance().getLanguageConfig().reloadConfig();
+                instance.getLanguageConfig().reloadConfig();
             }
 
             case "config" -> {
                 if (replace) {
-                    StructureReloot.getInstance().getDefaultConfig().delete();
-                    StructureReloot.getInstance().setDefaultConfig(null);
+                    instance.getDefaultConfig().delete();
+                    instance.setDefaultConfig(null);
                 }
-                StructureReloot.getInstance().initDefaultConfig();
+                instance.initDefaultConfig();
             }
 
             case "entityupdatesettings" -> {
                 if (replace) {
-                    StructureReloot.getInstance().getEntityUpdateConfig().delete();
-                    StructureReloot.getInstance().setEntityUpdateConfig(null);
+                    instance.getEntityUpdateConfig().delete();
                 }
-                StructureReloot.getInstance().setEntityUpdateConfig(new EntityUpdateConfig());
+                instance.setEntityUpdateConfig(new UpdateConfig(instance.getEntityUpdateConfig().getName()));
             }
 
             case "blockupdatesettings" -> {
                 if (replace) {
-                    StructureReloot.getInstance().getBlockUpdateConfig().delete();
-                    StructureReloot.getInstance().setBlockUpdateConfig(null);
+                    instance.getBlockUpdateConfig().delete();
                 }
-                StructureReloot.getInstance().setBlockUpdateConfig(new BlockUpdateConfig());
+                instance.setBlockUpdateConfig(new UpdateConfig(instance.getBlockUpdateConfig().getName()));
             }
 
             default -> {

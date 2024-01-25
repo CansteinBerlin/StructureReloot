@@ -4,10 +4,8 @@ import me.hasenzahn1.structurereloot.commands.RelootCommand;
 import me.hasenzahn1.structurereloot.commands.RelootDebugCommand;
 import me.hasenzahn1.structurereloot.commandsystem.CommandManager;
 import me.hasenzahn1.structurereloot.config.CustomConfig;
-import me.hasenzahn1.structurereloot.config.DefaultConfig;
 import me.hasenzahn1.structurereloot.config.LanguageConfig;
-import me.hasenzahn1.structurereloot.config.update.BlockUpdateConfig;
-import me.hasenzahn1.structurereloot.config.update.EntityUpdateConfig;
+import me.hasenzahn1.structurereloot.config.UpdateConfig;
 import me.hasenzahn1.structurereloot.database.WorldDatabase;
 import me.hasenzahn1.structurereloot.general.AutoRelootScheduler;
 import me.hasenzahn1.structurereloot.general.ChangesPerDay;
@@ -32,19 +30,22 @@ public final class StructureReloot extends JavaPlugin {
     private static StructureReloot instance;
     public static Logger LOGGER;
 
+    //Data Handling
     private boolean debugMode;
     private String databasePath;
 
-
-    private CommandManager commandManager;
+    //Configs
     private CustomConfig defaultConfig;
     private LanguageConfig languageConfig;
+    private UpdateConfig blockUpdateConfig;
+    private UpdateConfig entityUpdateConfig;
+
+    private CommandManager commandManager;
     private HashMap<World, WorldDatabase> databases;
 
     private LootValueChangeTask lootValueChangeTask;
 
-    private BlockUpdateConfig blockUpdateConfig;
-    private EntityUpdateConfig entityUpdateConfig;
+
     private AutoRelootScheduler autoRelootScheduler;
 
     private ChangesPerDay changes;
@@ -120,12 +121,12 @@ public final class StructureReloot extends JavaPlugin {
         languageConfig = new LanguageConfig(this);
         initDefaultConfig();
 
-        blockUpdateConfig = new BlockUpdateConfig();
-        entityUpdateConfig = new EntityUpdateConfig();
+        blockUpdateConfig = new UpdateConfig("blockUpdateSettings.yml");
+        entityUpdateConfig = new UpdateConfig("entityUpdateSettings.yml");
     }
 
     public void initDefaultConfig() {
-        defaultConfig = new DefaultConfig();
+        defaultConfig = new CustomConfig(this, "config.yml");
         PREFIX = ChatColor.translateAlternateColorCodes('&', defaultConfig.getConfig().getString("prefix", PREFIX));
         debugMode = defaultConfig.getConfig().getBoolean("debugMode", false);
         databasePath = "data";
@@ -162,19 +163,19 @@ public final class StructureReloot extends JavaPlugin {
         return languageConfig;
     }
 
-    public BlockUpdateConfig getBlockUpdateConfig() {
+    public UpdateConfig getBlockUpdateConfig() {
         return blockUpdateConfig;
     }
 
-    public EntityUpdateConfig getEntityUpdateConfig() {
+    public UpdateConfig getEntityUpdateConfig() {
         return entityUpdateConfig;
     }
 
-    public void setBlockUpdateConfig(BlockUpdateConfig blockUpdateConfig) {
+    public void setBlockUpdateConfig(UpdateConfig blockUpdateConfig) {
         this.blockUpdateConfig = blockUpdateConfig;
     }
 
-    public void setEntityUpdateConfig(EntityUpdateConfig entityUpdateConfig) {
+    public void setEntityUpdateConfig(UpdateConfig entityUpdateConfig) {
         this.entityUpdateConfig = entityUpdateConfig;
     }
 

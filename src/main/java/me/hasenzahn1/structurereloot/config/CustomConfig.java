@@ -16,9 +16,11 @@ public class CustomConfig {
     private FileConfiguration config;
     private final JavaPlugin plugin;
     protected boolean isNew;
-    
+    private final String name;
+
     public CustomConfig(JavaPlugin plugin, String name) {
         this.plugin = plugin;
+        this.name = name;
         isNew = false;
         createCustomConfig(plugin, name);
     }
@@ -54,7 +56,7 @@ public class CustomConfig {
     }
 
     public void reloadConfig() {
-        if(!configFile.exists()){
+        if (!configFile.exists()) {
             createCustomConfig(plugin, configFile.getName());
             return;
         }
@@ -78,5 +80,9 @@ public class CustomConfig {
 
     public FileConfiguration getConfig() {
         return config;
+    }
+
+    public String getName() {
+        return name;
     }
 }
