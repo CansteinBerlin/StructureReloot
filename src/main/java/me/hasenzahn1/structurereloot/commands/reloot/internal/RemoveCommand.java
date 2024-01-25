@@ -35,7 +35,7 @@ public class RemoveCommand extends SubCommand {
             return true;
         }
 
-        WorldDatabase database = StructureReloot.getInstance().getDatabase(world);
+        WorldDatabase database = StructureReloot.getInstance().getDatabaseManager().getDatabase(world);
         int page;
         if (args[1].equalsIgnoreCase("block")) {
             LootBlockValue value = database.getBlock(LootValue.getLocFromString(world, args[2]));

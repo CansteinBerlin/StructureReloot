@@ -37,10 +37,10 @@ public class RelootResetCommand extends SubCommand {
         }
 
         if (args[0].equalsIgnoreCase("entity")) {
-            StructureReloot.getInstance().getDatabase(world).removeAllEntitys();
+            StructureReloot.getInstance().getDatabaseManager().getDatabase(world).removeAllEntitys();
             sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.reset.removedEntities"));
         } else if (args[0].equalsIgnoreCase("block")) {
-            StructureReloot.getInstance().getDatabase(world).removeAllBlocks();
+            StructureReloot.getInstance().getDatabaseManager().getDatabase(world).removeAllBlocks();
             sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.reset.removedBlocks"));
         } else {
             sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.invalidCommand",

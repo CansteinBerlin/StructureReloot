@@ -74,8 +74,8 @@ public class RelootListLootablesCommand extends SubCommand {
         }
 
         List<? extends LootValue> values = args[0].equalsIgnoreCase("block") ?
-                StructureReloot.getInstance().getDatabase(world).getAllBlocks() :
-                StructureReloot.getInstance().getDatabase(world).getAllEntities();
+                StructureReloot.getInstance().getDatabaseManager().getDatabase(world).getAllBlocks() :
+                StructureReloot.getInstance().getDatabaseManager().getDatabase(world).getAllEntities();
 
         listAllElements(sender, world, page, values, args[0].equalsIgnoreCase("block") ? "blocks" : "entities");
 

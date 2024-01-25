@@ -29,7 +29,7 @@ public class RelootEntityCommand extends SubCommand {
             return true;
         }
 
-        List<LootEntityValue> lootBlockValues = StructureReloot.getInstance().getDatabase(((Player) sender).getWorld()).getAllEntities();
+        List<LootEntityValue> lootBlockValues = StructureReloot.getInstance().getDatabaseManager().getDatabase(((Player) sender).getWorld()).getAllEntities();
 
         List<LootEntityValue> valid = lootBlockValues.stream()
                 .filter(value -> value.getLocationString().equalsIgnoreCase(args[0]))
@@ -48,7 +48,7 @@ public class RelootEntityCommand extends SubCommand {
     @Override
     public List<String> tabComplete(CommandSender sender, String[] args) {
         if (!(sender instanceof Player)) return null;
-        List<LootEntityValue> lootBlockValues = StructureReloot.getInstance().getDatabase(((Player) sender).getWorld()).getAllEntities(); //Not Performant i know
+        List<LootEntityValue> lootBlockValues = StructureReloot.getInstance().getDatabaseManager().getDatabase(((Player) sender).getWorld()).getAllEntities(); //Not Performant i know
         return lootBlockValues.stream()
                 .map(LootEntityValue::getLocationString)
                 .filter(s -> s.startsWith(args[0]))

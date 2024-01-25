@@ -8,7 +8,7 @@ import me.hasenzahn1.structurereloot.commandsystem.CommandManager;
 import me.hasenzahn1.structurereloot.config.CustomConfig;
 import me.hasenzahn1.structurereloot.config.LanguageConfig;
 import me.hasenzahn1.structurereloot.config.UpdateConfig;
-import me.hasenzahn1.structurereloot.database.WorldDatabase;
+import me.hasenzahn1.structurereloot.database.DatabaseManager;
 import me.hasenzahn1.structurereloot.general.AutoRelootScheduler;
 import me.hasenzahn1.structurereloot.general.RelootActivityLogger;
 import me.hasenzahn1.structurereloot.general.RelootSettings;
@@ -17,11 +17,8 @@ import me.hasenzahn1.structurereloot.listeners.EntityListener;
 import me.hasenzahn1.structurereloot.reloot.LootValueProcessor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
-import org.bukkit.World;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.HashMap;
 
 @Getter
 @Setter
@@ -43,10 +40,10 @@ public final class StructureReloot extends JavaPlugin {
     //Commands
     private CommandManager commandManager;
 
-    //Database Access
-    private String databasePath;
-    private HashMap<World, WorldDatabase> databases;
+    //Database
+    private DatabaseManager databaseManager;
 
+    //Automatic Relooting and processing of requested reloots
     private LootValueProcessor lootValueProcessor;
     private AutoRelootScheduler autoRelootScheduler;
 
@@ -63,9 +60,12 @@ public final class StructureReloot extends JavaPlugin {
 
         //Config and Database
         initConfigs();
-        databases = new HashMap<>();
+        databaseManager = new DatabaseManager("data");
 
+        //Creation of tickable tasks
         lootValueProcessor = new LootValueProcessor();
+        autoRelootScheduler = new AutoRelootScheduler();
+        autoRelootScheduler.runTaskTimer(this, 20 * 5, 20 * 60);
 
         //Commands
         commandManager = new CommandManager(this);
@@ -76,8 +76,7 @@ public final class StructureReloot extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new BlockListener(), this);
         Bukkit.getPluginManager().registerEvents(new EntityListener(), this);
 
-        autoRelootScheduler = new AutoRelootScheduler();
-        autoRelootScheduler.runTaskTimer(this, 20 * 5, 20 * 60);
+
     }
 
 
@@ -93,25 +92,12 @@ public final class StructureReloot extends JavaPlugin {
         defaultConfig = new CustomConfig(this, "config.yml");
         PREFIX = ChatColor.translateAlternateColorCodes('&', defaultConfig.getConfig().getString("prefix", PREFIX));
         debugMode = defaultConfig.getConfig().getBoolean("debugMode", false);
-        databasePath = "data";
         LootValueProcessor.CHANGE_AMOUNT = defaultConfig.getConfig().getInt("changesPerTick", 20);
     }
 
     @Override
     public void onDisable() {
         autoRelootScheduler.cancel();
-    }
-
-    public WorldDatabase getDatabase(World world) {
-        if (!databases.containsKey(world)) createDatabase(world);
-        return databases.get(world);
-    }
-
-    public void createDatabase(World world) {
-        relootActivityLogger.logNewWorld(world);
-        WorldDatabase database = new WorldDatabase(databasePath, world);
-        database.init();
-        databases.put(world, database);
     }
 
     public static StructureReloot getInstance() {

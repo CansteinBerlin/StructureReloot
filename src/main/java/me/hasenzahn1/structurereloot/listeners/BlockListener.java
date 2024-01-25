@@ -33,7 +33,7 @@ public class BlockListener implements Listener {
         if (loc.getBlock().getType() == Material.AIR) return; // Do not Capture Broken Blocks
         LootTable lootTable = event.getLootTable();
         LootBlockValue lootBlockValue = new LootBlockValue(loc, lootTable);
-        StructureReloot.getInstance().getDatabase(event.getWorld()).addBlock(lootBlockValue);
+        StructureReloot.getInstance().getDatabaseManager().getDatabase(event.getWorld()).addBlock(lootBlockValue);
     }
 
     /*
@@ -46,7 +46,7 @@ public class BlockListener implements Listener {
             Location loc = b.getLocation();
             LootTable lootTable = ((Lootable) b.getState()).getLootTable();
             LootBlockValue lbv = new LootBlockValue(loc, lootTable, b.getType(), ((Directional) b.getBlockData()).getFacing());
-            StructureReloot.getInstance().getDatabase(loc.getWorld()).addBlock(lbv);
+            StructureReloot.getInstance().getDatabaseManager().getDatabase(loc.getWorld()).addBlock(lbv);
         }
     }
 
@@ -61,7 +61,7 @@ public class BlockListener implements Listener {
         if (lootTable == null) return;
         Location loc = b.getLocation();
         LootBlockValue lbv = new LootBlockValue(loc, lootTable, b.getType(), ((Directional) b.getBlockData()).getFacing());
-        StructureReloot.getInstance().getDatabase(loc.getWorld()).addBlock(lbv);
+        StructureReloot.getInstance().getDatabaseManager().getDatabase(loc.getWorld()).addBlock(lbv);
     }
 
 }

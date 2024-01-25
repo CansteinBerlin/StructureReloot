@@ -51,7 +51,7 @@ public class LoadStressTestDataBlockCommand extends SubCommand {
             x = i % div;
             y = i / div;
         }
-        StructureReloot.getInstance().getDatabase(world).addMultipleBlocks(values);
+        StructureReloot.getInstance().getDatabaseManager().getDatabase(world).addMultipleBlocks(values);
 
         sender.sendMessage(StructureReloot.PREFIX + "§aAdded " + amount + " new LootBlocks");
         return true;

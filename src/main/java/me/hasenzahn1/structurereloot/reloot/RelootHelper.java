@@ -21,11 +21,11 @@ public class RelootHelper {
     }
 
     public static void regenNEntities(World world, int amount, Runnable runnable) {
-        List<LootEntityValue> levs = StructureReloot.getInstance().getDatabase(world).getAllEntities();
+        List<LootEntityValue> levs = StructureReloot.getInstance().getDatabaseManager().getDatabase(world).getAllEntities();
         Collections.shuffle(levs);
         List<LootEntityValue> values = levs.stream().limit(Math.min(levs.size(), amount)).collect(Collectors.toList());
 
-        WorldDatabase database = StructureReloot.getInstance().getDatabase(world);
+        WorldDatabase database = StructureReloot.getInstance().getDatabaseManager().getDatabase(world);
         database.setCacheRemove(true);
         RelootHelper.relootMultipleEntities(values, runnable != null ? List.of(runnable) : List.of());
         database.removeMultipleEntities(values);
@@ -33,11 +33,11 @@ public class RelootHelper {
     }
 
     public static void regenNBlocks(World world, int amount, Runnable runnable) {
-        List<LootBlockValue> lbvs = StructureReloot.getInstance().getDatabase(world).getAllBlocks();
+        List<LootBlockValue> lbvs = StructureReloot.getInstance().getDatabaseManager().getDatabase(world).getAllBlocks();
         Collections.shuffle(lbvs);
         List<LootBlockValue> values = lbvs.stream().limit(Math.min(lbvs.size(), amount)).collect(Collectors.toList());
 
-        WorldDatabase database = StructureReloot.getInstance().getDatabase(world);
+        WorldDatabase database = StructureReloot.getInstance().getDatabaseManager().getDatabase(world);
         database.setCacheRemove(true);
         RelootHelper.relootMultipleBlocks(values, runnable != null ? List.of(runnable) : List.of());
         database.removeMultipleBlocks(values);

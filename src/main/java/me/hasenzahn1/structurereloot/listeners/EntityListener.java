@@ -37,7 +37,7 @@ public class EntityListener implements Listener {
         Entity e = Bukkit.getEntity(minecart.getUniqueId());
         if (e == null) return;
         LootEntityValue lev = new LootEntityValue(e.getType(), e.getLocation(), event.getLootTable(), minecart.getUniqueId());
-        StructureReloot.getInstance().getDatabase(event.getWorld()).addEntity(lev);
+        StructureReloot.getInstance().getDatabaseManager().getDatabase(event.getWorld()).addEntity(lev);
     }
 
 
@@ -46,11 +46,6 @@ public class EntityListener implements Listener {
      */
     @EventHandler
     public void onChunkLoad(ChunkLoadEvent event) {
-        //If a chunk is loaded in world with no database create a database
-        if (StructureReloot.getInstance().getDatabase(event.getWorld()) == null) {
-            StructureReloot.getInstance().createDatabase(event.getWorld());
-        }
-
         //Check only for newly created chunks
         if (!event.isNewChunk()) return;
         if (!event.getWorld().getEnvironment().equals(World.Environment.THE_END)) return;
@@ -68,7 +63,6 @@ public class EntityListener implements Listener {
                 }
             }
         }.runTaskLater(StructureReloot.getInstance(), 2);
-
     }
 
     /*
@@ -81,7 +75,7 @@ public class EntityListener implements Listener {
 
         if (!entity.getItem().getType().equals(Material.ELYTRA)) return; //Don't know what happened here
         LootEntityValue lev = new LootEntityValue(EntityType.ITEM_FRAME, entity.getLocation(), null, entity.getUniqueId());
-        StructureReloot.getInstance().getDatabase(entity.getWorld()).addEntity(lev); // Save to database
+        StructureReloot.getInstance().getDatabaseManager().getDatabase(entity.getWorld()).addEntity(lev); // Save to database
         entity.getPersistentDataContainer().remove(markEntityKey); //IMPORTANT: Remove markerkey
     }
 
@@ -92,7 +86,7 @@ public class EntityListener implements Listener {
 
         if (!entity.getItem().getType().equals(Material.ELYTRA)) return; //Don't know what happened here
         LootEntityValue lev = new LootEntityValue(EntityType.ITEM_FRAME, entity.getLocation(), null, entity.getUniqueId());
-        StructureReloot.getInstance().getDatabase(entity.getWorld()).addEntity(lev); // Save to database
+        StructureReloot.getInstance().getDatabaseManager().getDatabase(entity.getWorld()).addEntity(lev); // Save to database
         entity.getPersistentDataContainer().remove(markEntityKey); //IMPORTANT: Remove markerkey
     }
 

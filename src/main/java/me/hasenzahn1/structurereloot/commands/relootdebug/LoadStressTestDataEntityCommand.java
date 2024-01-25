@@ -48,7 +48,7 @@ public class LoadStressTestDataEntityCommand extends SubCommand {
             x = i % div;
             y = i / div;
         }
-        StructureReloot.getInstance().getDatabase(world).addMultipleEntities(values);
+        StructureReloot.getInstance().getDatabaseManager().getDatabase(world).addMultipleEntities(values);
 
         sender.sendMessage(StructureReloot.PREFIX + "§aAdded " + amount + " new LootEntities");
         return true;
