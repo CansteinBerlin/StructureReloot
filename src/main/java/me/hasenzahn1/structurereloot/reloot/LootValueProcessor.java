@@ -23,7 +23,7 @@ public class LootValueProcessor {
         elements = new ArrayList<>();
     }
 
-    public void addElement(LootValueQueueElement element) {
+    public void addToProcessQueue(LootValueQueueElement element) {
         this.elements.add(element);
         if (!elements.isEmpty() && task == null) {
             startProcessingTask();
