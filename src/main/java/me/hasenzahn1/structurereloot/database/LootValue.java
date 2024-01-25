@@ -33,7 +33,7 @@ public abstract class LootValue {
         try {
             return new Location(world, Integer.parseInt(strings[0]), Integer.parseInt(strings[1]), Integer.parseInt(strings[2]));
         } catch (IndexOutOfBoundsException | NumberFormatException e) {
-            StructureReloot.LOGGER.log(Level.WARNING, "Malformed location string in database: " + loc);
+            StructureReloot.getInstance().getRelootActivityLogger().log(Level.WARNING, "Malformed location string in database: " + loc);
         }
         return null;
     }

@@ -1,7 +1,6 @@
 package me.hasenzahn1.structurereloot.database.tables;
 
 import me.hasenzahn1.structurereloot.StructureReloot;
-import me.hasenzahn1.structurereloot.config.LanguageConfig;
 import me.hasenzahn1.structurereloot.database.LootBlockValue;
 import me.hasenzahn1.structurereloot.databasesystem.Database;
 import me.hasenzahn1.structurereloot.databasesystem.Table;
@@ -94,7 +93,7 @@ public class BlockTable extends Table {
         }
 
         //Update Changes per day
-        StructureReloot.getInstance().getChangesPerDay().markAddBlock(value);
+        StructureReloot.getInstance().getRelootActivityLogger().logAddBlock(value);
         close(con);
     }
 
@@ -106,7 +105,7 @@ public class BlockTable extends Table {
             _addMultipleBlocks(values);
         }
         //Update Changes per day
-        for (LootBlockValue value : values) StructureReloot.getInstance().getChangesPerDay().markAddBlock(value);
+        for (LootBlockValue value : values) StructureReloot.getInstance().getRelootActivityLogger().logAddBlock(value);
     }
 
     public void _addMultipleBlocks(List<LootBlockValue> values) {
@@ -148,7 +147,7 @@ public class BlockTable extends Table {
         }
 
         //Update Changes per day
-        StructureReloot.getInstance().getChangesPerDay().markRemoveBlock(value);
+        StructureReloot.getInstance().getRelootActivityLogger().logRemoveBlock(value);
         close(con);
     }
 
@@ -167,7 +166,8 @@ public class BlockTable extends Table {
             e.printStackTrace();
         }
         //Update Changes per day
-        for (LootBlockValue value : values) StructureReloot.getInstance().getChangesPerDay().markRemoveBlock(value);
+        for (LootBlockValue value : values)
+            StructureReloot.getInstance().getRelootActivityLogger().logRemoveBlock(value);
         close(con);
     }
 

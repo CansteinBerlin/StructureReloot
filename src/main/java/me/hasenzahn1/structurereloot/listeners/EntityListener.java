@@ -1,7 +1,6 @@
 package me.hasenzahn1.structurereloot.listeners;
 
 import me.hasenzahn1.structurereloot.StructureReloot;
-import me.hasenzahn1.structurereloot.config.LanguageConfig;
 import me.hasenzahn1.structurereloot.database.LootBlockValue;
 import me.hasenzahn1.structurereloot.database.LootEntityValue;
 import org.bukkit.Bukkit;
@@ -34,15 +33,11 @@ public class EntityListener implements Listener {
     @EventHandler
     public void onLootGenerate(LootGenerateEvent event) {
         if (event.isPlugin()) return;
-        if (!(event.getInventoryHolder() instanceof StorageMinecart)) return;
-        StorageMinecart minecart = (StorageMinecart) event.getInventoryHolder();
+        if (!(event.getInventoryHolder() instanceof StorageMinecart minecart)) return;
         Entity e = Bukkit.getEntity(minecart.getUniqueId());
         if (e == null) return;
         LootEntityValue lev = new LootEntityValue(e.getType(), e.getLocation(), event.getLootTable(), minecart.getUniqueId());
         StructureReloot.getInstance().getDatabase(event.getWorld()).addEntity(lev);
-
-        if (StructureReloot.getInstance().isDebugMode())
-            StructureReloot.LOGGER.log(Level.INFO, "Added new LootEntity to Database at location " + lev.getLocationString() + " with lootTable: " + event.getLootTable());
     }
 
 
@@ -68,7 +63,7 @@ public class EntityListener implements Listener {
                         e.getPersistentDataContainer().set(markEntityKey, PersistentDataType.BYTE, (byte) 1);
 
                         if (StructureReloot.getInstance().isDebugMode())
-                            StructureReloot.LOGGER.log(Level.INFO, "Marked Itemframe as LootItemFrame at: " + LootBlockValue.locationToLocationString(e.getLocation()) + " in World " + event.getWorld().getName());
+                            StructureReloot.getInstance().getLogger().log(Level.INFO, "Marked Itemframe as LootItemFrame at: " + LootBlockValue.locationToLocationString(e.getLocation()) + " in World " + event.getWorld().getName());
                     }
                 }
             }
@@ -81,33 +76,24 @@ public class EntityListener implements Listener {
      */
     @EventHandler
     public void onPlayerDamageItemFrame(EntityDamageByEntityEvent event) {
-        if (!(event.getEntity() instanceof ItemFrame)) return;
+        if (!(event.getEntity() instanceof ItemFrame entity)) return;
         if (!event.getEntity().getPersistentDataContainer().has(markEntityKey, PersistentDataType.BYTE)) return;
 
-        ItemFrame entity = ((ItemFrame) event.getEntity());
         if (!entity.getItem().getType().equals(Material.ELYTRA)) return; //Don't know what happened here
         LootEntityValue lev = new LootEntityValue(EntityType.ITEM_FRAME, entity.getLocation(), null, entity.getUniqueId());
         StructureReloot.getInstance().getDatabase(entity.getWorld()).addEntity(lev); // Save to database
         entity.getPersistentDataContainer().remove(markEntityKey); //IMPORTANT: Remove markerkey
-
-        if (StructureReloot.getInstance().isDebugMode())
-            StructureReloot.LOGGER.log(Level.INFO, "Added new ItemFrame to Database at location " + lev.getLocationString());
     }
 
     @EventHandler
     public void onHangingBreak(HangingBreakEvent event) {
-        if (!(event.getEntity() instanceof ItemFrame)) return;
+        if (!(event.getEntity() instanceof ItemFrame entity)) return;
         if (!event.getEntity().getPersistentDataContainer().has(markEntityKey, PersistentDataType.BYTE)) return;
 
-        ItemFrame entity = ((ItemFrame) event.getEntity());
         if (!entity.getItem().getType().equals(Material.ELYTRA)) return; //Don't know what happened here
         LootEntityValue lev = new LootEntityValue(EntityType.ITEM_FRAME, entity.getLocation(), null, entity.getUniqueId());
         StructureReloot.getInstance().getDatabase(entity.getWorld()).addEntity(lev); // Save to database
         entity.getPersistentDataContainer().remove(markEntityKey); //IMPORTANT: Remove markerkey
-
-        if (StructureReloot.getInstance().isDebugMode())
-            StructureReloot.LOGGER.log(Level.INFO, "Added new ItemFrame to Database at location " + lev.getLocationString());
-
     }
 
 }

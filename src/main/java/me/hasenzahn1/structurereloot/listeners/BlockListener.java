@@ -1,7 +1,6 @@
 package me.hasenzahn1.structurereloot.listeners;
 
 import me.hasenzahn1.structurereloot.StructureReloot;
-import me.hasenzahn1.structurereloot.config.LanguageConfig;
 import me.hasenzahn1.structurereloot.database.LootBlockValue;
 import org.bukkit.Location;
 import org.bukkit.Material;
@@ -17,7 +16,6 @@ import org.bukkit.loot.LootTable;
 import org.bukkit.loot.Lootable;
 
 import java.util.List;
-import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public class BlockListener implements Listener {
@@ -36,8 +34,6 @@ public class BlockListener implements Listener {
         LootTable lootTable = event.getLootTable();
         LootBlockValue lootBlockValue = new LootBlockValue(loc, lootTable);
         StructureReloot.getInstance().getDatabase(event.getWorld()).addBlock(lootBlockValue);
-        if (StructureReloot.getInstance().isDebugMode())
-            StructureReloot.LOGGER.log(Level.INFO, "Added new LootBlock to Database at location " + LootBlockValue.locationToLocationString(loc) + " with lootTable: " + lootTable);
     }
 
     /*
@@ -51,8 +47,6 @@ public class BlockListener implements Listener {
             LootTable lootTable = ((Lootable) b.getState()).getLootTable();
             LootBlockValue lbv = new LootBlockValue(loc, lootTable, b.getType(), ((Directional) b.getBlockData()).getFacing());
             StructureReloot.getInstance().getDatabase(loc.getWorld()).addBlock(lbv);
-            if (StructureReloot.getInstance().isDebugMode())
-                StructureReloot.LOGGER.log(Level.INFO, "Added new LootBlock to Database at location " + LootBlockValue.locationToLocationString(loc) + " with lootTable: §6" + lootTable);
         }
     }
 
@@ -68,8 +62,6 @@ public class BlockListener implements Listener {
         Location loc = b.getLocation();
         LootBlockValue lbv = new LootBlockValue(loc, lootTable, b.getType(), ((Directional) b.getBlockData()).getFacing());
         StructureReloot.getInstance().getDatabase(loc.getWorld()).addBlock(lbv);
-        if (StructureReloot.getInstance().isDebugMode())
-            StructureReloot.LOGGER.log(Level.INFO, "Added new LootBlock to Database at location " + LootBlockValue.locationToLocationString(loc) + " with lootTable: " + lootTable);
     }
 
 }

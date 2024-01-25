@@ -10,7 +10,7 @@ import me.hasenzahn1.structurereloot.config.LanguageConfig;
 import me.hasenzahn1.structurereloot.config.UpdateConfig;
 import me.hasenzahn1.structurereloot.database.WorldDatabase;
 import me.hasenzahn1.structurereloot.general.AutoRelootScheduler;
-import me.hasenzahn1.structurereloot.general.ChangesPerDay;
+import me.hasenzahn1.structurereloot.general.RelootActivityLogger;
 import me.hasenzahn1.structurereloot.general.RelootSettings;
 import me.hasenzahn1.structurereloot.listeners.BlockListener;
 import me.hasenzahn1.structurereloot.listeners.EntityListener;
@@ -24,7 +24,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.util.HashMap;
 import java.util.List;
-import java.util.logging.Logger;
 
 @Getter
 @Setter
@@ -32,11 +31,9 @@ public final class StructureReloot extends JavaPlugin {
 
     public static String PREFIX = "§b[§6StructureReloot§b] §r";
     private static StructureReloot instance;
-    public static Logger LOGGER;
 
     //Data Handling
     private boolean debugMode;
-    private String databasePath;
 
     //Configs
     private CustomConfig defaultConfig;
@@ -44,28 +41,27 @@ public final class StructureReloot extends JavaPlugin {
     private UpdateConfig blockUpdateConfig;
     private UpdateConfig entityUpdateConfig;
 
+    //Commands
     private CommandManager commandManager;
+
+    //Database Access
+    private String databasePath;
     private HashMap<World, WorldDatabase> databases;
 
     private LootValueChangeTask lootValueChangeTask;
-
-
     private AutoRelootScheduler autoRelootScheduler;
-
-    private ChangesPerDay changesPerDay;
+    private RelootActivityLogger relootActivityLogger;
 
     @Override
     public void onEnable() {
         ConfigurationSerialization.registerClass(RelootSettings.class);
 
         instance = this;
-        LOGGER = getLogger();
+        relootActivityLogger = new RelootActivityLogger(getLogger());
 
         initConfigs();
         databases = new HashMap<>();
-
-        changesPerDay = new ChangesPerDay();
-
+        
         lootValueChangeTask = new LootValueChangeTask();
 
         commandManager = new CommandManager(this);
@@ -148,7 +144,7 @@ public final class StructureReloot extends JavaPlugin {
     }
 
     public void createDatabase(World world) {
-        LOGGER.info("Found new world with name: " + world.getName());
+        relootActivityLogger.logNewWorld(world);
         WorldDatabase database = new WorldDatabase(databasePath, world);
         database.init();
         databases.put(world, database);

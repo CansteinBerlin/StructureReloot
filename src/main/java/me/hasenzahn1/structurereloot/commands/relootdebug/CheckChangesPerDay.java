@@ -1,7 +1,6 @@
 package me.hasenzahn1.structurereloot.commands.relootdebug;
 
 import me.hasenzahn1.structurereloot.StructureReloot;
-import me.hasenzahn1.structurereloot.config.LanguageConfig;
 import me.hasenzahn1.structurereloot.commandsystem.BaseCommand;
 import me.hasenzahn1.structurereloot.commandsystem.SubCommand;
 import org.bukkit.command.CommandSender;
@@ -14,7 +13,7 @@ public class CheckChangesPerDay extends SubCommand {
 
     @Override
     public boolean performCommand(CommandSender sender, String[] args) {
-        sender.sendMessage(StructureReloot.getInstance().getChangesPerDay().toString());
+        sender.sendMessage(StructureReloot.getInstance().getRelootActivityLogger().toString());
         return true;
     }
 }
