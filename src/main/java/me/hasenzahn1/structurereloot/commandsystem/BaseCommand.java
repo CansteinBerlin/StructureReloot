@@ -19,6 +19,8 @@ public abstract class BaseCommand {
         subCommands = new ArrayList<>();
     }
 
+    public abstract void sendInvalidCommandMessage(CommandSender sender);
+
     public boolean performCommand(CommandSender sender, String[] args) {
         if (args.length > 0) {
             for (SubCommand cmd : subCommands) {

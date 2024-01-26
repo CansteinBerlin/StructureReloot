@@ -23,17 +23,21 @@ public class RelootRegenCommand extends SubCommand {
     }
 
     @Override
+    public void sendInvalidCommandMessage(CommandSender sender) {
+        sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.invalidCommand",
+                "command", getCommandHistory(),
+                "args", StringUtils.listToCommandArgs(tabComplete(null, new String[]{""})) +
+                        " " +
+                        StringUtils.listToCommandArgs(tabComplete(null, new String[]{"", ""})) +
+                        " " +
+                        "<1/2/.../all>"
+        ));
+    }
+
+    @Override
     public boolean performCommand(CommandSender sender, String[] args) {
         if (args.length != 3) {
-            sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.invalidCommand",
-                    "command", getCommandHistory(),
-                    "args", StringUtils.listToCommandArgs(tabComplete(null, new String[]{""})) +
-                            " " +
-                            StringUtils.listToCommandArgs(tabComplete(null, new String[]{"", ""})) +
-                            " " +
-                            "<1/2/.../all>"
-            ));
-
+            sendInvalidCommandMessage(sender);
             return true;
         }
 
@@ -52,14 +56,7 @@ public class RelootRegenCommand extends SubCommand {
             try {
                 amount = Integer.parseInt(args[2]);
             } catch (NumberFormatException e) {
-                sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.invalidCommand",
-                        "command", getCommandHistory(),
-                        "args", StringUtils.listToCommandArgs(tabComplete(null, new String[]{""})) +
-                                " " +
-                                StringUtils.listToCommandArgs(tabComplete(null, new String[]{"", ""})) +
-                                " " +
-                                "<1/2/.../all>"
-                ));
+                sendInvalidCommandMessage(sender);
                 return true;
             }
         }
@@ -92,14 +89,7 @@ public class RelootRegenCommand extends SubCommand {
 
 
         } else {
-            sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.invalidCommand",
-                    "command", getCommandHistory(),
-                    "args", StringUtils.listToCommandArgs(tabComplete(null, new String[]{""})) +
-                            " " +
-                            StringUtils.listToCommandArgs(tabComplete(null, new String[]{"", ""})) +
-                            " " +
-                            "<1/2/.../all>"
-            ));
+            sendInvalidCommandMessage(sender);
         }
         return true;
     }

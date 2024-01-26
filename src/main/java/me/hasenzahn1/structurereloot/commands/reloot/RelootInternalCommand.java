@@ -4,6 +4,7 @@ import me.hasenzahn1.structurereloot.StructureReloot;
 import me.hasenzahn1.structurereloot.commandsystem.BaseCommand;
 import me.hasenzahn1.structurereloot.commandsystem.SubCommand;
 import me.hasenzahn1.structurereloot.util.ReflectionUtil;
+import org.bukkit.command.CommandSender;
 
 import java.lang.reflect.InvocationTargetException;
 import java.util.logging.Level;
@@ -21,5 +22,9 @@ public class RelootInternalCommand extends SubCommand {
                 StructureReloot.getInstance().getRelootActivityLogger().log(Level.SEVERE, "Could not register Subcommand for " + name);
             }
         }
+    }
+
+    @Override
+    public void sendInvalidCommandMessage(CommandSender sender) {
     }
 }

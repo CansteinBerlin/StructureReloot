@@ -24,14 +24,21 @@ public class RelootInfoCommand extends SubCommand {
     }
 
     @Override
+    public void sendInvalidCommandMessage(CommandSender sender) {
+        sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.invalidCommand"),
+                "command", getCommandHistory(),
+                "args", "<world>");
+    }
+
+    @Override
     public boolean performCommand(CommandSender sender, String[] args) {
+        //Invalid command
         if (args.length > 1) {
-            sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.invalidCommand"),
-                    "command", getCommandHistory(),
-                    "args", "<world>");
+            sendInvalidCommandMessage(sender);
             return true;
         }
 
+        //If no args are provided the sender has to be a player
         World world;
         if (args.length == 0) {
             if (!(sender instanceof Player)) {
@@ -39,7 +46,9 @@ public class RelootInfoCommand extends SubCommand {
                 return true;
             }
             world = ((Player) sender).getWorld();
-        } else {
+        }
+        //Otherwise the world is loaded
+        else {
             world = Bukkit.getWorld(args[0]);
             if (world == null) {
                 sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.reset.invalidWorld", "world", args[0]));
@@ -47,6 +56,7 @@ public class RelootInfoCommand extends SubCommand {
             }
         }
 
+        //Send the information screen
         sendPlayerInfoScreen(sender, world);
         return true;
     }
@@ -60,6 +70,12 @@ public class RelootInfoCommand extends SubCommand {
                 .collect(Collectors.toList());
     }
 
+    /**
+     * Send the information as a screen.
+     *
+     * @param sender The sender to send the message to
+     * @param world  The world to get the information from
+     */
     public static void sendPlayerInfoScreen(CommandSender sender, World world) {
         RelootSettings blockSettings = StructureReloot.getInstance().getBlockUpdateConfig().getSettingsForWorld(world);
         if (blockSettings == null) {
@@ -73,10 +89,11 @@ public class RelootInfoCommand extends SubCommand {
             return;
         }
 
+        //Get Title
         TextComponent titleLine = new TextComponent(LanguageConfig.getLang("info.header"));
         BaseComponent[] worldLine = new MineDown(LanguageConfig.getLang("info.worldLine", "world", world.getName())).toComponent();
 
-
+        //Get the converted settings
         BaseComponent[] blockSettingsText = convertSettings(LanguageConfig.getLang("info.blocks"), world, blockSettings, "block");
         BaseComponent[] entitySettingsText = convertSettings(LanguageConfig.getLang("info.entities"), world, entitySettings, "entity");
 
@@ -89,6 +106,15 @@ public class RelootInfoCommand extends SubCommand {
         sender.spigot().sendMessage(titleLine);
     }
 
+    /**
+     * Converts a Settings object to Components that can be sent
+     *
+     * @param type
+     * @param world
+     * @param settings
+     * @param commandType
+     * @return
+     */
     private static BaseComponent[] convertSettings(String type, World world, RelootSettings settings, String commandType) {
         TextComponent typeText = new TextComponent(type);
 

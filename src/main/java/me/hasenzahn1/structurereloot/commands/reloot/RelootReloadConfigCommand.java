@@ -21,12 +21,18 @@ public class RelootReloadConfigCommand extends SubCommand {
     }
 
     @Override
+    public void sendInvalidCommandMessage(CommandSender sender) {
+        sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.invalidCommand",
+                "command", getCommandHistory(),
+                "args", StringUtils.listToCommandArgs(tabComplete(sender, new String[]{""})))
+        );
+
+    }
+
+    @Override
     public boolean performCommand(CommandSender sender, String[] args) {
         if (args.length == 0 || args.length > 2) {
-            sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.invalidCommand",
-                    "command", getCommandHistory(),
-                    "args", StringUtils.listToCommandArgs(tabComplete(sender, new String[]{""}))));
-
+            sendInvalidCommandMessage(sender);
             return true;
         }
 
@@ -70,9 +76,7 @@ public class RelootReloadConfigCommand extends SubCommand {
             }
 
             default -> {
-                sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.invalidCommand",
-                        "command", getCommandHistory(),
-                        "args", StringUtils.listToCommandArgs(tabComplete(sender, new String[]{""}))));
+                sendInvalidCommandMessage(sender);
                 return true;
             }
         }

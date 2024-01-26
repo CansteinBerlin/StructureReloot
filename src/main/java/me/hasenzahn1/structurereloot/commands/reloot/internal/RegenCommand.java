@@ -21,6 +21,11 @@ public class RegenCommand extends SubCommand {
     }
 
     @Override
+    public void sendInvalidCommandMessage(CommandSender sender) {
+        
+    }
+
+    @Override
     public boolean performCommand(CommandSender sender, String[] args) {
         if (args.length != 3) {
             return true;

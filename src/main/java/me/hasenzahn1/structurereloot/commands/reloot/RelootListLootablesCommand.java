@@ -31,18 +31,21 @@ public class RelootListLootablesCommand extends SubCommand {
     }
 
     @Override
+    public void sendInvalidCommandMessage(CommandSender sender) {
+        sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.invalidCommand",
+                "command", getCommandHistory(),
+                "args", "<block/entity> <world> <page>"));
+    }
+
+    @Override
     public boolean performCommand(CommandSender sender, String[] args) {
         if (args.length > 3 || args.length == 0) {
-            sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.invalidCommand",
-                    "command", getCommandHistory(),
-                    "args", "<block/entity> <world> <page>"));
+            sendInvalidCommandMessage(sender);
             return true;
         }
 
         if (!args[0].equalsIgnoreCase("block") && !args[0].equalsIgnoreCase("entity")) {
-            sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.invalidCommand",
-                    "command", getCommandHistory(),
-                    "args", "<block/entity> <world> <page>"));
+            sendInvalidCommandMessage(sender);
             return true;
         }
 
@@ -64,9 +67,7 @@ public class RelootListLootablesCommand extends SubCommand {
         int page = 0;
         if (args.length == 3) {
             if (!SetMaxRelootCommand.isInt(args[2])) {
-                sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.invalidCommand",
-                        "command", getCommandHistory(),
-                        "args", "<block/entity> <world> <page>"));
+                sendInvalidCommandMessage(sender);
                 return true;
             } else {
                 page = Math.max(Integer.parseInt(args[2]) - 1, 0);

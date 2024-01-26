@@ -5,7 +5,7 @@ import org.bukkit.command.CommandSender;
 
 import java.util.Arrays;
 
-public class SubCommand extends BaseCommand {
+public abstract class SubCommand extends BaseCommand {
 
     protected BaseCommand parent;
 
@@ -13,6 +13,9 @@ public class SubCommand extends BaseCommand {
         super(name, permission);
         this.parent = parent;
     }
+
+    @Override
+    public abstract void sendInvalidCommandMessage(CommandSender sender);
 
     @Override
     public boolean performCommand(CommandSender sender, String[] args) {

@@ -21,13 +21,19 @@ public class RelootResetCommand extends SubCommand {
     }
 
     @Override
+    public void sendInvalidCommandMessage(CommandSender sender) {
+        sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.invalidCommand",
+                "command", getCommandHistory(),
+                "args", StringUtils.listToCommandArgs(tabComplete(null, new String[]{""})) +
+                        " " +
+                        StringUtils.listToCommandArgs(tabComplete(null, new String[]{"", ""})))
+        );
+    }
+
+    @Override
     public boolean performCommand(CommandSender sender, String[] args) {
         if (args.length != 2) {
-            sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.invalidCommand",
-                    "command", getCommandHistory(),
-                    "args", StringUtils.listToCommandArgs(tabComplete(null, new String[]{""})) +
-                            " " +
-                            StringUtils.listToCommandArgs(tabComplete(null, new String[]{"", ""}))));
+            sendInvalidCommandMessage(sender);
             return true;
         }
         World world = Bukkit.getWorld(args[1]);
@@ -43,11 +49,7 @@ public class RelootResetCommand extends SubCommand {
             StructureReloot.getInstance().getDatabaseManager().getDatabase(world).removeAllBlocks();
             sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.reset.removedBlocks"));
         } else {
-            sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.invalidCommand",
-                    "command", getCommandHistory(),
-                    "args", StringUtils.listToCommandArgs(tabComplete(null, new String[]{""})) +
-                            " " +
-                            StringUtils.listToCommandArgs(tabComplete(null, new String[]{"", ""}))));
+            sendInvalidCommandMessage(sender);
         }
 
         return true;

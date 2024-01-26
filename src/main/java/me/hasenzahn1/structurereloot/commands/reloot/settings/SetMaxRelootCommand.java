@@ -17,11 +17,16 @@ public class SetMaxRelootCommand extends SubCommand {
     }
 
     @Override
+    public void sendInvalidCommandMessage(CommandSender sender) {
+        sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.invalidCommand",
+                "command", getCommandHistory(),
+                "args", "<world> <block/entity> <amount>"));
+    }
+
+    @Override
     public boolean performCommand(CommandSender sender, String[] args) {
         if (args.length != 3) {
-            sender.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.invalidCommand",
-                    "command", getCommandHistory(),
-                    "args", "<world> <block/entity> <amount>"));
+            sendInvalidCommandMessage(sender);
             return true;
         }
 
