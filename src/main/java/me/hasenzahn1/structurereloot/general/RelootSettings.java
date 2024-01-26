@@ -17,11 +17,14 @@ public class RelootSettings implements ConfigurationSerializable {
 
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm:ss");
 
+    //Serialized
     public boolean relootOnStartup;
     public int maxRelootAmount;
     public LocalDateTime nextDate;
-    public long duration;
     public String durationPattern;
+
+    //Internal
+    public long duration;
     private boolean shouldBeRelooted;
 
     public RelootSettings(boolean relootOnStartup, int maxRelootAmount, String durationPattern) {

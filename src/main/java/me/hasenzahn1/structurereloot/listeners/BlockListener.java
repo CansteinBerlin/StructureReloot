@@ -81,21 +81,6 @@ public class BlockListener implements Listener {
         else handleNonDirectionalBlock(b);
     }
 
-    private void handleDirectionalBlock(Block block) {
-        Location loc = block.getLocation();
-        LootTable lootTable = ((Lootable) block.getState()).getLootTable();
-        if (lootTable == null) return;
-        LootBlockValue lbv = new LootBlockValue(loc, lootTable, block.getType(), ((Directional) block.getBlockData()).getFacing());
-        StructureReloot.getInstance().getDatabaseManager().getDatabase(loc.getWorld()).addBlock(lbv);
-    }
-
-    private void handleNonDirectionalBlock(Block block) {
-        Location loc = block.getLocation();
-        LootTable lootTable = ((Lootable) block.getState()).getLootTable();
-        if (lootTable == null) return;
-        LootBlockValue lbv = new LootBlockValue(loc, lootTable, block.getType(), BlockFace.UP);
-        StructureReloot.getInstance().getDatabaseManager().getDatabase(loc.getWorld()).addBlock(lbv);
-    }
 
     /*
     We have to save the lootTable of each suspicious sand/gravel as they are removed when brushing the block
@@ -115,29 +100,47 @@ public class BlockListener implements Listener {
     public void onBlockDropItem(BlockDropItemEvent event) {
         //System.out.println(new ClassDebug(event));
         if (!(event.getBlockState() instanceof BrushableBlock)) return;
-        if (!((BrushableBlock) event.getBlockState()).getPersistentDataContainer().has(SAVED_LOOT_TABLE)) return;
 
-        //Create, Fetch and Save LootValue
-        Location loc = event.getBlock().getLocation();
-        NamespacedKey key = NamespacedKey.fromString(((BrushableBlock) event.getBlockState()).getPersistentDataContainer().get(SAVED_LOOT_TABLE, PersistentDataType.STRING));
-        if (key == null) return;
-        LootTable lootTable = Bukkit.getLootTable(key);
-        LootBlockValue lbv = new LootBlockValue(loc, lootTable, event.getBlockState().getType(), BlockFace.UP);
-        StructureReloot.getInstance().getDatabaseManager().getDatabase(loc.getWorld()).addBlock(lbv);
+        //Handle the block
+        handleBrushBlock(event.getBlockState().getBlock());
     }
 
     @EventHandler
     public void onBlockConvertToEntity(EntityChangeBlockEvent event) {
         if (!(event.getBlock().getState() instanceof BrushableBlock)) return;
-        if (!(((BrushableBlock) event.getBlock().getState()).getPersistentDataContainer().has(SAVED_LOOT_TABLE)))
+
+        //Handle the Block
+        handleBrushBlock(event.getBlock());
+    }
+
+
+    //============ Handler Methods ============//
+    private void handleBrushBlock(Block block) {
+        if (!(((BrushableBlock) block.getState()).getPersistentDataContainer().has(SAVED_LOOT_TABLE)))
             return;
 
         //Create, Fetch and Save LootValue
-        Location loc = event.getBlock().getLocation();
-        NamespacedKey key = NamespacedKey.fromString(((BrushableBlock) event.getBlock().getState()).getPersistentDataContainer().get(SAVED_LOOT_TABLE, PersistentDataType.STRING));
+        Location loc = block.getLocation();
+        NamespacedKey key = NamespacedKey.fromString(((BrushableBlock) block.getState()).getPersistentDataContainer().get(SAVED_LOOT_TABLE, PersistentDataType.STRING));
         if (key == null) return;
         LootTable lootTable = Bukkit.getLootTable(key);
-        LootBlockValue lbv = new LootBlockValue(loc, lootTable, event.getBlock().getState().getType(), BlockFace.UP);
+        LootBlockValue lbv = new LootBlockValue(loc, lootTable, block.getState().getType(), BlockFace.UP);
+        StructureReloot.getInstance().getDatabaseManager().getDatabase(loc.getWorld()).addBlock(lbv);
+    }
+
+    private void handleDirectionalBlock(Block block) {
+        Location loc = block.getLocation();
+        LootTable lootTable = ((Lootable) block.getState()).getLootTable();
+        if (lootTable == null) return;
+        LootBlockValue lbv = new LootBlockValue(loc, lootTable, block.getType(), ((Directional) block.getBlockData()).getFacing());
+        StructureReloot.getInstance().getDatabaseManager().getDatabase(loc.getWorld()).addBlock(lbv);
+    }
+
+    private void handleNonDirectionalBlock(Block block) {
+        Location loc = block.getLocation();
+        LootTable lootTable = ((Lootable) block.getState()).getLootTable();
+        if (lootTable == null) return;
+        LootBlockValue lbv = new LootBlockValue(loc, lootTable, block.getType(), BlockFace.UP);
         StructureReloot.getInstance().getDatabaseManager().getDatabase(loc.getWorld()).addBlock(lbv);
     }
 

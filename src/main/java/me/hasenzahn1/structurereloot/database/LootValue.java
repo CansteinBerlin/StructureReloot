@@ -28,16 +28,6 @@ public abstract class LootValue {
         this.lootTable = lootTable != null ? Bukkit.getLootTable(lootTable) : null;
     }
 
-    public static Location getLocFromString(World world, String loc) {
-        String[] strings = loc.split(",");
-        try {
-            return new Location(world, Integer.parseInt(strings[0]), Integer.parseInt(strings[1]), Integer.parseInt(strings[2]));
-        } catch (IndexOutOfBoundsException | NumberFormatException e) {
-            StructureReloot.getInstance().getRelootActivityLogger().log(Level.WARNING, "Malformed location string in database: " + loc);
-        }
-        return null;
-    }
-
     public String getStringLootTable() {
         return lootTable != null ? lootTable.toString() : "";
     }
@@ -48,6 +38,17 @@ public abstract class LootValue {
 
     public static String locationToLocationString(Location loc) {
         return loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ();
+    }
+
+    
+    public static Location getLocFromString(World world, String loc) {
+        String[] strings = loc.split(",");
+        try {
+            return new Location(world, Integer.parseInt(strings[0]), Integer.parseInt(strings[1]), Integer.parseInt(strings[2]));
+        } catch (IndexOutOfBoundsException | NumberFormatException e) {
+            StructureReloot.getInstance().getRelootActivityLogger().log(Level.WARNING, "Malformed location string in database: " + loc);
+        }
+        return null;
     }
 
 }

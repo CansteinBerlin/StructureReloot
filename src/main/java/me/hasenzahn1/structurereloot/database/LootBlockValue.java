@@ -27,6 +27,7 @@ public class LootBlockValue extends LootValue {
 
         blockMaterial = loc.getBlock().getType();
         BlockData data = loc.getBlock().getBlockData();
+        //Some blocks are not directional, The Suspicious sand block as an example. Defaults to NORTH
         if (data instanceof Directional) {
             facing = ((Directional) data).getFacing();
         } else {
@@ -59,10 +60,12 @@ public class LootBlockValue extends LootValue {
             location.getBlock().setBlockData(data);
         }
 
-        //Set Loottable of Lootable Chest and Dispenser
+        //Set Loottable of Lootable Blocks
         BlockState state = location.getBlock().getState();
         if (state instanceof Lootable) {
             ((Lootable) state).setLootTable(lootTable);
+
+            //Suspicious Blocks have to be marked as they lose their LootTable
             if (state instanceof BrushableBlock) {
                 ((BrushableBlock) state).getPersistentDataContainer().set(BlockListener.SAVED_LOOT_TABLE, PersistentDataType.STRING, lootTable + "");
             }

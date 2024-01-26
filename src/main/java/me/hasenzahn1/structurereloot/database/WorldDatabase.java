@@ -93,11 +93,4 @@ public class WorldDatabase extends Database {
     public void removeAllEntitys() {
         removeMultipleEntities(getAllEntities());
     }
-
-
-    //############# Caching ##############//
-    public void setCacheRemove(boolean value) {
-        getTable(EntityTable.class).setCacheRemove(value);
-        getTable(BlockTable.class).setCacheRemove(value);
-    }
 }

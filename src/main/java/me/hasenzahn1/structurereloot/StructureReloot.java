@@ -20,8 +20,6 @@ import org.bukkit.ChatColor;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
-//TODO: SUS BLOCK CHANGING TO ENTITY SHOULD BE SAVED
-
 @Getter
 @Setter
 public final class StructureReloot extends JavaPlugin {

@@ -40,8 +40,10 @@ public class LootEntityValue extends LootValue {
 
     @Override
     public void reloot() {
+        //Center on Block
         location.add(0.5, 0.5, 0.5);
 
+        //Remove all Entities inside the block that could cause it to be removed
         Collection<Entity> entities = location.getWorld().getNearbyEntities(location, 0.5, 0.5, 0.5);
         for (Entity e : entities) {
             e.teleport(e.getLocation().add(0, -500, 0));
@@ -53,17 +55,23 @@ public class LootEntityValue extends LootValue {
         }
 
         //Check if the block the item frame is placed does not destroy the frame
-        if (!location.getBlock().getType().isAir()) {
+        if (!location.getBlock().getType().isAir() && entity.equals(EntityType.ITEM_FRAME)) {
             location.getBlock().setType(Material.AIR);
         }
 
-        Entity spawned = location.getWorld().spawnEntity(location, entity); //Spawn Entity
-        if (lootTable == null && spawned instanceof ItemFrame) {
-            ((ItemFrame) spawned).setItem(new ItemStack(Material.ELYTRA)); //If itemframe set item
-            spawned.getPersistentDataContainer().set(EntityListener.markEntityKey, PersistentDataType.BYTE, (byte) 1); //Mark entity
+        //Spawn the Entity
+        Entity spawned = location.getWorld().spawnEntity(location, entity);
 
-        } else if (spawned instanceof Lootable) {
-            ((Lootable) spawned).setLootTable(lootTable); //If StorageMinecart set LootTable
+        //If the Spawned entity is an Itemframe mark it and set the item to an elytra
+        if (spawned instanceof ItemFrame) {
+            ((ItemFrame) spawned).setItem(new ItemStack(Material.ELYTRA));
+            spawned.getPersistentDataContainer().set(EntityListener.markEntityKey, PersistentDataType.BYTE, (byte) 1);
+            return;
+        }
+
+        //If spawned is another Entity that can store a loottable set that instead
+        if (spawned instanceof Lootable) {
+            ((Lootable) spawned).setLootTable(lootTable);
         }
     }
 
