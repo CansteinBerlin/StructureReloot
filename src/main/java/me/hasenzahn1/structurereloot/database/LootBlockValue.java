@@ -22,6 +22,12 @@ public class LootBlockValue extends LootValue {
     private final Material blockMaterial;
     private final BlockFace facing;
 
+    /**
+     * Create a new LootBlockValue through code.
+     *
+     * @param loc       The location the block is at
+     * @param lootTable The lootTable the block has
+     */
     public LootBlockValue(Location loc, LootTable lootTable) {
         super(loc, lootTable);
 
@@ -35,6 +41,14 @@ public class LootBlockValue extends LootValue {
         }
     }
 
+    /**
+     * Create a new LootBlockValue through code
+     *
+     * @param loc           The location the block is at
+     * @param lootTable     The lootTable the block has
+     * @param blockMaterial The material the block has
+     * @param facing        The Direction the block is facing
+     */
     public LootBlockValue(Location loc, LootTable lootTable, Material blockMaterial, BlockFace facing) {
         super(loc, lootTable);
 
@@ -42,6 +56,15 @@ public class LootBlockValue extends LootValue {
         this.facing = facing;
     }
 
+    /**
+     * Create a new LootBlockValue form the database
+     *
+     * @param world         The World the block is in
+     * @param loc           The Location the block is at
+     * @param lootTable     The lootTable the block has
+     * @param blockMaterial The material the block has
+     * @param facing        The direction the block is facing
+     */
     public LootBlockValue(World world, String loc, NamespacedKey lootTable, String blockMaterial, String facing) {
         super(world, loc, lootTable);
 
@@ -49,6 +72,9 @@ public class LootBlockValue extends LootValue {
         this.facing = BlockFace.valueOf(facing);
     }
 
+    /**
+     * Method to reloot that specific block
+     */
     @Override
     public void reloot() {
         location.getBlock().setType(Material.AIR); //Reset block

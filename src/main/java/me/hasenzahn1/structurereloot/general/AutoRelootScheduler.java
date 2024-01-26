@@ -7,6 +7,9 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.List;
 
+/**
+ * This class checks all worlds if they need to be relooted.
+ */
 public class AutoRelootScheduler extends BukkitRunnable {
 
     private final StructureReloot instance;

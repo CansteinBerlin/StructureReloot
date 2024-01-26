@@ -27,6 +27,13 @@ public class RelootSettings implements ConfigurationSerializable {
     public long duration;
     private boolean shouldBeRelooted;
 
+    /**
+     * Should be used when creating the settings Object via code.
+     *
+     * @param relootOnStartup Whether a reloot should be started when the server starts.
+     * @param maxRelootAmount The maximum amount of block/entities that should be relooted
+     * @param durationPattern The amount of time between Reloots
+     */
     public RelootSettings(boolean relootOnStartup, int maxRelootAmount, String durationPattern) {
         this.relootOnStartup = relootOnStartup;
         this.maxRelootAmount = maxRelootAmount;
@@ -36,6 +43,11 @@ public class RelootSettings implements ConfigurationSerializable {
         shouldBeRelooted = relootOnStartup;
     }
 
+    /**
+     * Should not be used!!! Only for usage with loading from the config
+     *
+     * @param fields
+     */
     public RelootSettings(Map<String, Object> fields) {
         relootOnStartup = (boolean) fields.get("relootOnStartup");
         maxRelootAmount = (int) fields.get("maxRelootAmount");
@@ -45,23 +57,40 @@ public class RelootSettings implements ConfigurationSerializable {
         shouldBeRelooted = relootOnStartup;
     }
 
+    /**
+     * Calculates when the nextReloot should take place, provided the reloot just happened
+     */
     public void nextDate() {
         nextDate = LocalDateTime.now().plusSeconds(duration);
         shouldBeRelooted = false;
     }
 
+    /**
+     * Returns true if the setting (block/entity) in the respective world should be relooted
+     *
+     * @return whether this setting needs a reloot
+     */
     public boolean needsUpdate() {
         return ChronoUnit.SECONDS.between(LocalDateTime.now(), nextDate) <= 0 || shouldBeRelooted;
     }
 
+    /**
+     * Returns the maximum amount of blocks/entities that should be relooted. Returns Integer.MAX_VALUE if all elements should be relooted
+     *
+     * @return the amount of elements that should be relooted
+     */
     public int getMaxRelootAmount() {
         return maxRelootAmount < 0 ? Integer.MAX_VALUE : maxRelootAmount;
     }
 
-    public long setDurationPattern(String durationPattern) {
+    /**
+     * Method to set the duration pattern and convert them to a second's duration
+     *
+     * @param durationPattern The Duration pattern, e.g. 2h30m
+     */
+    public void setDurationPattern(String durationPattern) {
         this.durationPattern = durationPattern;
         this.duration = TimeUtil.parsePeriodToSeconds(durationPattern);
-        return this.duration;
     }
 
     @Override

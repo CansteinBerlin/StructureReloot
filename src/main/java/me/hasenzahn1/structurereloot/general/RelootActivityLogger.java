@@ -26,26 +26,56 @@ public class RelootActivityLogger {
         formatter = DateTimeFormatter.ofPattern("dd-MM-yyy hh:mm:ss");
     }
 
+    /**
+     * Logs the adding of a block to the database to the log file/console
+     *
+     * @param value
+     */
     public void logAddBlock(LootBlockValue value) {
         log(Level.OFF, "Added new LootBlock at " + value.getLocationString() + " in " + value.getLocation().getWorld().getName());
     }
 
+    /**
+     * Logs the adding of an entity to the database to the log file/console
+     *
+     * @param value
+     */
     public void logAddEntity(LootEntityValue value) {
         log(Level.OFF, "Added new LootEntity at " + value.getLocationString() + " in " + value.getLocation().getWorld().getName());
     }
 
+    /**
+     * Logs the removal of a block from a database to the log file/console
+     *
+     * @param value
+     */
     public void logRemoveBlock(LootBlockValue value) {
         log(Level.OFF, "Removed or relooted LootBlock at " + value.getLocationString() + " in " + value.getLocation().getWorld().getName());
     }
 
+    /**
+     * Logs the removal of an entity from a database to the log file/console
+     *
+     * @param value
+     */
     public void logRemoveEntity(LootEntityValue value) {
         log(Level.OFF, "Removed or relooted LootEntity at " + value.getLocationString() + " in " + value.getLocation().getWorld().getName());
     }
 
+    /**
+     * Logs the creation of a new world database to the log file/console
+     *
+     * @param world
+     */
     public void logNewWorld(World world) {
         log(Level.INFO, "Found new world with name: " + world.getName());
     }
 
+    /**
+     * General log method to the text file and the log file
+     *
+     * @param level The Log level. Level.OFF represents the debug level, and is sent to the textfile but only to the console if the plugin is in debug mode
+     */
     public void log(Level level, String message) {
         logToTextFile("[" + ((level != Level.OFF) ? level.getName() : "DEBUG") + "]: " + message + "\n");
         if (level != Level.OFF || StructureReloot.getInstance().isDebugMode()) {
@@ -53,6 +83,9 @@ public class RelootActivityLogger {
         }
     }
 
+    /**
+     * Creates a new log file if not exists
+     */
     private void create() {
         DateTimeFormatter f = DateTimeFormatter.ISO_LOCAL_DATE;
         String fileTitle = f.format(LocalDateTime.now()) + ".txt";
@@ -67,6 +100,11 @@ public class RelootActivityLogger {
         }
     }
 
+    /**
+     * Logs a text to the log file
+     *
+     * @param text
+     */
     private void logToTextFile(String text) {
         create();
         try {

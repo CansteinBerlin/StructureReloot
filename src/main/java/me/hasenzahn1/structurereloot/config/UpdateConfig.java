@@ -15,6 +15,11 @@ public class UpdateConfig extends CustomConfig {
 
     private final HashMap<World, RelootSettings> settings;
 
+    /**
+     * Create a new Update config and loads all settings
+     *
+     * @param name
+     */
     public UpdateConfig(String name) {
         super(StructureReloot.getInstance(), name);
 
@@ -35,10 +40,19 @@ public class UpdateConfig extends CustomConfig {
         if (isNew) update();
     }
 
+    /**
+     * Gets the Settings for a world
+     *
+     * @param world
+     * @return
+     */
     public RelootSettings getSettingsForWorld(World world) {
         return settings.getOrDefault(world, null);
     }
 
+    /**
+     * Updates all settings files
+     */
     public void update() {
         FileConfiguration config = getConfig();
         for (Map.Entry<World, RelootSettings> entry : settings.entrySet()) {
@@ -47,6 +61,11 @@ public class UpdateConfig extends CustomConfig {
         saveConfig();
     }
 
+    /**
+     * Get a list of all settings that need updating
+     *
+     * @return
+     */
     public List<World> getNeededUpdates() {
         return settings.entrySet().stream().filter(entry -> entry.getValue().needsUpdate()).map(Map.Entry::getKey).collect(Collectors.toList());
     }

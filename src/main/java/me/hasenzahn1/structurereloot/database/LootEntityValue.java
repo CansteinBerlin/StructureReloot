@@ -24,6 +24,14 @@ public class LootEntityValue extends LootValue {
     private final EntityType entity;
     private final UUID uuid;
 
+    /**
+     * Create a new LootEntityValue through Code
+     *
+     * @param entity    The EntityType the block has
+     * @param location  The Location the entity is at
+     * @param lootTable The Loottable the entity has
+     * @param uuid      The uuid of the entity
+     */
     public LootEntityValue(EntityType entity, Location location, LootTable lootTable, UUID uuid) {
         super(location, lootTable);
 
@@ -31,6 +39,15 @@ public class LootEntityValue extends LootValue {
         this.uuid = uuid;
     }
 
+    /**
+     * Create a new LootEntityValue
+     *
+     * @param world      The World the entity is in
+     * @param entityType The EntityType of the entity
+     * @param location   The location the entity is a
+     * @param lootTable  The LootTable the entity has
+     * @param uuid       The uuid the entity has
+     */
     public LootEntityValue(World world, String entityType, String location, NamespacedKey lootTable, String uuid) {
         super(world, location, lootTable);
 
@@ -38,6 +55,9 @@ public class LootEntityValue extends LootValue {
         this.uuid = UUID.fromString(uuid);
     }
 
+    /**
+     * Method to reloot that specific entity
+     */
     @Override
     public void reloot() {
         //Center on Block
@@ -75,7 +95,7 @@ public class LootEntityValue extends LootValue {
         }
     }
 
-    public boolean checkSurroundingBlock(Location location, BlockFace... faces) {
+    private boolean checkSurroundingBlock(Location location, BlockFace... faces) {
         for (BlockFace face : faces) {
             if (location.clone().add(face.getDirection()).getBlock().getType().isSolid()) {
                 return true;

@@ -25,8 +25,12 @@ public class EntityListener implements Listener {
 
     public static NamespacedKey markEntityKey = new NamespacedKey(StructureReloot.getInstance(), "markedRelootEntity");
 
-    /*
-        Used to detect chest minecart opening
+
+    /**
+     * This listens to loot generation. If an entity generates it's loot it should be added to database.
+     * Entities this event applies to are: StorageMinekart.
+     *
+     * @param event
      */
     @EventHandler
     public void onLootGenerate(LootGenerateEvent event) {
@@ -39,8 +43,10 @@ public class EntityListener implements Listener {
     }
 
 
-    /*
-        If a chunk that has not been loaded is generated with an Item frame. The itemframe is marked for later use.
+    /**
+     * Newly generated Itemframes in the END have to be marked, as they are otherwise non-distinguishable.
+     *
+     * @param event
      */
     @EventHandler
     public void onChunkLoad(ChunkLoadEvent event) {
@@ -62,8 +68,11 @@ public class EntityListener implements Listener {
         }.runTaskLater(StructureReloot.getInstance(), 2);
     }
 
-    /*
-        If itemframe get's damaged
+
+    /**
+     * When killing an itemframe the itemframe should be added to the config.
+     *
+     * @param event
      */
     @EventHandler
     public void onPlayerDamageItemFrame(EntityDamageByEntityEvent event) {
@@ -71,12 +80,22 @@ public class EntityListener implements Listener {
         handleBrokenItemFrame(entity);
     }
 
+    /**
+     * When an Itemframe is killed through blocks, or other events the itemframe should be added to the config.
+     *
+     * @param event
+     */
     @EventHandler
     public void onHangingBreak(HangingBreakEvent event) {
         if (!(event.getEntity() instanceof ItemFrame entity)) return;
         handleBrokenItemFrame(entity);
     }
 
+    /**
+     * Add the Itemframe to the config, only if they are marked.
+     *
+     * @param itemFrame
+     */
     private void handleBrokenItemFrame(ItemFrame itemFrame) {
         if (!itemFrame.getPersistentDataContainer().has(markEntityKey, PersistentDataType.BYTE)) // Not marked. Ignore!
             return;

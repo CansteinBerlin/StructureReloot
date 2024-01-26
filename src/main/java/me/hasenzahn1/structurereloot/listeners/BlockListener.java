@@ -30,9 +30,11 @@ public class BlockListener implements Listener {
 
     public static final NamespacedKey SAVED_LOOT_TABLE = new NamespacedKey(StructureReloot.getInstance(), "loot_table_save");
 
-    /*
-        Should not receive entityLootables as well as plugins calling
-        LootTable.fillInventory(org.bukkit.inventory.Inventory, java.util.Random, LootContext).
+    /**
+     * This listens to loot generation. If a block generates it's loot it should be added to database.
+     * This listener is not supposed to listen to loot generation for broken blocks as some necessary information is missing
+     *
+     * @param event
      */
     @EventHandler
     public void onLootGenerate(LootGenerateEvent event) {
@@ -49,9 +51,11 @@ public class BlockListener implements Listener {
         StructureReloot.getInstance().getDatabaseManager().getDatabase(event.getWorld()).addBlock(lootBlockValue);
     }
 
-    /*
-        Blocks can be broken using explosion
-    */
+    /**
+     * Adds all relootable blocks that are broke due to an explosion to the database
+     *
+     * @param event
+     */
     @EventHandler
     public void onExplosionBreakChest(EntityExplodeEvent event) {
         //Fetch all broken Loot blocks
@@ -68,8 +72,10 @@ public class BlockListener implements Listener {
         }
     }
 
-    /*
-        Blocks can be broken by player
+    /**
+     * Adds all relootable blocks that are broken from players to the database
+     *
+     * @param event
      */
     @EventHandler
     public void onBlockBreak(BlockBreakEvent event) {
@@ -82,8 +88,11 @@ public class BlockListener implements Listener {
     }
 
 
-    /*
-    We have to save the lootTable of each suspicious sand/gravel as they are removed when brushing the block
+    /**
+     * This listener adds a new nbt tag to all Brushable blocks (Suspicious Sand/Gravel) that additionally saves the lootTable of the block.
+     * This is necessary as brushing a brushable block erases the lootTable data and replaces it with the item that is received.
+     *
+     * @param event
      */
     @EventHandler
     public void onChunkLoad(ChunkLoadEvent event) {
@@ -96,6 +105,11 @@ public class BlockListener implements Listener {
         }
     }
 
+    /**
+     * This event is used when a player finished to brush a brushable block. Then the block should be added to the database
+     *
+     * @param event
+     */
     @EventHandler
     public void onBlockDropItem(BlockDropItemEvent event) {
         //System.out.println(new ClassDebug(event));
@@ -105,6 +119,12 @@ public class BlockListener implements Listener {
         handleBrushBlock(event.getBlockState().getBlock());
     }
 
+    /**
+     * If a brushable block is converted to a falling entity, as the block below it is removed the block should als be added to the database.
+     * Brushable blocks will be removed when falling.
+     *
+     * @param event
+     */
     @EventHandler
     public void onBlockConvertToEntity(EntityChangeBlockEvent event) {
         if (!(event.getBlock().getState() instanceof BrushableBlock)) return;
@@ -115,6 +135,12 @@ public class BlockListener implements Listener {
 
 
     //============ Handler Methods ============//
+
+    /**
+     * Performs all necessary checks and add a brushable block to the database
+     *
+     * @param block The Brushable block to add
+     */
     private void handleBrushBlock(Block block) {
         if (!(((BrushableBlock) block.getState()).getPersistentDataContainer().has(SAVED_LOOT_TABLE)))
             return;
@@ -128,6 +154,11 @@ public class BlockListener implements Listener {
         StructureReloot.getInstance().getDatabaseManager().getDatabase(loc.getWorld()).addBlock(lbv);
     }
 
+    /**
+     * Adds a directional block like a chest, or a dispenser to the database. These have to be handled differently as non-directional blocks
+     *
+     * @param block The directional block to add
+     */
     private void handleDirectionalBlock(Block block) {
         Location loc = block.getLocation();
         LootTable lootTable = ((Lootable) block.getState()).getLootTable();
@@ -136,6 +167,11 @@ public class BlockListener implements Listener {
         StructureReloot.getInstance().getDatabaseManager().getDatabase(loc.getWorld()).addBlock(lbv);
     }
 
+    /**
+     * Adds a non-directional block to the database. An example of this is a decorated pot. The block is added with a default facing value of UP
+     *
+     * @param block The non-directional block to add
+     */
     private void handleNonDirectionalBlock(Block block) {
         Location loc = block.getLocation();
         LootTable lootTable = ((Lootable) block.getState()).getLootTable();

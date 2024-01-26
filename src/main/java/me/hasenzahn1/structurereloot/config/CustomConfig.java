@@ -1,6 +1,7 @@
 package me.hasenzahn1.structurereloot.config;
 
 import com.google.common.base.Charsets;
+import lombok.Getter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -10,6 +11,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
+@Getter
 public class CustomConfig {
 
     private File configFile;
@@ -25,7 +27,13 @@ public class CustomConfig {
         createCustomConfig(plugin, name);
     }
 
-    public void createCustomConfig(JavaPlugin plugin, String name) {
+    /**
+     * Creates a custom config from a file
+     *
+     * @param plugin
+     * @param name
+     */
+    private void createCustomConfig(JavaPlugin plugin, String name) {
         configFile = new File(plugin.getDataFolder(), name);
         if (!configFile.exists()) {
             isNew = true;
@@ -43,6 +51,9 @@ public class CustomConfig {
         config = YamlConfiguration.loadConfiguration(configFile);
     }
 
+    /**
+     * Deletes a config file completely
+     */
     public void delete() {
         String name = configFile.getName();
         try {
@@ -55,6 +66,9 @@ public class CustomConfig {
         }
     }
 
+    /**
+     * Reloads the config
+     */
     public void reloadConfig() {
         if (!configFile.exists()) {
             createCustomConfig(plugin, configFile.getName());
@@ -70,19 +84,14 @@ public class CustomConfig {
         config.setDefaults(YamlConfiguration.loadConfiguration(new InputStreamReader(defConfigStream, Charsets.UTF_8)));
     }
 
+    /**
+     * Saves the config
+     */
     public void saveConfig() {
         try {
             config.save(configFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public FileConfiguration getConfig() {
-        return config;
-    }
-
-    public String getName() {
-        return name;
     }
 }

@@ -12,6 +12,13 @@ public class LanguageConfig extends CustomConfig {
         languageConfig = this;
     }
 
+    /**
+     * Gets a language String from the config
+     *
+     * @param key  The language key
+     * @param args The args that are replaced
+     * @return
+     */
     public static String getLang(String key, String... args) {
         if (languageConfig == null) return "LANGUAGE CONFIG NOT LOADED";
         String lang = languageConfig.getConfig().getString(key, "&cUnknown or empty language key please check the config &6" + key);
@@ -27,6 +34,12 @@ public class LanguageConfig extends CustomConfig {
         return ChatColor.translateAlternateColorCodes('&', lang).replace("\\n", "\n");
     }
 
+    /**
+     * Gets a chat color from the config
+     *
+     * @param key The lang key from the config
+     * @return
+     */
     public static net.md_5.bungee.api.ChatColor getChatColor(String key) {
         String color = languageConfig.getConfig().getString(key, "MAGIC");
 

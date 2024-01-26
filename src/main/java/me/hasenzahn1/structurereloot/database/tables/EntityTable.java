@@ -36,7 +36,12 @@ public class EntityTable extends Table {
                 ");";
     }
 
-    //Get Values
+    /**
+     * Get an entity from the database at a specific location
+     *
+     * @param loc The location the entity is at
+     * @return
+     */
     public LootEntityValue getEntity(Location loc) {
         Connection con = getConnection();
         LootEntityValue value = null;
@@ -59,6 +64,11 @@ public class EntityTable extends Table {
         return value;
     }
 
+    /**
+     * Get all entities form the database
+     *
+     * @return
+     */
     public ArrayList<LootEntityValue> getAllEntities() {
         Connection con = getConnection();
         ArrayList<LootEntityValue> values = new ArrayList<>();
@@ -81,7 +91,11 @@ public class EntityTable extends Table {
     }
 
 
-    //Add Values
+    /**
+     * Add an entity to the database
+     *
+     * @param value
+     */
     public void addEntity(LootEntityValue value) {
         Connection con = getConnection();
         try (PreparedStatement statement = con.prepareStatement("INSERT OR REPLACE INTO " + getTableName() + " (location, lootTable, uuid, entityType) VALUES(?,?,?,?)")) {
@@ -100,6 +114,11 @@ public class EntityTable extends Table {
         close(con);
     }
 
+    /**
+     * Add multiple entities to the database. If there are more than 1000 entities the load is split into multiple transactions
+     *
+     * @param values
+     */
     public void addMultipleEntities(List<LootEntityValue> values) {
         if (values.size() > 1000) {
             _addMultipleEntities(values.subList(0, 999));
@@ -137,7 +156,11 @@ public class EntityTable extends Table {
     }
 
 
-    //Remove Values
+    /**
+     * Remove an entity from the database
+     *
+     * @param value
+     */
     public void removeEntity(LootEntityValue value) {
         Connection con = getConnection();
         try (PreparedStatement statement = con.prepareStatement("DELETE FROM " + getTableName() + " WHERE location=?")) {
@@ -151,6 +174,11 @@ public class EntityTable extends Table {
         close(con);
     }
 
+    /**
+     * Remove multiple entities from the database
+     *
+     * @param values
+     */
     public void removeMultipleEntities(List<LootEntityValue> values) {
         if (values.isEmpty()) return;
         Connection con = getConnection();

@@ -12,14 +12,33 @@ import java.util.stream.Collectors;
 
 public class RelootHelper {
 
+    /**
+     * Reloots Multiple blocks. For receiving a finish notice you can provide a callback that is called then the elements are processed
+     *
+     * @param values    The blocks to reloot
+     * @param callbacks Possible callbacks that are executed when the Elements finished relooting
+     */
     public static void relootMultipleBlocks(List<LootBlockValue> values, List<Runnable> callbacks) {
         StructureReloot.getInstance().getLootValueProcessor().addToProcessQueue(new LootValueProcessor.LootValueQueueElement(values, callbacks));
     }
 
+    /**
+     * Reloots Multiple entities. For receiving a finish notice you can provide a callback that is called then the elements are processed
+     *
+     * @param values    The entities to reloot
+     * @param callbacks Possible callbacks that are executed when the Elements finished relooting
+     */
     public static void relootMultipleEntities(List<LootEntityValue> values, List<Runnable> callbacks) {
         StructureReloot.getInstance().getLootValueProcessor().addToProcessQueue(new LootValueProcessor.LootValueQueueElement(values, callbacks));
     }
 
+    /**
+     * Reloot {amount} random entities in a specific World. For receiving a finish notice you can provide a callback that is called then the elements are processed
+     *
+     * @param world    The world to reloot in
+     * @param amount   The amount of entities to reloot
+     * @param runnable The callback that is executed when the elements finished processing
+     */
     public static void regenNEntities(World world, int amount, Runnable runnable) {
         //Get %amount% of random LootEntityValues to reloot
         List<LootEntityValue> levs = StructureReloot.getInstance().getDatabaseManager().getDatabase(world).getAllEntities();
@@ -34,6 +53,13 @@ public class RelootHelper {
         database.removeMultipleEntities(values);
     }
 
+    /**
+     * Reloot {amount} random blocks in a specific World. For receiving a finish notice you can provide a callback that is called then the elements are processed
+     *
+     * @param world    The world to reloot in
+     * @param amount   The amount of blocks to reloot
+     * @param runnable The callback that is executed when the elements finished processing
+     */
     public static void regenNBlocks(World world, int amount, Runnable runnable) {
         //Get %amount% of random LootBlockValues to reloot
         List<LootBlockValue> lbvs = StructureReloot.getInstance().getDatabaseManager().getDatabase(world).getAllBlocks();

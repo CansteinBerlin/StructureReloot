@@ -40,7 +40,13 @@ public abstract class LootValue {
         return loc.getBlockX() + "," + loc.getBlockY() + "," + loc.getBlockZ();
     }
 
-    
+    /**
+     * Gets a Location from a world and a string
+     *
+     * @param world The world the Location is in
+     * @param loc   The String representation of the location. Probably from the database
+     * @return The location created from the database
+     */
     public static Location getLocFromString(World world, String loc) {
         String[] strings = loc.split(",");
         try {

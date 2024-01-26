@@ -36,7 +36,12 @@ public class BlockTable extends Table {
                 ";";
     }
 
-    //get Value
+    /**
+     * Get a block from the database
+     *
+     * @param loc The location the block is at
+     * @return A LootBlockValue or null if not exists
+     */
     public LootBlockValue getBlock(Location loc) {
         Connection con = getConnection();
         LootBlockValue value = null;
@@ -57,6 +62,11 @@ public class BlockTable extends Table {
         return value;
     }
 
+    /**
+     * Get all blocks from the database
+     *
+     * @return
+     */
     public ArrayList<LootBlockValue> getAllBlocks() {
         Connection con = getConnection();
         ArrayList<LootBlockValue> values = new ArrayList<>();
@@ -76,7 +86,11 @@ public class BlockTable extends Table {
         return values;
     }
 
-    //add Value
+    /**
+     * Add a block to the database
+     *
+     * @param value
+     */
     public void addBlock(LootBlockValue value) {
         Connection con = getConnection();
         try (PreparedStatement statement = con.prepareStatement("INSERT OR REPLACE INTO " + getTableName() + " (location, lootTable, block, facing) VALUES(?,?,?,?)")) {
@@ -94,6 +108,11 @@ public class BlockTable extends Table {
         close(con);
     }
 
+    /**
+     * Add multiple blocks to the database. If there are more the 1000 blocks, the input in split into multiple transactions
+     *
+     * @param values
+     */
     public void addMultipleBlocks(List<LootBlockValue> values) {
         if (values.size() > 1000) {
             _addMultipleBlocks(values.subList(0, 999));
@@ -129,7 +148,11 @@ public class BlockTable extends Table {
         close(con);
     }
 
-    // remove Value
+    /**
+     * Remove a block from the database
+     *
+     * @param value
+     */
     public void removeBlock(LootBlockValue value) {
         Connection con = getConnection();
         try (PreparedStatement statement = con.prepareStatement("DELETE FROM " + getTableName() + " WHERE location=?")) {
@@ -144,6 +167,11 @@ public class BlockTable extends Table {
         close(con);
     }
 
+    /**
+     * Remove multiple blocks from the database
+     *
+     * @param values
+     */
     public void removeMultipleBlocks(List<LootBlockValue> values) {
         if (values.isEmpty()) return;
         Connection con = getConnection();
