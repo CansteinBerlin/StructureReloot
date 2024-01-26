@@ -2,16 +2,19 @@ package me.hasenzahn1.structurereloot.database;
 
 
 import lombok.Getter;
+import me.hasenzahn1.structurereloot.listeners.BlockListener;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.BrushableBlock;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.loot.LootTable;
 import org.bukkit.loot.Lootable;
+import org.bukkit.persistence.PersistentDataType;
 
 @Getter
 public class LootBlockValue extends LootValue {
@@ -60,6 +63,9 @@ public class LootBlockValue extends LootValue {
         BlockState state = location.getBlock().getState();
         if (state instanceof Lootable) {
             ((Lootable) state).setLootTable(lootTable);
+            if (state instanceof BrushableBlock) {
+                ((BrushableBlock) state).getPersistentDataContainer().set(BlockListener.SAVED_LOOT_TABLE, PersistentDataType.STRING, lootTable + "");
+            }
             state.update();
         }
     }
