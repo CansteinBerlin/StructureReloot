@@ -1,9 +1,10 @@
 package me.hasenzahn1.structurereloot;
 
 import co.aikar.commands.PaperCommandManager;
+import com.google.common.collect.ImmutableList;
 import lombok.Getter;
 import lombok.Setter;
-import me.hasenzahn1.structurereloot.aikar.RelootAikarCommand;
+import me.hasenzahn1.structurereloot.commands.RelootCommand;
 import me.hasenzahn1.structurereloot.config.CustomConfig;
 import me.hasenzahn1.structurereloot.config.LanguageConfig;
 import me.hasenzahn1.structurereloot.config.UpdateConfig;
@@ -68,8 +69,14 @@ public final class StructureReloot extends JavaPlugin {
 
         //Commands
         paperCommandManager = new PaperCommandManager(this);
-        paperCommandManager.registerCommand(new RelootAikarCommand());
+        paperCommandManager.registerCommand(new RelootCommand());
         paperCommandManager.enableUnstableAPI("help");
+        paperCommandManager.getCommandCompletions().registerCompletion("configName", c -> {
+            return ImmutableList.of("lang", "config", "entityupdatesettings", "blockupdatesettings");
+        });
+        paperCommandManager.getCommandCompletions().registerCompletion("boolean", c -> {
+            return ImmutableList.of("true", "false");
+        });
 
         //Register Listeners
         Bukkit.getPluginManager().registerEvents(new BlockListener(), this);

@@ -1,4 +1,4 @@
-package me.hasenzahn1.structurereloot.aikar;
+package me.hasenzahn1.structurereloot.commands;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.CommandHelp;
@@ -26,7 +26,7 @@ import java.util.List;
 
 @CommandAlias("reloot")
 @CommandPermission("structurereloot.command.reloot")
-public class RelootAikarCommand extends BaseCommand {
+public class RelootCommand extends BaseCommand {
 
     @HelpCommand
     @Syntax("")
@@ -108,6 +108,7 @@ public class RelootAikarCommand extends BaseCommand {
     @Subcommand("reloadConfig")
     @CommandPermission("structurereloot.command.reloadConfig")
     @Syntax("<name> (override: true/false)")
+    @CommandCompletion("@configName @boolean")
     public static void reloadConfig(Player player, String name, @Optional Boolean override) {
         if (override == null) override = false;
 
@@ -191,7 +192,7 @@ public class RelootAikarCommand extends BaseCommand {
             }
 
             //Repromt menu
-            RelootAikarCommand.listLootables(player, type, world, page);
+            RelootCommand.listLootables(player, type, world, page);
         }
 
         @Subcommand("remove")
@@ -215,7 +216,7 @@ public class RelootAikarCommand extends BaseCommand {
             }
 
             //Repromt Menu
-            RelootAikarCommand.listLootables(player, type, world, page);
+            RelootCommand.listLootables(player, type, world, page);
         }
 
         @Subcommand("setDuration")
@@ -241,7 +242,7 @@ public class RelootAikarCommand extends BaseCommand {
             }
 
             //Redisplay Settings Menu
-            RelootAikarCommand.info(player, world);
+            RelootCommand.info(player, world);
         }
 
         @Subcommand("setMaxRelootAmount")
@@ -258,7 +259,7 @@ public class RelootAikarCommand extends BaseCommand {
                 StructureReloot.getInstance().getEntityUpdateConfig().update();
             }
 
-            RelootAikarCommand.info(player, world);
+            RelootCommand.info(player, world);
         }
 
         @Subcommand("setRelootOnStartup")
@@ -275,7 +276,7 @@ public class RelootAikarCommand extends BaseCommand {
                 StructureReloot.getInstance().getEntityUpdateConfig().update();
             }
 
-            RelootAikarCommand.info(player, world);
+            RelootCommand.info(player, world);
         }
     }
 }

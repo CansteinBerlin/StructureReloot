@@ -1,16 +1,12 @@
 commands:
-  invalidCommand: "&cInvalid command. Please use &6/%command% %args%"
-  noPlayer: "&cYou have to be a player to use this command"
   invalidType: "&cInvalid value &6%value% &cfor type (block/entity)"
 
   reset:
-    invalidWorld: "&cUnknown world with name &6%world%"
     removedEntities: "&aSuccessfully removed all entities from the database"
     removedBlocks: "&aSuccessfully removed all blocks from the database"
   regen:
     sucEntity: "&aSuccessfully relooted &6%amount% &aentities in &6%time% &aseconds"
     sucBlock: "&aSuccessfully relooted &6%amount% &ablocks in &6%time% &aseconds"
-    sucBoth: "&aSuccessfully relooted &6%amount% &ablocks and entities in &6%time% &aseconds"
   reloadConfig:
     reloadSuccess: "&aSuccessfully reloaded the config: &6%config%"
     replaceSuccess: "&aSuccessfully replaced the config: &6%config%"
@@ -18,9 +14,6 @@ commands:
   info:
     noSettings: "&cNo Settings available for world &6%world%"
   settings:
-    invalidBool: "&cInvalid value &6%value% &cfor boolean (true/false)"
-    invalidType: "&cInvalid value &6%value% &cfor type (block/entity)"
-    invalidInt: "&cInvalid value &6%value% &cfor integer (1/2/3/...)"
     invalidPattern: "&cInvalid value &6%value% &cfor time pattern (bsp. 2h30m)"
   listlootables:
     noLootables: "&cThere are no lootable &6%type%&c in world &6%world%"
