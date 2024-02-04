@@ -13,7 +13,7 @@ public abstract class Table {
         this.tableName = tableName;
         this.database = database;
     }
-    
+
     public abstract String getCreationString();
 
     public String getTableName() {

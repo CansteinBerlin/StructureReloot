@@ -1,6 +1,7 @@
 commands:
   invalidCommand: "&cInvalid command. Please use &6/%command% %args%"
   noPlayer: "&cYou have to be a player to use this command"
+  invalidType: "&cInvalid value &6%value% &cfor type (block/entity)"
 
   reset:
     invalidWorld: "&cUnknown world with name &6%world%"
@@ -13,6 +14,7 @@ commands:
   reloadConfig:
     reloadSuccess: "&aSuccessfully reloaded the config: &6%config%"
     replaceSuccess: "&aSuccessfully replaced the config: &6%config%"
+    invalidConfig: "&cNo config with the name &6%config% &cfound"
   info:
     noSettings: "&cNo Settings available for world &6%world%"
   settings:
@@ -40,11 +42,11 @@ info:
   timeBetweenRelootHover: "&6This setting defines the duration between two cycles. E.g.: 2h30m"
 
   relootOnStartupLine:
-    "[%relootOnStartup%](hover=%relootOnStartupHover%) [true](color=%colorTrue% run_command=/reloot settings setRelootOnStartup %commandType% %world% true hover=%setHover%)[ &7| ](run_command= hover=%setHover%)[false](color=%colorFalse% run_command=/reloot settings setRelootOnStartup %commandType% %world% false hover=%setHover%)"
+    "[%relootOnStartup%](hover=%relootOnStartupHover%) [true](color=%colorTrue% run_command=/reloot internal setRelootOnStartup %commandType% %world% true hover=%setHover%)[ &7| ](run_command= hover=%setHover%)[false](color=%colorFalse% run_command=/reloot internal setRelootOnStartup %commandType% %world% false hover=%setHover%)"
   setMaxAmountLine:
-    "[%maxRelootAmount%](hover=%maxRelootAmountHover%) [%amount%](color=white suggest_command=/reloot settings setMaxRelootAmount %commandType% %world% hover=%setHover%)"
+    "[%maxRelootAmount%](hover=%maxRelootAmountHover%) [%amount%](color=white suggest_command=/reloot internal setMaxRelootAmount %commandType% %world% hover=%setHover%)"
   timeBetweenRelootLine:
-    "[%timeBetweenReloot%](hover=%timeBetweenRelootHover%) [%time%](color=white suggest_command=/reloot settings setDuration %commandType% %world% hover=%setHover%)"
+    "[%timeBetweenReloot%](hover=%timeBetweenRelootHover%) [%time%](color=white suggest_command=/reloot internal setDuration %commandType% %world% hover=%setHover%)"
 
 listLootTables:
   title: "&aList Lootable %type% for world:"

@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
 public class TimeUtil {
 
     private static final Pattern periodPattern = Pattern.compile("([0-9]+)([smhdMWwYy])");
-    
+
     public static Long parsePeriodToSeconds(String period) {
         if (period == null) return null;
         Matcher matcher = periodPattern.matcher(period);

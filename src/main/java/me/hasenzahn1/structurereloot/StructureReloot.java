@@ -1,10 +1,9 @@
 package me.hasenzahn1.structurereloot;
 
+import co.aikar.commands.PaperCommandManager;
 import lombok.Getter;
 import lombok.Setter;
-import me.hasenzahn1.structurereloot.commands.RelootCommand;
-import me.hasenzahn1.structurereloot.commands.RelootDebugCommand;
-import me.hasenzahn1.structurereloot.commandsystem.CommandManager;
+import me.hasenzahn1.structurereloot.aikar.RelootAikarCommand;
 import me.hasenzahn1.structurereloot.config.CustomConfig;
 import me.hasenzahn1.structurereloot.config.LanguageConfig;
 import me.hasenzahn1.structurereloot.config.UpdateConfig;
@@ -38,7 +37,7 @@ public final class StructureReloot extends JavaPlugin {
     private UpdateConfig entityUpdateConfig;
 
     //Commands
-    private CommandManager commandManager;
+    private PaperCommandManager paperCommandManager;
 
     //Database
     private DatabaseManager databaseManager;
@@ -68,9 +67,9 @@ public final class StructureReloot extends JavaPlugin {
         autoRelootScheduler.runTaskTimer(this, 20 * 5, 20 * 60);
 
         //Commands
-        commandManager = new CommandManager(this);
-        commandManager.addCommand(new RelootCommand());
-        commandManager.addCommand(new RelootDebugCommand());
+        paperCommandManager = new PaperCommandManager(this);
+        paperCommandManager.registerCommand(new RelootAikarCommand());
+        paperCommandManager.enableUnstableAPI("help");
 
         //Register Listeners
         Bukkit.getPluginManager().registerEvents(new BlockListener(), this);

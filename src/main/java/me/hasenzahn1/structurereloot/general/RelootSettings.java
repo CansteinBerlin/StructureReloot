@@ -15,6 +15,10 @@ import java.util.Map;
 @Setter
 public class RelootSettings implements ConfigurationSerializable {
 
+    public enum Type {
+        BLOCK, ENTITY
+    }
+
     private static final DateTimeFormatter FORMATTER = DateTimeFormatter.ofPattern("dd.MM.yyyy, HH:mm:ss");
 
     //Serialized

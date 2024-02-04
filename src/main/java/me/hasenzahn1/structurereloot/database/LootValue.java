@@ -8,6 +8,7 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.loot.LootTable;
 
+import java.util.Objects;
 import java.util.logging.Level;
 
 @Getter
@@ -34,6 +35,19 @@ public abstract class LootValue {
 
     public String getLocationString() {
         return locationToLocationString(location);
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LootValue value = (LootValue) o;
+        return Objects.equals(location, value.location) && Objects.equals(lootTable, value.lootTable);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(location, lootTable);
     }
 
     public static String locationToLocationString(Location loc) {
