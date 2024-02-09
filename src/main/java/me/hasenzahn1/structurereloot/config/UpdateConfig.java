@@ -9,6 +9,7 @@ import org.bukkit.configuration.file.FileConfiguration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
 public class UpdateConfig extends CustomConfig {
@@ -28,6 +29,11 @@ public class UpdateConfig extends CustomConfig {
 
         for (World world : Bukkit.getWorlds()) {
             //Load if exists
+            if (StructureReloot.getInstance().getDisabledWorlds().contains(world)) {
+                StructureReloot.getInstance().getRelootActivityLogger().log(Level.OFF, "Ignoring World " + world + " as it is disabled");
+                continue;
+            }
+
             if (config.contains(world.getName())) {
                 settings.put(world, config.getObject(world.getName(), RelootSettings.class));
                 continue;
@@ -67,7 +73,10 @@ public class UpdateConfig extends CustomConfig {
      * @return
      */
     public List<World> getNeededUpdates() {
-        return settings.entrySet().stream().filter(entry -> entry.getValue().needsUpdate()).map(Map.Entry::getKey).collect(Collectors.toList());
+        return settings.entrySet().stream()
+                .filter(entry -> entry.getValue().needsUpdate())
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
     }
 
 }

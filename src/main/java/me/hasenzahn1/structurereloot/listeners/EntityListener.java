@@ -36,6 +36,7 @@ public class EntityListener implements Listener {
     public void onLootGenerate(LootGenerateEvent event) {
         if (event.isPlugin()) return; // Don't capture loot generated from plugin
         if (!(event.getInventoryHolder() instanceof StorageMinecart minecart)) return;
+        if (StructureReloot.getInstance().getDisabledWorlds().contains(event.getWorld())) return;
 
         //Create Storage entry and save to the database
         LootEntityValue lev = new LootEntityValue(minecart.getType(), minecart.getLocation(), event.getLootTable(), minecart.getUniqueId());
@@ -52,6 +53,7 @@ public class EntityListener implements Listener {
     public void onChunkLoad(ChunkLoadEvent event) {
         if (!event.isNewChunk()) return; //Check only for newly created chunks
         if (!event.getWorld().getEnvironment().equals(World.Environment.THE_END)) return;
+        if (StructureReloot.getInstance().getDisabledWorlds().contains(event.getWorld())) return;
 
         //Wait for the chunk to load. Then mark the entity
         new BukkitRunnable() {
@@ -77,6 +79,8 @@ public class EntityListener implements Listener {
     @EventHandler
     public void onPlayerDamageItemFrame(EntityDamageByEntityEvent event) {
         if (!(event.getEntity() instanceof ItemFrame entity)) return;
+        if (StructureReloot.getInstance().getDisabledWorlds().contains(event.getEntity().getWorld())) return;
+
         handleBrokenItemFrame(entity);
     }
 
@@ -88,6 +92,8 @@ public class EntityListener implements Listener {
     @EventHandler
     public void onHangingBreak(HangingBreakEvent event) {
         if (!(event.getEntity() instanceof ItemFrame entity)) return;
+        if (StructureReloot.getInstance().getDisabledWorlds().contains(event.getEntity().getWorld())) return;
+
         handleBrokenItemFrame(entity);
     }
 

@@ -40,6 +40,7 @@ public class BlockListener implements Listener {
     public void onLootGenerate(LootGenerateEvent event) {
         if (event.getInventoryHolder() instanceof Entity) return;
         if (event.isPlugin()) return;
+        if (StructureReloot.getInstance().getDisabledWorlds().contains(event.getWorld())) return;
 
         // Do not Capture Broken Blocks
         Location loc = event.getLootContext().getLocation();
@@ -58,6 +59,8 @@ public class BlockListener implements Listener {
      */
     @EventHandler
     public void onExplosionBreakChest(EntityExplodeEvent event) {
+        if (StructureReloot.getInstance().getDisabledWorlds().contains(event.getEntity().getWorld())) return;
+
         //Fetch all broken Loot blocks
         List<Block> lootBlocks = event.blockList()
                 .stream()
@@ -81,6 +84,7 @@ public class BlockListener implements Listener {
     public void onBlockBreak(BlockBreakEvent event) {
         if (!(event.getBlock().getState() instanceof Lootable)) return;
         if (event.getBlock().getState() instanceof BrushableBlock) return; // Ignore Brushable Block
+        if (StructureReloot.getInstance().getDisabledWorlds().contains(event.getBlock().getWorld())) return;
 
         Block b = event.getBlock();
         if (b.getBlockData() instanceof Directional) handleDirectionalBlock(b);
@@ -96,6 +100,8 @@ public class BlockListener implements Listener {
      */
     @EventHandler
     public void onChunkLoad(ChunkLoadEvent event) {
+        if (StructureReloot.getInstance().getDisabledWorlds().contains(event.getWorld())) return;
+
         for (BlockState state : event.getChunk().getTileEntities()) {
             if (!(state instanceof BrushableBlock)) continue;
             LootTable table = ((BrushableBlock) state).getLootTable();
@@ -112,7 +118,7 @@ public class BlockListener implements Listener {
      */
     @EventHandler
     public void onBlockDropItem(BlockDropItemEvent event) {
-        //System.out.println(new ClassDebug(event));
+        if (StructureReloot.getInstance().getDisabledWorlds().contains(event.getBlock().getWorld())) return;
         if (!(event.getBlockState() instanceof BrushableBlock)) return;
 
         //Handle the block
@@ -127,6 +133,7 @@ public class BlockListener implements Listener {
      */
     @EventHandler
     public void onBlockConvertToEntity(EntityChangeBlockEvent event) {
+        if (StructureReloot.getInstance().getDisabledWorlds().contains(event.getEntity().getWorld())) return;
         if (!(event.getBlock().getState() instanceof BrushableBlock)) return;
 
         //Handle the Block

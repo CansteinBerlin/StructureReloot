@@ -17,8 +17,12 @@ import me.hasenzahn1.structurereloot.listeners.EntityListener;
 import me.hasenzahn1.structurereloot.reloot.LootValueProcessor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.World;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Getter
 @Setter
@@ -41,6 +45,7 @@ public final class StructureReloot extends JavaPlugin {
     private PaperCommandManager paperCommandManager;
 
     //Database
+    private List<World> disabledWorlds;
     private DatabaseManager databaseManager;
 
     //Automatic Relooting and processing of requested reloots
@@ -96,6 +101,13 @@ public final class StructureReloot extends JavaPlugin {
         PREFIX = ChatColor.translateAlternateColorCodes('&', defaultConfig.getConfig().getString("prefix", PREFIX));
         debugMode = defaultConfig.getConfig().getBoolean("debugMode", false);
         LootValueProcessor.CHANGE_AMOUNT = defaultConfig.getConfig().getInt("changesPerTick", 20);
+
+        disabledWorlds = new ArrayList<>();
+        for (String world : defaultConfig.getConfig().getStringList("world-blacklist")) {
+            System.out.println(world);
+            if (Bukkit.getWorld(world) != null) disabledWorlds.add(Bukkit.getWorld(world));
+        }
+        System.out.println(disabledWorlds);
     }
 
     @Override

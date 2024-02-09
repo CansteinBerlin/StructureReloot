@@ -1,5 +1,6 @@
 commands:
   invalidType: "&cInvalid value &6%value% &cfor type (block/entity)"
+  disabledWorld: "&cStructureReloot is disabled for this world &6%world%"
 
   reset:
     removedEntities: "&aSuccessfully removed all entities from the database"

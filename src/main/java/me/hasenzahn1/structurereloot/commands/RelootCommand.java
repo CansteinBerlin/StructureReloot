@@ -39,6 +39,10 @@ public class RelootCommand extends BaseCommand {
     @Syntax("(world)")
     public static void info(Player player, World world) {
         if (world == null) world = player.getWorld();
+        if (StructureReloot.getInstance().getDisabledWorlds().contains(world)) {
+            player.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.disabledWorld", "world", world.getName()));
+            return;
+        }
 
         //Gather Settings
         RelootSettings blockSettings = StructureReloot.getInstance().getBlockUpdateConfig().getSettingsForWorld(world);
@@ -74,6 +78,10 @@ public class RelootCommand extends BaseCommand {
     @Syntax("<block/entity> (world) (page)")
     public static void listLootables(Player player, RelootSettings.Type type, World world, @Optional Integer page) {
         if (page == null || page < 0) page = 0;
+        if (StructureReloot.getInstance().getDisabledWorlds().contains(world)) {
+            player.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.disabledWorld", "world", world.getName()));
+            return;
+        }
 
         List<? extends LootValue> values = type == RelootSettings.Type.BLOCK ?
                 StructureReloot.getInstance().getDatabaseManager().getDatabase(world).getAllBlocks() :
@@ -87,6 +95,10 @@ public class RelootCommand extends BaseCommand {
     @Syntax("<block/entity> <amount> (world)")
     public static void regen(Player player, RelootSettings.Type type, Integer amount, World world) {
         if (amount < 0) amount = Integer.MAX_VALUE;
+        if (StructureReloot.getInstance().getDisabledWorlds().contains(world)) {
+            player.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.disabledWorld", "world", world.getName()));
+            return;
+        }
 
         long millis = System.currentTimeMillis();
         Integer finalAmount = amount;
@@ -154,6 +166,11 @@ public class RelootCommand extends BaseCommand {
     @CommandPermission("structurereloot.command.reset")
     @Syntax("<block/entity> (world)")
     public static void reset(Player player, RelootSettings.Type type, World world) {
+        if (StructureReloot.getInstance().getDisabledWorlds().contains(world)) {
+            player.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.disabledWorld", "world", world.getName()));
+            return;
+        }
+
         if (type == RelootSettings.Type.BLOCK) {
             StructureReloot.getInstance().getDatabaseManager().getDatabase(world).removeAllEntitys();
             player.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.reset.removedEntities"));
@@ -171,6 +188,8 @@ public class RelootCommand extends BaseCommand {
         @Subcommand("regen")
         @Syntax("<block/entity> <world> <locString>")
         public static void regen(Player player, RelootSettings.Type type, World world, String locString) {
+            if (StructureReloot.getInstance().getDisabledWorlds().contains(world)) return;
+
             Location location = LootValue.getLocFromString(world, locString);
             WorldDatabase database = StructureReloot.getInstance().getDatabaseManager().getDatabase(world);
             int page;
@@ -198,6 +217,8 @@ public class RelootCommand extends BaseCommand {
         @Subcommand("remove")
         @Syntax("<block/entity> <world> <locString>")
         public static void remove(Player player, RelootSettings.Type type, World world, String locString) {
+            if (StructureReloot.getInstance().getDisabledWorlds().contains(world)) return;
+
             WorldDatabase database = StructureReloot.getInstance().getDatabaseManager().getDatabase(world);
             int page;
 
@@ -222,6 +243,8 @@ public class RelootCommand extends BaseCommand {
         @Subcommand("setDuration")
         @Syntax("<block/entity> <world> <pattern>")
         public static void setDuration(Player player, RelootSettings.Type type, World world, String arg) {
+            if (StructureReloot.getInstance().getDisabledWorlds().contains(world)) return;
+
             RelootSettings settings = (type == RelootSettings.Type.BLOCK) ?
                     StructureReloot.getInstance().getBlockUpdateConfig().getSettingsForWorld(world) :
                     StructureReloot.getInstance().getEntityUpdateConfig().getSettingsForWorld(world);
@@ -247,6 +270,8 @@ public class RelootCommand extends BaseCommand {
 
         @Subcommand("setMaxRelootAmount")
         public static void setMaxReloot(Player player, RelootSettings.Type type, World world, Integer amount) {
+            if (StructureReloot.getInstance().getDisabledWorlds().contains(world)) return;
+
             RelootSettings settings = (type == RelootSettings.Type.BLOCK) ?
                     StructureReloot.getInstance().getBlockUpdateConfig().getSettingsForWorld(world) :
                     StructureReloot.getInstance().getEntityUpdateConfig().getSettingsForWorld(world);
@@ -264,6 +289,8 @@ public class RelootCommand extends BaseCommand {
 
         @Subcommand("setRelootOnStartup")
         public static void setRelootOnStartup(Player player, RelootSettings.Type type, World world, Boolean value) {
+            if (StructureReloot.getInstance().getDisabledWorlds().contains(world)) return;
+
             RelootSettings settings = (type == RelootSettings.Type.BLOCK) ?
                     StructureReloot.getInstance().getBlockUpdateConfig().getSettingsForWorld(world) :
                     StructureReloot.getInstance().getEntityUpdateConfig().getSettingsForWorld(world);
