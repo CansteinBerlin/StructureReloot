@@ -122,7 +122,7 @@ public class BlockListener implements Listener {
         if (!(event.getBlockState() instanceof BrushableBlock)) return;
 
         //Handle the block
-        handleBrushBlock(event.getBlockState().getBlock());
+        handleBrushBlock((BrushableBlock) event.getBlockState());
     }
 
     /**
@@ -137,7 +137,7 @@ public class BlockListener implements Listener {
         if (!(event.getBlock().getState() instanceof BrushableBlock)) return;
 
         //Handle the Block
-        handleBrushBlock(event.getBlock());
+        handleBrushBlock((BrushableBlock) event.getBlock().getState());
     }
 
 
@@ -146,18 +146,18 @@ public class BlockListener implements Listener {
     /**
      * Performs all necessary checks and add a brushable block to the database
      *
-     * @param block The Brushable block to add
+     * @param state The Brushable block to add
      */
-    private void handleBrushBlock(Block block) {
-        if (!(((BrushableBlock) block.getState()).getPersistentDataContainer().has(SAVED_LOOT_TABLE)))
+    private void handleBrushBlock(BrushableBlock state) {
+        if (!(state.getPersistentDataContainer().has(SAVED_LOOT_TABLE)))
             return;
 
         //Create, Fetch and Save LootValue
-        Location loc = block.getLocation();
-        NamespacedKey key = NamespacedKey.fromString(((BrushableBlock) block.getState()).getPersistentDataContainer().get(SAVED_LOOT_TABLE, PersistentDataType.STRING));
+        Location loc = state.getBlock().getLocation();
+        NamespacedKey key = NamespacedKey.fromString(state.getPersistentDataContainer().get(SAVED_LOOT_TABLE, PersistentDataType.STRING));
         if (key == null) return;
         LootTable lootTable = Bukkit.getLootTable(key);
-        LootBlockValue lbv = new LootBlockValue(loc, lootTable, block.getState().getType(), BlockFace.UP);
+        LootBlockValue lbv = new LootBlockValue(loc, lootTable, state.getType(), BlockFace.UP);
         StructureReloot.getInstance().getDatabaseManager().getDatabase(loc.getWorld()).addBlock(lbv);
     }
 
