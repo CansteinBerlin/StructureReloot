@@ -1,230 +1,121 @@
 package me.hasenzahn1.structurereloot;
 
+import co.aikar.commands.PaperCommandManager;
+import com.google.common.collect.ImmutableList;
+import lombok.Getter;
+import lombok.Setter;
 import me.hasenzahn1.structurereloot.commands.RelootCommand;
-import me.hasenzahn1.structurereloot.commands.RelootDebugCommand;
-import me.hasenzahn1.structurereloot.commandsystem.CommandManager;
 import me.hasenzahn1.structurereloot.config.CustomConfig;
-import me.hasenzahn1.structurereloot.config.DefaultConfig;
 import me.hasenzahn1.structurereloot.config.LanguageConfig;
-import me.hasenzahn1.structurereloot.config.update.BlockUpdateConfig;
-import me.hasenzahn1.structurereloot.config.update.EntityUpdateConfig;
-import me.hasenzahn1.structurereloot.database.WorldDatabase;
+import me.hasenzahn1.structurereloot.config.UpdateConfig;
+import me.hasenzahn1.structurereloot.database.DatabaseManager;
 import me.hasenzahn1.structurereloot.general.AutoRelootScheduler;
-import me.hasenzahn1.structurereloot.general.ChangesPerDay;
+import me.hasenzahn1.structurereloot.general.RelootActivityLogger;
 import me.hasenzahn1.structurereloot.general.RelootSettings;
 import me.hasenzahn1.structurereloot.listeners.BlockListener;
 import me.hasenzahn1.structurereloot.listeners.EntityListener;
-import me.hasenzahn1.structurereloot.reloot.LootValueChangeTask;
-import me.hasenzahn1.structurereloot.reloot.RelootHelper;
+import me.hasenzahn1.structurereloot.reloot.LootValueProcessor;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
 import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.HashMap;
+import java.util.ArrayList;
 import java.util.List;
-import java.util.logging.Logger;
 
+@Getter
+@Setter
 public final class StructureReloot extends JavaPlugin {
 
     public static String PREFIX = "§b[§6StructureReloot§b] §r";
     private static StructureReloot instance;
-    public static Logger LOGGER;
 
+    //Data Handling
     private boolean debugMode;
-    private String databasePath;
+    private RelootActivityLogger relootActivityLogger;
 
-
-    private CommandManager commandManager;
+    //Configs
     private CustomConfig defaultConfig;
     private LanguageConfig languageConfig;
-    private HashMap<World, WorldDatabase> databases;
+    private UpdateConfig blockUpdateConfig;
+    private UpdateConfig entityUpdateConfig;
 
-    private LootValueChangeTask lootValueChangeTask;
+    //Commands
+    private PaperCommandManager paperCommandManager;
 
-    private BlockUpdateConfig blockUpdateConfig;
-    private EntityUpdateConfig entityUpdateConfig;
+    //Database
+    private List<World> disabledWorlds;
+    private DatabaseManager databaseManager;
+
+    //Automatic Relooting and processing of requested reloots
+    private LootValueProcessor lootValueProcessor;
     private AutoRelootScheduler autoRelootScheduler;
 
-    private ChangesPerDay changes;
 
     @Override
     public void onEnable() {
         ConfigurationSerialization.registerClass(RelootSettings.class);
 
+        //Static References
         instance = this;
-        LOGGER = getLogger();
 
+        //Logging
+        relootActivityLogger = new RelootActivityLogger(getLogger());
+
+        //Config and Database
         initConfigs();
-        databases = new HashMap<>();
+        databaseManager = new DatabaseManager("data");
 
-        changes = new ChangesPerDay();
+        //Creation of tickable tasks
+        lootValueProcessor = new LootValueProcessor();
+        autoRelootScheduler = new AutoRelootScheduler();
+        autoRelootScheduler.runTaskTimer(this, 20 * 5, 20 * 60);
 
-        lootValueChangeTask = new LootValueChangeTask();
+        //Commands
+        paperCommandManager = new PaperCommandManager(this);
+        paperCommandManager.registerCommand(new RelootCommand());
+        paperCommandManager.enableUnstableAPI("help");
+        paperCommandManager.getCommandCompletions().registerCompletion("configName", c -> {
+            return ImmutableList.of("lang", "config", "entityupdatesettings", "blockupdatesettings");
+        });
+        paperCommandManager.getCommandCompletions().registerCompletion("boolean", c -> {
+            return ImmutableList.of("true", "false");
+        });
 
-        commandManager = new CommandManager(this);
-        commandManager.addCommand(new RelootCommand());
-        commandManager.addCommand(new RelootDebugCommand());
-
+        //Register Listeners
         Bukkit.getPluginManager().registerEvents(new BlockListener(), this);
         Bukkit.getPluginManager().registerEvents(new EntityListener(), this);
-
-        relootElementsInWorld(true);
-
-        autoRelootScheduler = new AutoRelootScheduler();
-        autoRelootScheduler.runTaskTimer(this, 20 * 5, 20 * 5);
-
-    }
-
-    public void relootElementsInWorld(boolean isStartup) {
-        List<World> neededBlockUpdateSettings = blockUpdateConfig.getNeededUpdates();
-        List<World> neededEntityUpdateSettings = entityUpdateConfig.getNeededUpdates();
-        boolean updated = false;
-
-        //Blocks
-        for (World world : neededBlockUpdateSettings) {
-            RelootSettings settings = blockUpdateConfig.getSettingsForWorld(world);
-            if (isStartup != settings.isRelootOnStartup()) {
-                continue;
-            }
-
-            //Bukkit.broadcastMessage("Update blocks in world: " + world.getName());
-            RelootHelper.regenNBlocks(world, settings.getMaxRelootAmount(), null);
-            updated = true;
-            settings.nextDate();
-        }
-
-        if (updated) blockUpdateConfig.update();
-
-        //Entities
-        updated = false;
-        for (World world : neededEntityUpdateSettings) {
-            RelootSettings settings = entityUpdateConfig.getSettingsForWorld(world);
-
-            if (isStartup != settings.isRelootOnStartup()) {
-                continue;
-            }
-
-            //Bukkit.broadcastMessage("Update entity in world: " + world.getName());
-            RelootHelper.regenNEntities(world, settings.getMaxRelootAmount(), null);
-            updated = true;
-            settings.nextDate();
-        }
-
-        if (updated) entityUpdateConfig.update();
-    }
-
-    public static String getLang(String key, String... args) {
-        String lang = StructureReloot.getInstance().languageConfig.getConfig().getString(key, "&cUnknown or empty language key please check the config &6" + key);
-        for (int i = 0; i + 1 < args.length; i += 2) {
-            lang = lang.replace("%" + args[i] + "%", args[i + 1]);
-        }
-
-        if (!StructureReloot.getInstance().languageConfig.getConfig().contains(key)) {
-            StructureReloot.getInstance().languageConfig.getConfig().set(key, "&cUnknown or empty language key please check the config &6" + key);
-            StructureReloot.getInstance().languageConfig.saveConfig();
-        }
-
-        return ChatColor.translateAlternateColorCodes('&', lang).replace("\\n", "\n");
-    }
-
-    public static net.md_5.bungee.api.ChatColor getChatColor(String key) {
-        String color = StructureReloot.getInstance().languageConfig.getConfig().getString(key, "MAGIC");
-
-        if (!StructureReloot.getInstance().languageConfig.getConfig().contains(key)) {
-            StructureReloot.getInstance().languageConfig.getConfig().set(key, "&cUnknown or empty language key please check the config &6" + key);
-            StructureReloot.getInstance().languageConfig.saveConfig();
-        }
-        return net.md_5.bungee.api.ChatColor.of(color);
     }
 
     private void initConfigs() {
         languageConfig = new LanguageConfig(this);
         initDefaultConfig();
 
-        blockUpdateConfig = new BlockUpdateConfig();
-        entityUpdateConfig = new EntityUpdateConfig();
+        blockUpdateConfig = new UpdateConfig("blockUpdateSettings.yml");
+        entityUpdateConfig = new UpdateConfig("entityUpdateSettings.yml");
     }
 
     public void initDefaultConfig() {
-        defaultConfig = new DefaultConfig();
+        defaultConfig = new CustomConfig(this, "config.yml");
         PREFIX = ChatColor.translateAlternateColorCodes('&', defaultConfig.getConfig().getString("prefix", PREFIX));
         debugMode = defaultConfig.getConfig().getBoolean("debugMode", false);
-        databasePath = "data";
-        LootValueChangeTask.CHANGE_AMOUNT = defaultConfig.getConfig().getInt("changesPerTick", 20);
-    }
+        LootValueProcessor.CHANGE_AMOUNT = defaultConfig.getConfig().getInt("changesPerTick", 20);
 
-    public void reloadLanguageConfig() {
-        if (languageConfig != null) {
-            languageConfig.reloadConfig();
-        } else {
-            languageConfig = new LanguageConfig(this);
+        disabledWorlds = new ArrayList<>();
+        for (String world : defaultConfig.getConfig().getStringList("world-blacklist")) {
+            System.out.println(world);
+            if (Bukkit.getWorld(world) != null) disabledWorlds.add(Bukkit.getWorld(world));
         }
+        System.out.println(disabledWorlds);
     }
 
     @Override
     public void onDisable() {
-        // Plugin shutdown logic
+        autoRelootScheduler.cancel();
     }
 
     public static StructureReloot getInstance() {
         return instance;
-    }
-
-    public WorldDatabase getDatabase(World world) {
-        if (!databases.containsKey(world)) createDatabase(world);
-        return databases.get(world);
-    }
-
-    public boolean isDebugMode() {
-        return debugMode;
-    }
-
-    public void setDefaultConfig(CustomConfig defaultConfig) {
-        this.defaultConfig = defaultConfig;
-    }
-
-    public void setLanguageConfig(LanguageConfig languageConfig) {
-        this.languageConfig = languageConfig;
-    }
-
-    public CustomConfig getDefaultConfig() {
-        return defaultConfig;
-    }
-
-    public LanguageConfig getLanguageConfig() {
-        return languageConfig;
-    }
-
-    public BlockUpdateConfig getBlockUpdateConfig() {
-        return blockUpdateConfig;
-    }
-
-    public EntityUpdateConfig getEntityUpdateConfig() {
-        return entityUpdateConfig;
-    }
-
-    public void setBlockUpdateConfig(BlockUpdateConfig blockUpdateConfig) {
-        this.blockUpdateConfig = blockUpdateConfig;
-    }
-
-    public void setEntityUpdateConfig(EntityUpdateConfig entityUpdateConfig) {
-        this.entityUpdateConfig = entityUpdateConfig;
-    }
-
-    public ChangesPerDay getChangesPerDay() {
-        return changes;
-    }
-
-    public LootValueChangeTask getLootValueChangeTask() {
-        return lootValueChangeTask;
-    }
-
-    public void createDatabase(World world) {
-        LOGGER.info("Found new world with name: " + world.getName());
-        WorldDatabase database = new WorldDatabase(databasePath, world);
-        database.init();
-        databases.put(world, database);
     }
 }

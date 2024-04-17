@@ -3,3 +3,6 @@ prefix: "&8[&6Structure&8Reloot]&f: "
 changesPerTick: 5
 # When it is enabled, a debug command is activated.
 debugMode: true
+# List of all Worlds that are blacklisted
+world-blacklist:
+  -

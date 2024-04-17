@@ -7,7 +7,7 @@ public class DebugMessage {
     public DebugMessage(Object... values) {
         objects = values;
     }
-    
+
     @Override
     public String toString() {
         StringBuilder sb = new StringBuilder("Values: ");

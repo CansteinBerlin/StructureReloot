@@ -59,7 +59,7 @@ public abstract class Database {
         } catch (ClassNotFoundException e) {
             plugin.getLogger().log(Level.SEVERE, "You need the SQLite JBDC library. Google it. Put it in /lib folder.");
         }
-        
+
         return null;
     }
 

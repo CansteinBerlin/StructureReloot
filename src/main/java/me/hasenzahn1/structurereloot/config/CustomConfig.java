@@ -1,6 +1,7 @@
 package me.hasenzahn1.structurereloot.config;
 
 import com.google.common.base.Charsets;
+import lombok.Getter;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -10,20 +11,29 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
-public abstract class CustomConfig {
+@Getter
+public class CustomConfig {
 
     private File configFile;
     private FileConfiguration config;
     private final JavaPlugin plugin;
     protected boolean isNew;
-    
+    private final String name;
+
     public CustomConfig(JavaPlugin plugin, String name) {
         this.plugin = plugin;
+        this.name = name;
         isNew = false;
         createCustomConfig(plugin, name);
     }
 
-    public void createCustomConfig(JavaPlugin plugin, String name) {
+    /**
+     * Creates a custom config from a file
+     *
+     * @param plugin
+     * @param name
+     */
+    private void createCustomConfig(JavaPlugin plugin, String name) {
         configFile = new File(plugin.getDataFolder(), name);
         if (!configFile.exists()) {
             isNew = true;
@@ -41,6 +51,9 @@ public abstract class CustomConfig {
         config = YamlConfiguration.loadConfiguration(configFile);
     }
 
+    /**
+     * Deletes a config file completely
+     */
     public void delete() {
         String name = configFile.getName();
         try {
@@ -53,9 +66,16 @@ public abstract class CustomConfig {
         }
     }
 
+    /**
+     * Reloads the config
+     */
     public void reloadConfig() {
-        config = YamlConfiguration.loadConfiguration(configFile);
+        if (!configFile.exists()) {
+            createCustomConfig(plugin, configFile.getName());
+            return;
+        }
 
+        config = YamlConfiguration.loadConfiguration(configFile);
         final InputStream defConfigStream = plugin.getResource(configFile.getName());
         if (defConfigStream == null) {
             return;
@@ -64,15 +84,14 @@ public abstract class CustomConfig {
         config.setDefaults(YamlConfiguration.loadConfiguration(new InputStreamReader(defConfigStream, Charsets.UTF_8)));
     }
 
+    /**
+     * Saves the config
+     */
     public void saveConfig() {
         try {
             config.save(configFile);
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
-
-    public FileConfiguration getConfig() {
-        return config;
     }
 }

@@ -12,7 +12,7 @@ public class TextComponentUtil {
                 textWithColor(new TextComponent(text), textColor),
                 textWithColor(new TextComponent("-".repeat(width - width / 2)), minusColor));
     }
-    
+
     public static TextComponent textWithHover(TextComponent text, String subtitle) {
         text.setHoverEvent(new HoverEvent(HoverEvent.Action.SHOW_TEXT, new BaseComponent[]{new TextComponent(subtitle)}));
         return text;

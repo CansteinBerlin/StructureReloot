@@ -4,10 +4,3 @@ main: me.hasenzahn1.structurereloot.StructureReloot
 api-version: 1.19
 authors: [ Hasenzahn1 ]
 description: A Plugin that replaces the loot in structures
-
-commands:
-  reloot:
-    description: Reloot Commands
-
-  relootDebug:
-      description: Reloot debugCommands. Only available if debug is turned on in the config

@@ -1,27 +1,39 @@
 package me.hasenzahn1.structurereloot.database;
 
 
+import lombok.Getter;
+import me.hasenzahn1.structurereloot.listeners.BlockListener;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.World;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
+import org.bukkit.block.BrushableBlock;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 import org.bukkit.loot.LootTable;
 import org.bukkit.loot.Lootable;
+import org.bukkit.persistence.PersistentDataType;
 
+@Getter
 public class LootBlockValue extends LootValue {
 
     private final Material blockMaterial;
     private final BlockFace facing;
 
+    /**
+     * Create a new LootBlockValue through code.
+     *
+     * @param loc       The location the block is at
+     * @param lootTable The lootTable the block has
+     */
     public LootBlockValue(Location loc, LootTable lootTable) {
         super(loc, lootTable);
 
         blockMaterial = loc.getBlock().getType();
         BlockData data = loc.getBlock().getBlockData();
+        //Some blocks are not directional, The Suspicious sand block as an example. Defaults to NORTH
         if (data instanceof Directional) {
             facing = ((Directional) data).getFacing();
         } else {
@@ -29,6 +41,14 @@ public class LootBlockValue extends LootValue {
         }
     }
 
+    /**
+     * Create a new LootBlockValue through code
+     *
+     * @param loc           The location the block is at
+     * @param lootTable     The lootTable the block has
+     * @param blockMaterial The material the block has
+     * @param facing        The Direction the block is facing
+     */
     public LootBlockValue(Location loc, LootTable lootTable, Material blockMaterial, BlockFace facing) {
         super(loc, lootTable);
 
@@ -36,6 +56,15 @@ public class LootBlockValue extends LootValue {
         this.facing = facing;
     }
 
+    /**
+     * Create a new LootBlockValue form the database
+     *
+     * @param world         The World the block is in
+     * @param loc           The Location the block is at
+     * @param lootTable     The lootTable the block has
+     * @param blockMaterial The material the block has
+     * @param facing        The direction the block is facing
+     */
     public LootBlockValue(World world, String loc, NamespacedKey lootTable, String blockMaterial, String facing) {
         super(world, loc, lootTable);
 
@@ -43,22 +72,29 @@ public class LootBlockValue extends LootValue {
         this.facing = BlockFace.valueOf(facing);
     }
 
+    /**
+     * Method to reloot that specific block
+     */
     @Override
     public void reloot() {
-        loc.getBlock().setType(Material.AIR); //Reset block
-        loc.getBlock().setType(blockMaterial); //Set Block
+        location.getBlock().setType(Material.AIR); //Reset block
+        location.getBlock().setType(blockMaterial); //Set Block
 
         //Set Directional Block Data
-        if (loc.getBlock().getBlockData() instanceof Directional) {
-            Directional data = ((Directional) loc.getBlock().getBlockData());
+        if (location.getBlock().getBlockData() instanceof Directional data) {
             data.setFacing(facing); //Set Facing Direction
-            loc.getBlock().setBlockData(data);
+            location.getBlock().setBlockData(data);
         }
 
-        //Set Loottable of Lootable Chest and Dispenser
-        BlockState state = loc.getBlock().getState();
+        //Set Loottable of Lootable Blocks
+        BlockState state = location.getBlock().getState();
         if (state instanceof Lootable) {
             ((Lootable) state).setLootTable(lootTable);
+
+            //Suspicious Blocks have to be marked as they lose their LootTable
+            if (state instanceof BrushableBlock) {
+                ((BrushableBlock) state).getPersistentDataContainer().set(BlockListener.SAVED_LOOT_TABLE, PersistentDataType.STRING, lootTable + "");
+            }
             state.update();
         }
     }
@@ -66,7 +102,7 @@ public class LootBlockValue extends LootValue {
 
     //Getter and Setter
     public String getLocationString() {
-        return locationToLocationString(loc);
+        return locationToLocationString(location);
     }
 
     public String getBlockMaterialString() {
@@ -77,18 +113,11 @@ public class LootBlockValue extends LootValue {
         return facing.name();
     }
 
-    public Material getBlockMaterial() {
-        return blockMaterial;
-    }
-
-    public BlockFace getFacing() {
-        return facing;
-    }
 
     @Override
     public String toString() {
         return "LootBlockValue{" +
-                "loc=" + loc +
+                "loc=" + location +
                 ", lootTable=" + lootTable.toString() +
                 ", blockMaterial=" + blockMaterial +
                 ", facing=" + facing +

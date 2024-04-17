@@ -10,7 +10,7 @@ public class ClassDebug {
     public ClassDebug(Object obejct) {
         this.object = obejct;
     }
-    
+
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();

@@ -1,7 +1,6 @@
-package me.hasenzahn1.structurereloot.config.update;
+package me.hasenzahn1.structurereloot.config;
 
 import me.hasenzahn1.structurereloot.StructureReloot;
-import me.hasenzahn1.structurereloot.config.CustomConfig;
 import me.hasenzahn1.structurereloot.general.RelootSettings;
 import org.bukkit.Bukkit;
 import org.bukkit.World;
@@ -10,12 +9,18 @@ import org.bukkit.configuration.file.FileConfiguration;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.logging.Level;
 import java.util.stream.Collectors;
 
-public abstract class UpdateConfig extends CustomConfig {
+public class UpdateConfig extends CustomConfig {
 
     private final HashMap<World, RelootSettings> settings;
 
+    /**
+     * Create a new Update config and loads all settings
+     *
+     * @param name
+     */
     public UpdateConfig(String name) {
         super(StructureReloot.getInstance(), name);
 
@@ -24,6 +29,11 @@ public abstract class UpdateConfig extends CustomConfig {
 
         for (World world : Bukkit.getWorlds()) {
             //Load if exists
+            if (StructureReloot.getInstance().getDisabledWorlds().contains(world)) {
+                StructureReloot.getInstance().getRelootActivityLogger().log(Level.OFF, "Ignoring World " + world + " as it is disabled");
+                continue;
+            }
+
             if (config.contains(world.getName())) {
                 settings.put(world, config.getObject(world.getName(), RelootSettings.class));
                 continue;
@@ -36,10 +46,19 @@ public abstract class UpdateConfig extends CustomConfig {
         if (isNew) update();
     }
 
+    /**
+     * Gets the Settings for a world
+     *
+     * @param world
+     * @return
+     */
     public RelootSettings getSettingsForWorld(World world) {
         return settings.getOrDefault(world, null);
     }
 
+    /**
+     * Updates all settings files
+     */
     public void update() {
         FileConfiguration config = getConfig();
         for (Map.Entry<World, RelootSettings> entry : settings.entrySet()) {
@@ -48,8 +67,16 @@ public abstract class UpdateConfig extends CustomConfig {
         saveConfig();
     }
 
+    /**
+     * Get a list of all settings that need updating
+     *
+     * @return
+     */
     public List<World> getNeededUpdates() {
-        return settings.entrySet().stream().filter(entry -> entry.getValue().needsUpdate()).map(Map.Entry::getKey).collect(Collectors.toList());
+        return settings.entrySet().stream()
+                .filter(entry -> entry.getValue().needsUpdate())
+                .map(Map.Entry::getKey)
+                .collect(Collectors.toList());
     }
 
 }
