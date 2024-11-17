@@ -5,6 +5,7 @@ import com.google.common.collect.ImmutableList;
 import lombok.Getter;
 import lombok.Setter;
 import me.hasenzahn1.structurereloot.commands.RelootCommand;
+import me.hasenzahn1.structurereloot.commands.RelootDebugCommand;
 import me.hasenzahn1.structurereloot.config.CustomConfig;
 import me.hasenzahn1.structurereloot.config.LanguageConfig;
 import me.hasenzahn1.structurereloot.config.UpdateConfig;
@@ -15,6 +16,7 @@ import me.hasenzahn1.structurereloot.general.RelootSettings;
 import me.hasenzahn1.structurereloot.listeners.BlockListener;
 import me.hasenzahn1.structurereloot.listeners.EntityListener;
 import me.hasenzahn1.structurereloot.reloot.LootValueProcessor;
+import me.hasenzahn1.structurereloot.util.CommandUtils;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.World;
@@ -75,6 +77,7 @@ public final class StructureReloot extends JavaPlugin {
         //Commands
         paperCommandManager = new PaperCommandManager(this);
         paperCommandManager.registerCommand(new RelootCommand());
+        if (debugMode) paperCommandManager.registerCommand(new RelootDebugCommand());
         paperCommandManager.enableUnstableAPI("help");
         paperCommandManager.getCommandCompletions().registerCompletion("configName", c -> {
             return ImmutableList.of("lang", "config", "entityupdatesettings", "blockupdatesettings");
@@ -104,10 +107,13 @@ public final class StructureReloot extends JavaPlugin {
 
         disabledWorlds = new ArrayList<>();
         for (String world : defaultConfig.getConfig().getStringList("world-blacklist")) {
-            System.out.println(world);
             if (Bukkit.getWorld(world) != null) disabledWorlds.add(Bukkit.getWorld(world));
         }
-        System.out.println(disabledWorlds);
+
+        CommandUtils.teleportPermission = defaultConfig.getConfig().getString("teleportPermission", "minecraft.command.teleport");
+        CommandUtils.teleportCommand = defaultConfig.getConfig().getString("teleportCommand", "/minecraft:tp %x% %y% %z%");
+
+
     }
 
     @Override

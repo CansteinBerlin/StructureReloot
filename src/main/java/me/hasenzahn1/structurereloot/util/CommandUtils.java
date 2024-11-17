@@ -20,6 +20,9 @@ import static me.hasenzahn1.structurereloot.util.TextComponentUtil.*;
 
 public class CommandUtils {
 
+    public static String teleportPermission;
+    public static String teleportCommand;
+
     public static BaseComponent[] convertSettingsToStringInfo(String type, World world, RelootSettings settings, String commandType) {
         TextComponent typeText = new TextComponent(type);
         BaseComponent[] relootOnStartup = new MineDown(LanguageConfig.getLang("info.relootOnStartupLine",
@@ -98,7 +101,15 @@ public class CommandUtils {
             //Element text <lootTable> (<loc>) [Reloot if perm] [x if perm]
             BaseComponent[] comps = combineComponents(
                     new TextComponent("§6  " + lootTable),
-                    textWithHover(textWithCommand(new TextComponent("§8(" + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ")"), player.hasPermission("minecraft.command.teleport") ? "/minecraft:tp " + loc.getBlockX() + " " + loc.getBlockY() + " " + loc.getBlockZ() : ""), player.hasPermission("minecraft.command.teleport") ? LanguageConfig.getLang("listLootTables.teleport") : ""),
+                    textWithHover(
+                            textWithCommand(
+                                    new TextComponent("§8(" + loc.getBlockX() + ", " + loc.getBlockY() + ", " + loc.getBlockZ() + ")"),
+                                    player.hasPermission(teleportPermission) ? teleportCommand
+                                            .replaceAll("%x%", String.valueOf(loc.getBlockX()))
+                                            .replaceAll("%y%", String.valueOf(loc.getBlockY()))
+                                            .replaceAll("%z%", String.valueOf(loc.getBlockZ()))
+                                            .replaceAll("%world%", loc.getWorld().getName())
+                                            : ""), player.hasPermission(teleportPermission) ? LanguageConfig.getLang("listLootTables.teleport") : ""),
 
                     player.hasPermission("structurereloot.command.regen") ?
                             textWithCommand(new TextComponent(LanguageConfig.getLang("listLootTables.reloot")),

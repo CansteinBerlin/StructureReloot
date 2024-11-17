@@ -6,3 +6,6 @@ debugMode: true
 # List of all Worlds that are blacklisted
 world-blacklist:
   -
+
+teleportPermission: "minecraft.command.teleport"
+teleportCommand: "/minecraft:tp %x% %y% %z%" # %world%
