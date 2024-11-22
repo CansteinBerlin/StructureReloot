@@ -1,6 +1,6 @@
 # Structure Reloot
 
-*This plugin is tested for minecraft versions 1.19.x, 1.20.x*
+*This plugin is tested for minecraft versions 1.19.x, 1.20.x, 1.21.x*
 
 A plugin for automatically resettings loot blocks like chests/dispensers/suspicious gravel/sand as well as lootentities
 like chest minecars/elytra item frames. Intended for the usage on a server with a fixed worldboarder that relies on
@@ -26,3 +26,8 @@ To execute any of the commands you need the base permission `structurereloot.com
 #### Lootable List
 
 ![image](https://github.com/CansteinBerlin/StructureReloot/assets/75828222/8d896bc3-620f-4955-b2eb-100b0154b1de)
+
+## Why usw this plugin and not the paper option?
+This plugin offers many practical functions for regenerating chests and entities that are not possible with the method provided in the paper configuration. 
+This includes the regeneration of entities in general, as well as the ability to regenerate blocks at any time with just one command. 
+Another advantage of this plugin is the ability to view/teleport/remove looted blocks/entities at any time.
