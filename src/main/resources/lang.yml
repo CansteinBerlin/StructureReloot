@@ -18,6 +18,12 @@ commands:
     invalidPattern: "&cInvalid value &6%value% &cfor time pattern (bsp. 2h30m)"
   listlootables:
     noLootables: "&cThere are no lootable &6%type%&c in world &6%world%"
+  remove:
+    invalidRadius: "&cThe radius &6%radius% &cyou specified is invalid"
+    successBlock: "&aSuccessfully removed &6%amount% &ablocks in a &6%radius% &ablock radius"
+    successEntity: "&aSuccessfully removed &6%amount% &aentities in a &6%radius% &ablock radius"
+    noBlockFound: "&cNo block found in a &6%radius% &cradius"
+    noEntityFound: "&cNo entity found in a &6%radius% &cradius"
 
 
 info:

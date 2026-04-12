@@ -117,6 +117,37 @@ public class RelootCommand extends BaseCommand {
         }
     }
 
+    @Subcommand("remove")
+    @CommandPermission("structurereloot.command.remove")
+    @Syntax("<block/entity> <radius>")
+    public static void remove(Player player, RelootSettings.Type type, Integer radius) {
+        if(radius < 0){
+            player.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.remove.invalidRadius", "radius", String.valueOf(radius)));
+            return;
+        }
+
+        if (StructureReloot.getInstance().getDisabledWorlds().contains(player.getWorld())) {
+            player.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.disabledWorld", "world", player.getWorld().getName()));
+            return;
+        }
+
+        if (type == RelootSettings.Type.BLOCK) {
+            int amount = RelootHelper.removeBlocksInRadius(player.getLocation(), radius);
+            if (amount > 0) player.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.remove.successBlock",
+                    "amount", String.valueOf(amount),
+                    "radius", radius + ""));
+            else player.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.remove.noBlockFound",
+                    "radius", radius + ""));
+        } else {
+            int amount = RelootHelper.removeEntitiesInRadius(player.getLocation(), radius);
+            if (amount > 0) player.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.remove.successEntity",
+                    "amount", String.valueOf(amount),
+                    "radius", radius + ""));
+            else player.sendMessage(StructureReloot.PREFIX + LanguageConfig.getLang("commands.remove.noEntityFound",
+                    "radius", radius + ""));
+        }
+    }
+
     @Subcommand("reloadConfig")
     @CommandPermission("structurereloot.command.reloadConfig")
     @Syntax("<name> (override: true/false)")

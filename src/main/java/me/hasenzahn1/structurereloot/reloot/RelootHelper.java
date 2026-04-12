@@ -4,8 +4,10 @@ import me.hasenzahn1.structurereloot.StructureReloot;
 import me.hasenzahn1.structurereloot.database.LootBlockValue;
 import me.hasenzahn1.structurereloot.database.LootEntityValue;
 import me.hasenzahn1.structurereloot.database.WorldDatabase;
+import org.bukkit.Location;
 import org.bukkit.World;
 
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -72,6 +74,50 @@ public class RelootHelper {
         //Remove from the database
         WorldDatabase database = StructureReloot.getInstance().getDatabaseManager().getDatabase(world);
         database.removeMultipleBlocks(values);
+    }
+
+    /**
+     * Remove all blocks within a certain radius centered around a location
+     *
+     * @param location The center location
+     * @param radius   The radius to search in
+     */
+    public static int removeBlocksInRadius(Location location, int radius) {
+        int radiusSquared = radius * radius;
+        List<LootBlockValue> toRemove = new ArrayList<>();
+        List<LootBlockValue> lbvs = StructureReloot.getInstance().getDatabaseManager().getDatabase(location.getWorld()).getAllBlocks();
+
+        for (LootBlockValue block : lbvs) {
+            if (block.getLocation().distanceSquared(location) <= radiusSquared) {
+                toRemove.add(block);
+            }
+        }
+
+        WorldDatabase database = StructureReloot.getInstance().getDatabaseManager().getDatabase(location.getWorld());
+        database.removeMultipleBlocks(toRemove);
+        return toRemove.size();
+    }
+
+    /**
+     * Remove all entities within a certain radius centered around a location
+     *
+     * @param location The center location
+     * @param radius   The radius to search in
+     */
+    public static int removeEntitiesInRadius(Location location, int radius) {
+        int radiusSquared = radius * radius;
+        List<LootEntityValue> toRemove = new ArrayList<>();
+        List<LootEntityValue> levs = StructureReloot.getInstance().getDatabaseManager().getDatabase(location.getWorld()).getAllEntities();
+
+        for (LootEntityValue entity : levs) {
+            if (entity.getLocation().distanceSquared(location) <= radiusSquared) {
+                toRemove.add(entity);
+            }
+        }
+
+        WorldDatabase database = StructureReloot.getInstance().getDatabaseManager().getDatabase(location.getWorld());
+        database.removeMultipleEntities(toRemove);
+        return toRemove.size();
     }
 
 }
